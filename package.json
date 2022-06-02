@@ -9,7 +9,7 @@
   "scripts": {
     "test": "jest --config jestconfig.json",
     "build": "tsc",
-    "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\"",
+    "format": "prettier --write \"src/**/*.ts\"",
     "lint": "tslint -p tsconfig.json",
     "prepare": "npm run build",
     "prepublishOnly": "npm test && npm run lint",
@@ -21,7 +21,10 @@
     "type": "git",
     "url": "git+https://github.com/jpmasters/jons-sudoku-solver.git"
   },
-  "keywords": ["Sudoku", "Solver"],
+  "keywords": [
+    "Sudoku",
+    "Solver"
+  ],
   "author": "Jon Masters",
   "license": "MIT",
   "bugs": {
