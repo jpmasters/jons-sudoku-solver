@@ -27,3 +27,22 @@ test('Reading the cell value when it has resolved returns the correct value', ()
   const c = new CellValue([4]);
   expect(c.value === 4);
 });
+
+test('Copy returns a new CellValue', () => {
+  const c = new CellValue([3, 4, 5]);
+  const d = c.copy();
+  expect(d).toBeInstanceOf(CellValue);
+});
+
+test('Copy returns a CellValue with the correct values', () => {
+  const c = new CellValue([3, 4, 5]);
+  const d = c.copy();
+  expect(d.valuePotentials).toStrictEqual([0, 0, 1 / 3, 1 / 3, 1 / 3, 0, 0, 0, 0]);
+});
+
+test('Copy returns a deep copy', () => {
+  const c = new CellValue([3, 4, 5]);
+  const d = c.copy();
+
+  expect(d.valuePotentials).not.toBe(c.valuePotentials);
+});
