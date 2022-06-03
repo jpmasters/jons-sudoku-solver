@@ -1,7 +1,7 @@
-import { SudokuCellValue } from '../SudokuCellValue';
+import { CellValue } from '../CellValue';
 
 test('Default constructor instantiates a cell value with all possible states', () => {
-  const c = new SudokuCellValue();
+  const c = new CellValue();
 
   // object is created
   expect(c).not.toBeNull();
@@ -14,16 +14,16 @@ test('Default constructor instantiates a cell value with all possible states', (
 });
 
 test('Reading the value before it is 100% known throws an exception.', () => {
-  const c = new SudokuCellValue();
+  const c = new CellValue();
   expect(() => c.value).toThrow();
 });
 
 test('Reading the cell value after it has resolved sets hasValue to true', () => {
-  const c = new SudokuCellValue([3]);
+  const c = new CellValue([3]);
   expect(c.hasKnownValue).toBeTruthy();
 });
 
 test('Reading the cell value when it has resolved returns the correct value', () => {
-  const c = new SudokuCellValue([4]);
+  const c = new CellValue([4]);
   expect(c.value === 4);
 });

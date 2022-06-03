@@ -4,7 +4,7 @@ import { SudokuAllPossibleValues, SudokuPossibleValue, SudokuPossibleValues } fr
  * This class represents a cell in a Sudoku grid and holds all the potential
  * values that the cell can have. It is designed to be immutable.
  */
-export class SudokuCellValue {
+export class CellValue {
   /**
    * Instantiates a new instance of a Sudoku grid cell. The cell is designed to
    * be immutable. If the cell is constructed without initial values, it will
