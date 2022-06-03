@@ -1,4 +1,4 @@
-import { SudokuAllPossibleValues, SudokuPossibleValue, SudokuPossibleValues } from './SudokuValueTypes';
+import { SudokuAllPossibleValues, SudokuPossibleValue, SudokuPossibleValues } from './ValueTypes';
 
 /**
  * This class represents a cell in a Sudoku grid and holds all the potential
@@ -32,10 +32,6 @@ export class CellValue {
    */
   get valuePotentials(): number[] {
     return this._valuePotentials;
-  }
-
-  private set valuePotentials(values: number[]) {
-    this._valuePotentials = values;
   }
 
   private _valuePotentials: number[];

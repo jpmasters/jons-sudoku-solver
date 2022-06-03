@@ -1,5 +1,5 @@
 import { CellValue } from './CellValue';
-import { GridLocation } from './SudokuValueTypes';
+import { GridLocation } from './ValueTypes';
 
 /**
  * Describes a cell within a Sudoku grid.
@@ -17,7 +17,7 @@ export class Cell {
 
     // the location must be in range
     if (location.x < 1 || location.x > 9 || location.y < 1 || location.y > 9) {
-      throw new Error('Location is out of range. x nad y values should be between 1 anad 9');
+      throw new Error('Location is out of range. x and y values should be between 1 and 9');
     }
 
     this.location = location;
