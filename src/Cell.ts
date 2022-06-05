@@ -24,6 +24,14 @@ export class Cell {
   }
 
   /**
+   * Returns a deep copy of the Cell.
+   * @returns A deep copy of the Cell.
+   */
+  copy(): Cell {
+    return new Cell({ x: this.location.x, y: this.location.y }, this.value.copy());
+  }
+
+  /**
    * Gets the value for the cell.
    */
   readonly value: CellValue;

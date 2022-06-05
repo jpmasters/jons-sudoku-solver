@@ -10,6 +10,7 @@
         "node"
     ],
     "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(ts|js)$",
+    "collectCoverage": true,
     "coverageDirectory": "coverage",
     "collectCoverageFrom": [
         "src/**/*.{ts,js}",

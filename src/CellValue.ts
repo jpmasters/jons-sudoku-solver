@@ -19,9 +19,13 @@ export class CellValue {
     });
   }
 
+  /**
+   * Returns a deep copy of the CellValue.
+   * @returns A dseep copy of the CellValue.
+   */
   copy(): CellValue {
     let rv = new CellValue();
-    rv._valuePotentials = Object.assign([], this._valuePotentials);
+    rv._valuePotentials = [...this._valuePotentials];
     return rv;
   }
 
@@ -31,7 +35,7 @@ export class CellValue {
    * index 4 contains 0.5.
    */
   get valuePotentials(): number[] {
-    return this._valuePotentials;
+    return [...this._valuePotentials];
   }
 
   private _valuePotentials: number[];

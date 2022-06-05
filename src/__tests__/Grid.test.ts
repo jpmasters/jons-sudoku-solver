@@ -14,19 +14,16 @@ const testPuzzle1 = [
 ];
 
 test('Can create a grid from a 2D puzzle array', () => {
-  const g = new Grid(testPuzzle1);
+  const g = Grid.fromGrid(testPuzzle1);
 
   expect(g).toBeInstanceOf(Grid);
 });
 
 test('Grid has a 9x9 cell array', () => {
-  const g = new Grid(testPuzzle1);
+  const g = Grid.fromGrid(testPuzzle1);
 
   expect(g.values).not.toBeNull();
-  expect(g.values.length).toBe(9);
-  g.values.forEach((row) => {
-    expect(row.length).toBe(9);
-  });
+  expect(g.values.length).toBe(81);
 });
 
 test('Grid cannot be created with invalid arrays', () => {
@@ -36,35 +33,44 @@ test('Grid cannot be created with invalid arrays', () => {
   const errGrid4 = [[0], [0], [0], [0], [0], [0], [0], [0], [0]];
 
   expect(() => {
-    const g = new Grid(errGrid1);
+    const g = Grid.fromGrid(errGrid1);
   }).toThrow();
 
   expect(() => {
-    const g = new Grid(errGrid2);
+    const g = Grid.fromGrid(errGrid2);
   }).toThrow();
 
   expect(() => {
-    const g = new Grid(errGrid3);
+    const g = Grid.fromGrid(errGrid3);
   }).toThrow();
 
   expect(() => {
-    const g = new Grid(errGrid4);
+    const g = Grid.fromGrid(errGrid4);
   }).toThrow();
 });
 
 test('Grid is created in the correct state', () => {
-  const g = new Grid(testPuzzle1);
+  const g = Grid.fromGrid(testPuzzle1);
 
-  expect(g.values[0].length).toBe(9);
+  expect(g.values.length).toBe(81);
 
-  g.values.forEach((row, y) => {
-    row.forEach((val, x) => {
-      if (testPuzzle1[y][x]) {
-        expect(val.value.hasKnownValue).toBeTruthy();
-        expect(val.value.value).toBe(testPuzzle1[y][x]);
-      } else {
-        expect(val.value.hasKnownValue).not.toBeTruthy();
-      }
-    });
+  g.values.forEach((c) => {
+    if (testPuzzle1[c.location.y - 1][c.location.x - 1]) {
+      expect(c.value.hasKnownValue).toBeTruthy();
+      expect(c.value.value).toBe(testPuzzle1[c.location.y - 1][c.location.x - 1]);
+    } else {
+      expect(c.value.hasKnownValue).not.toBeTruthy();
+    }
   });
+});
+
+test('Grid errors when it doesnt have 81 values', () => {
+  const errGrid2 = [[0, 0, 0, 0, 0, 0, 0, 0, 0]];
+  expect(() => {
+    const g = Grid.fromGrid(errGrid2);
+  }).toThrow();
+
+  expect(() => {
+    const g = new Grid([new Cell({ x: 1, y: 1 }), new Cell({ x: 2, y: 1 }), new Cell({ x: 3, y: 1 })]);
+  }).toThrow();
 });

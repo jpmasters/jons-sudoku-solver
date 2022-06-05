@@ -1,4 +1,5 @@
 import { Cell } from '../Cell';
+import { CellValue } from '../CellValue';
 
 test('Can create a cell with default value', () => {
   const c = new Cell({ x: 1, y: 1 });
@@ -21,4 +22,14 @@ test('Cell location x and y in range', () => {
   expect(() => {
     const c = new Cell({ x: 10, y: 10 });
   }).toThrow();
+});
+
+test('Copying a cell gives you a deep copy', () => {
+  const c = new Cell({ x: 1, y: 1 }, new CellValue([1, 2, 3]));
+  const d = c.copy();
+  expect(c).toStrictEqual(d);
+  expect(c === d).toBeFalsy();
+  expect(c.location === d.location).toBeFalsy();
+  expect(c.value === d.value).toBeFalsy();
+  expect(c.value.valuePotentials === d.value.valuePotentials).toBeFalsy();
 });
