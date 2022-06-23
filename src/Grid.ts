@@ -1,12 +1,30 @@
 import { Cell } from './Cell';
 import { CellCollection } from './CellCollection';
 import { CellValue } from './CellValue';
-import { SudokuPossibleValue } from './ValueTypes';
+import { GridLocation, SudokuPossibleValue } from './ValueTypes';
+
+export type GridRows = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
+export type GridColumns = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
+export type GridBlocks = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
 
 /**
  * Defines an immutable grid structure of Sudoku cells.
  */
 export class Grid extends CellCollection {
+  /**
+   * This helper function transforms a location (x 1 to 9, y 1 to 9) into the
+   * corresponding GridBlock (1 - 9) representing one of the 9 sub-squares in the
+   * Sudoku grid.
+   * @param location The x y location to look up.
+   * @returns The GridBlock that the location sits in.
+   */
+  static gridBlockFromLocation(location: GridLocation): GridBlocks {
+    const xBlock = Math.floor((location.x - 1) / 3);
+    const yBlock = Math.floor((location.y - 1) / 3);
+
+    return (1 + xBlock + 3 * yBlock) as GridBlocks;
+  }
+
   /**
    * Creates a new Grid object from a 9x9 array containing known values. Unknown values
    * should be set to zero.
@@ -47,5 +65,43 @@ export class Grid extends CellCollection {
 
     // ensure that there are 81 values set
     if (values.length !== 81) throw Error('A Grid must contain 81 values.');
+  }
+
+  /**
+   * Returns a copy of the data at a specified row.
+   * TODO: Unit Tests
+   * @param row The row to return.
+   * @returns A CellCollection containing a copy of the requested row.
+   */
+  row(row: GridRows): CellCollection {
+    const cells: Cell[] = this.values
+      .filter((cell) => cell.location.y === (row as number))
+      .sort((a, b) => a.location.x - b.location.x);
+
+    return new CellCollection(cells);
+  }
+
+  /**
+   * Returns a copy of the data at a specified column.
+   * TODO: Unit Tests
+   * @param column The column to return.
+   * @returns A CellCollection containing a copy of the requested column.
+   */
+  column(column: GridColumns): CellCollection {
+    const cells: Cell[] = this.values
+      .filter((cell) => cell.location.x === (column as number))
+      .sort((a, b) => a.location.y - b.location.y);
+
+    return new CellCollection(cells);
+  }
+
+  /**
+   * Returns a copy of the data at a specified column.
+   * TODO: Unit Tests
+   * @param column The column to return.
+   * @returns A CellCollection containing a copy of the requested column.
+   */
+  block(block: GridBlocks): CellCollection {
+    return new CellCollection(this.values.filter((cell) => Grid.gridBlockFromLocation(cell.location) === block));
   }
 }
