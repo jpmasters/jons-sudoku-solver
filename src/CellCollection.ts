@@ -32,4 +32,20 @@ export class CellCollection {
 
     return rv ? rv.copy() : null;
   }
+
+  /**
+   * Combines the contents of two CellCollections replacing any of the existing
+   * items with those in the cells parameter if they appear at the same grid
+   * location.
+   * @param cells Cells to merge.
+   * @returns A new CellCollection with the merged Cells.
+   */
+  mergedWith(cells: CellCollection): CellCollection {
+    // create the merged cells and de-dupe ensuring the cells passed in overwrite the existing ones
+    const meregedCells: Cell[] = cells.values.concat(this.values).filter((c, i, arr) => {
+      return arr.findIndex((c2) => c2.location.x === c.location.x && c2.location.y === c.location.y) === i;
+    });
+
+    return new CellCollection(meregedCells);
+  }
 }

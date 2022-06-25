@@ -69,7 +69,6 @@ export class Grid extends CellCollection {
 
   /**
    * Returns a copy of the data at a specified row.
-   * TODO: Unit Tests
    * @param row The row to return.
    * @returns A CellCollection containing a copy of the requested row.
    */
@@ -83,7 +82,6 @@ export class Grid extends CellCollection {
 
   /**
    * Returns a copy of the data at a specified column.
-   * TODO: Unit Tests
    * @param column The column to return.
    * @returns A CellCollection containing a copy of the requested column.
    */
@@ -97,11 +95,12 @@ export class Grid extends CellCollection {
 
   /**
    * Returns a copy of the data at a specified column.
-   * TODO: Unit Tests
    * @param column The column to return.
    * @returns A CellCollection containing a copy of the requested column.
    */
   block(block: GridBlocks): CellCollection {
-    return new CellCollection(this.values.filter((cell) => Grid.gridBlockFromLocation(cell.location) === block));
+    const cells: Cell[] = this.values.filter((cell) => Grid.gridBlockFromLocation(cell.location) === block);
+
+    return new CellCollection(cells);
   }
 }
