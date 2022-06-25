@@ -67,3 +67,97 @@ test('Merging cell collections returns returns items from both collections.', ()
   expect(replacedCell?.value.hasKnownValue).toBeTruthy();
   expect(replacedCell?.value.value).toBe(9);
 });
+
+test('hasLocation works', () => {
+  const cc1 = new CellCollection([
+    new Cell({ x: 5, y: 5 }, new CellValue([1])),
+    new Cell({ x: 6, y: 5 }, new CellValue([2])),
+    new Cell({ x: 7, y: 5 }, new CellValue([3])),
+    new Cell({ x: 8, y: 5 }, new CellValue([4])),
+    new Cell({ x: 9, y: 5 }, new CellValue([5])),
+  ]);
+
+  expect(cc1.hasLocation({ x: 5, y: 5 })).toBeTruthy();
+  expect(cc1.hasLocation({ x: 1, y: 1 })).toBeFalsy();
+});
+
+test('hasValue works', () => {
+  const cc1 = new CellCollection([
+    new Cell({ x: 5, y: 5 }, new CellValue([1])),
+    new Cell({ x: 6, y: 5 }, new CellValue([2])),
+    new Cell({ x: 7, y: 5 }, new CellValue([3])),
+    new Cell({ x: 8, y: 5 }, new CellValue([4])),
+    new Cell({ x: 9, y: 5 }, new CellValue([5])),
+  ]);
+
+  expect(cc1.hasValue(3)).toBeTruthy();
+  expect(cc1.hasValue(9)).toBeFalsy();
+});
+
+test('setValue throws if the location cannot be found', () => {
+  const cc1 = new CellCollection([
+    new Cell({ x: 5, y: 5 }, new CellValue([1])),
+    new Cell({ x: 6, y: 5 }, new CellValue([2])),
+    new Cell({ x: 7, y: 5 }, new CellValue([3])),
+    new Cell({ x: 8, y: 5 }, new CellValue([4])),
+    new Cell({ x: 9, y: 5 }, new CellValue([5])),
+  ]);
+
+  expect(() => {
+    cc1.setValue({ x: 1, y: 1 }, 9);
+  }).toThrow();
+
+  expect(() => {
+    cc1.setValue({ x: 6, y: 5 }, 9);
+  }).not.toThrow();
+});
+
+test('setValue throws if the value is already set in one of the other cells', () => {
+  const cc1 = new CellCollection([
+    new Cell({ x: 5, y: 5 }, new CellValue([1])),
+    new Cell({ x: 6, y: 5 }, new CellValue([2])),
+    new Cell({ x: 7, y: 5 }, new CellValue([3])),
+    new Cell({ x: 8, y: 5 }, new CellValue([4])),
+    new Cell({ x: 9, y: 5 }, new CellValue([5])),
+  ]);
+
+  expect(() => {
+    cc1.setValue({ x: 5, y: 5 }, 3);
+  }).toThrow();
+});
+
+test('setValue sets the value', () => {
+  const cc1 = new CellCollection([
+    new Cell({ x: 5, y: 5 }, new CellValue([1])),
+    new Cell({ x: 6, y: 5 }, new CellValue([2])),
+    new Cell({ x: 7, y: 5 }, new CellValue([3])),
+    new Cell({ x: 8, y: 5 }, new CellValue([4])),
+    new Cell({ x: 9, y: 5 }, new CellValue([5])),
+  ]);
+
+  const cc2 = cc1.setValue({ x: 5, y: 5 }, 9);
+  expect(cc2.hasValue(9)).toBeTruthy();
+  expect(cc2.cellAtLocation({ x: 5, y: 5 })?.value.value).toBe(9);
+});
+
+test('setValue having set a value removes that as a potentia value for all other cells in the collection.', () => {
+  const cc1 = new CellCollection([
+    new Cell({ x: 5, y: 5 }, new CellValue()),
+    new Cell({ x: 6, y: 5 }, new CellValue()),
+    new Cell({ x: 7, y: 5 }, new CellValue()),
+    new Cell({ x: 8, y: 5 }, new CellValue()),
+    new Cell({ x: 9, y: 5 }, new CellValue()),
+  ]);
+
+  const cc2 = cc1.setValue({ x: 5, y: 5 }, 9);
+
+  expect(cc2.values.length).toBe(5);
+  expect(cc2.cellAtLocation({ x: 5, y: 5 })?.value.value).toBe(9);
+  cc2.values
+    .filter((cell) => cell.location.x !== 5 && cell.location.y !== 5)
+    .every((cell) => {
+      expect(cell.value.valuePotentials[8]).toBeFalsy();
+      expect(cell.value.valuePotentials[0]).toBeTruthy();
+      return true;
+    });
+});

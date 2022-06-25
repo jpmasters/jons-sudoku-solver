@@ -30,6 +30,17 @@ export class CellValue {
   }
 
   /**
+   * Returns a copy of the CellValue with the specified potential removed.
+   * @param value The potential to remove from the value.
+   * @returns A new CellValue with the updated potentials.
+   */
+  removePotential(value: SudokuPossibleValue): CellValue {
+    let rv = this.copy();
+    rv._valuePotentials[value - 1] = false;
+    return rv;
+  }
+
+  /**
    * Gets the 9 possible cell value probabilities (0 - 1) as a zero based array.
    * E.g. if the probability that the cell contains a 3 is 50% then the value at
    * index 4 contains 0.5.
