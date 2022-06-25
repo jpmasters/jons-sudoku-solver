@@ -6,7 +6,7 @@ test('Can create a cell with default value', () => {
   expect(c).toBeInstanceOf(Cell);
   expect(c.location).toStrictEqual({ x: 1, y: 1 });
   expect(c.value.hasKnownValue).toBeFalsy();
-  expect(c.value.valuePotentials).toStrictEqual([1 / 9, 1 / 9, 1 / 9, 1 / 9, 1 / 9, 1 / 9, 1 / 9, 1 / 9, 1 / 9]);
+  expect(c.value.valuePotentials).toStrictEqual([true, true, true, true, true, true, true, true, true]);
 });
 
 test('Created cell holds location correctly', () => {

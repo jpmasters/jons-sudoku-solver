@@ -10,7 +10,7 @@ test('Default constructor instantiates a cell value with all possible states', (
   expect(c.hasKnownValue).toBeFalsy();
 
   // has the correct values
-  expect(c.valuePotentials).toStrictEqual(Array(9).fill(1 / 9));
+  expect(c.valuePotentials).toStrictEqual(Array(9).fill(true));
 });
 
 test('Reading the value before it is 100% known throws an exception.', () => {
@@ -37,7 +37,7 @@ test('Copy returns a new CellValue', () => {
 test('Copy returns a CellValue with the correct values', () => {
   const c = new CellValue([3, 4, 5]);
   const d = c.copy();
-  expect(d.valuePotentials).toStrictEqual([0, 0, 1 / 3, 1 / 3, 1 / 3, 0, 0, 0, 0]);
+  expect(d.valuePotentials).toStrictEqual([false, false, true, true, true, false, false, false, false]);
 });
 
 test('Copy returns a deep copy', () => {

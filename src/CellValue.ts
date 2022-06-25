@@ -13,9 +13,9 @@ export class CellValue {
    * @param value Optional initial cell value.
    */
   constructor(value: SudokuPossibleValues = SudokuAllPossibleValues) {
-    this._valuePotentials = Array(9).fill(0);
-    value.forEach((v, i, a) => {
-      this._valuePotentials[v - 1] = 1 / a.length;
+    this._valuePotentials = Array(9).fill(false);
+    value.forEach((v) => {
+      this._valuePotentials[v - 1] = true;
     });
   }
 
@@ -34,28 +34,27 @@ export class CellValue {
    * E.g. if the probability that the cell contains a 3 is 50% then the value at
    * index 4 contains 0.5.
    */
-  get valuePotentials(): number[] {
+  get valuePotentials(): boolean[] {
     return [...this._valuePotentials];
   }
 
-  private _valuePotentials: number[];
+  private _valuePotentials: boolean[];
 
   /**
    * Returns a value indicating whether or not the cell has a known value.
    */
   get hasKnownValue(): boolean {
-    return this._valuePotentials.includes(1);
+    return this._valuePotentials.filter((v) => v).length === 1;
   }
 
   /**
    * Gets the value of the cell if it has 100% settled. Throws an exception if not.
    */
   get value(): SudokuPossibleValue {
-    // search for a potential of 100%
-    const i = this._valuePotentials.findIndex((v) => v === 1);
+    if (!this.hasKnownValue) throw Error('Cell value is not known. Check hasKnownValue first.');
 
-    // if we don't find it, throw an exception, it was called before it had settled
-    if (i === -1) throw Error('Cell value is not known. Check hasKnownValue first.');
+    // search for a potential of 100%
+    const i = this._valuePotentials.findIndex((v) => v);
 
     // otherwise return the cell value
     return (i + 1) as unknown as SudokuPossibleValue;

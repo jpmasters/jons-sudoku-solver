@@ -42,10 +42,10 @@ export class CellCollection {
    */
   mergedWith(cells: CellCollection): CellCollection {
     // create the merged cells and de-dupe ensuring the cells passed in overwrite the existing ones
-    const meregedCells: Cell[] = cells.values.concat(this.values).filter((c, i, arr) => {
+    const mergedCells: Cell[] = cells.values.concat(this.values).filter((c, i, arr) => {
       return arr.findIndex((c2) => c2.location.x === c.location.x && c2.location.y === c.location.y) === i;
     });
 
-    return new CellCollection(meregedCells);
+    return new CellCollection(mergedCells);
   }
 }
