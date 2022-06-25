@@ -34,9 +34,9 @@ export class CellCollection {
   }
 
   /**
-   * Combines the contents of two CellCollections replacing any of the existing
-   * items with those in the cells parameter if they appear at the same grid
-   * location.
+   * Returns a new CellColection that combines the contents of two CellCollections 
+   * replacing any of the existing items with those in the cells parameter if they 
+   * appear at the same grid location.
    * @param cells Cells to merge.
    * @returns A new CellCollection with the merged Cells.
    */
