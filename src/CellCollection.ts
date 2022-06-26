@@ -86,14 +86,14 @@ export class CellCollection {
     // check for a valid value
     if (this.hasValue(value)) throw new Error(`This CellCollection already contains a value of ${value}`);
 
-    let newCellValues: Cell[] = [];
-    this.values.every((c) => {
-      if (c.location.x === location.x && c.location.y === location.y) {
-        newCellValues.push(new Cell({ x: location.x, y: location.y }, new CellValue([value])));
-      } else {
-        newCellValues.push(new Cell({ x: location.x, y: location.y }, c.value.removePotential(value)));
-      }
-      return true;
+    // create a new CellCollection with the new value
+    const newCellValues: Cell[] = this.values.map((c) => {
+      const newValue: CellValue =
+        c.location.x === location.x && c.location.y === location.y
+          ? new CellValue([value])
+          : c.value.removePotential(value);
+
+      return new Cell({ x: c.location.x, y: c.location.y }, newValue);
     });
 
     return new CellCollection(newCellValues);

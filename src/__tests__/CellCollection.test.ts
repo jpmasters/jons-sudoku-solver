@@ -1,3 +1,4 @@
+import { SudokuAllPossibleValues } from '../ValueTypes';
 import { Cell } from '../Cell';
 import { CellCollection } from '../CellCollection';
 import { CellValue } from '../CellValue';
@@ -138,6 +139,8 @@ test('setValue sets the value', () => {
   const cc2 = cc1.setValue({ x: 5, y: 5 }, 9);
   expect(cc2.hasValue(9)).toBeTruthy();
   expect(cc2.cellAtLocation({ x: 5, y: 5 })?.value.value).toBe(9);
+  expect(cc2.values.filter((cell) => cell.location.x === 5 && cell.location.y === 5).length).toBe(1);
+  expect(cc2.values.filter((cell) => cell.location.x !== 5 || cell.location.y !== 5).length).toBe(4);
 });
 
 test('setValue having set a value removes that as a potentia value for all other cells in the collection.', () => {
@@ -154,10 +157,12 @@ test('setValue having set a value removes that as a potentia value for all other
   expect(cc2.values.length).toBe(5);
   expect(cc2.cellAtLocation({ x: 5, y: 5 })?.value.value).toBe(9);
   cc2.values
-    .filter((cell) => cell.location.x !== 5 && cell.location.y !== 5)
-    .every((cell) => {
-      expect(cell.value.valuePotentials[8]).toBeFalsy();
-      expect(cell.value.valuePotentials[0]).toBeTruthy();
-      return true;
+    .filter((cell) => cell.location.x !== 5 || cell.location.y !== 5)
+    .forEach((cell) => {
+      SudokuAllPossibleValues.forEach((val, i) => {
+        val === 9
+          ? expect(cell.value.valuePotentials[i]).toBeFalsy()
+          : expect(cell.value.valuePotentials[i]).toBeTruthy();
+      });
     });
 });
