@@ -16,7 +16,7 @@ export class Cell {
     this.value = value.copy();
 
     // the location must be in range
-    if (location.x < 1 || location.x > 9 || location.y < 1 || location.y > 9) {
+    if (location.column < 1 || location.column > 9 || location.row < 1 || location.row > 9) {
       throw new Error('Location is out of range. x and y values should be between 1 and 9');
     }
 
@@ -28,7 +28,7 @@ export class Cell {
    * @returns A deep copy of the Cell.
    */
   copy(): Cell {
-    return new Cell({ x: this.location.x, y: this.location.y }, this.value.copy());
+    return new Cell({ column: this.location.column, row: this.location.row }, this.value.copy());
   }
 
   /**

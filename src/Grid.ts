@@ -1,11 +1,7 @@
 import { Cell } from './Cell';
 import { CellCollection } from './CellCollection';
 import { CellValue } from './CellValue';
-import { GridLocation, SudokuPossibleValue } from './ValueTypes';
-
-export type GridRows = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
-export type GridColumns = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
-export type GridBlocks = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
+import { GridBlocks, GridColumns, GridLocation, GridRows, SudokuPossibleValue } from './ValueTypes';
 
 /**
  * Defines an immutable grid structure of Sudoku cells.
@@ -19,8 +15,8 @@ export class Grid extends CellCollection {
    * @returns The GridBlock that the location sits in.
    */
   static gridBlockFromLocation(location: GridLocation): GridBlocks {
-    const xBlock = Math.floor((location.x - 1) / 3);
-    const yBlock = Math.floor((location.y - 1) / 3);
+    const xBlock = Math.floor((location.column - 1) / 3);
+    const yBlock = Math.floor((location.row - 1) / 3);
 
     return (1 + xBlock + 3 * yBlock) as GridBlocks;
   }
@@ -45,7 +41,7 @@ export class Grid extends CellCollection {
         return row.map((v, x) => {
           return new Cell(
             // remember locations are from 1 - 9 (not 0 - 8)
-            { x: x + 1, y: y + 1 },
+            { column: (x + 1) as GridColumns, row: (y + 1) as GridRows },
             v ? new CellValue([v as unknown as SudokuPossibleValue]) : new CellValue(),
           );
         });
@@ -74,8 +70,8 @@ export class Grid extends CellCollection {
    */
   row(row: GridRows): CellCollection {
     const cells: Cell[] = this.values
-      .filter((cell) => cell.location.y === (row as number))
-      .sort((a, b) => a.location.x - b.location.x);
+      .filter((cell) => cell.location.row === row)
+      .sort((a, b) => a.location.column - b.location.column);
 
     return new CellCollection(cells);
   }
@@ -87,8 +83,8 @@ export class Grid extends CellCollection {
    */
   column(column: GridColumns): CellCollection {
     const cells: Cell[] = this.values
-      .filter((cell) => cell.location.x === (column as number))
-      .sort((a, b) => a.location.y - b.location.y);
+      .filter((cell) => cell.location.column === column)
+      .sort((a, b) => a.location.row - b.location.row);
 
     return new CellCollection(cells);
   }

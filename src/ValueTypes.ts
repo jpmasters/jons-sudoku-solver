@@ -14,6 +14,21 @@ export type SudokuPossibleValues = ReadonlyArray<SudokuPossibleValue>;
 export const SudokuAllPossibleValues: SudokuPossibleValues = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
 /**
+ * Possible rows in a grid.
+ */
+export type GridRows = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
+
+/**
+ * Possible columns in a grid.
+ */
+export type GridColumns = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
+
+/**
+ * Possible blocks in a grid.
+ */
+export type GridBlocks = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
+
+/**
  * Defines the location of a cell within a grid.
  */
-export type GridLocation = { x: number; y: number };
+export type GridLocation = { column: GridColumns; row: GridRows };

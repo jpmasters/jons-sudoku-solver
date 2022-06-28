@@ -46,3 +46,25 @@ test('Copy returns a deep copy', () => {
 
   expect(d.valuePotentials).not.toBe(c.valuePotentials);
 });
+
+test('Remove a potential value sets it (and only it) to false.', () => {
+  const c = new CellValue();
+
+  expect(c.valuePotentials.length).toBe(9);
+  c.valuePotentials.forEach((v) => {
+    expect(v).toBeTruthy();
+  });
+
+  const d = c.removePotential(5);
+  const cCheck = Array(9).fill(true);
+  let dCheck = Array(9).fill(true);
+  dCheck[4] = false;
+
+  // c should be untouched
+  expect(c.valuePotentials).toEqual(cCheck);
+
+  // d should have the removed potential set to false
+  // and it should not have settled onm a value yet
+  expect(d.hasKnownValue).toBeFalsy();
+  expect(d.valuePotentials).toEqual(dCheck);
+});
