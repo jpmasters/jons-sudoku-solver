@@ -3,6 +3,7 @@ import { SudokuAllPossibleValues, SudokuPossibleValue, SudokuPossibleValues } fr
 /**
  * This class represents a cell in a Sudoku grid and holds all the potential
  * values that the cell can have. It is designed to be immutable.
+ * TODO: Might be better to reimplement this class to use an array of values rather than an array of flags.
  */
 export class CellValue {
   /**
