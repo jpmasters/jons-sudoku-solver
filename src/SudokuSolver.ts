@@ -66,6 +66,8 @@ export class SudokuSolver {
 
   /**
    * Solves the given 9x9 Sudoku grid.
+   * TODO: Needs a better way to handle puzzles it cant solve (than return incomplete solution)
+   * TODO: Add a callback method of some kind to allow the user to monitor the grids and changes at each iteration.
    * @param puzzle A puzzle defined a as a 2D array of numbers with zeros representing unknown values.
    * @returns A solved puzzle defined as a 2D array of numbers.
    */
