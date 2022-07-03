@@ -1,7 +1,7 @@
 import { emptyPuzzle } from '../EmptyPuzzle';
 import { GridDifference, Grid } from '../Grid';
 import { SudokuSolver } from '../SudokuSolver';
-import { testPuzzle3, testPuzzle3Solved } from './puzzles.test';
+import { testPuzzle1, testPuzzle2, testPuzzle3, testPuzzle3Solved } from './puzzles.test';
 
 const invalidPuzzle1: Array<Array<number>> = [];
 
@@ -109,9 +109,9 @@ test('Apply changes works', () => {
   gInitial.values
     .filter((iVal) => iVal.value.hasKnownValue)
     .forEach((iVal) => {
-      expect(updatedGrid.grid.cellAtLocation({ row: iVal.location.row, column: iVal.location.column })?.value.value).toBe(
-        iVal.value.value,
-      );
+      expect(
+        updatedGrid.grid.cellAtLocation({ row: iVal.location.row, column: iVal.location.column })?.value.value,
+      ).toBe(iVal.value.value);
     });
 
   const gSolved = Grid.fromGrid(testPuzzle3Solved);
@@ -135,4 +135,14 @@ test('Grid to puzzle array works', () => {
   const p1 = Grid.fromGrid(testPuzzle3Solved);
   const res = SudokuSolver.gridToPuzzleArray(p1);
   expect(res).toEqual(testPuzzle3Solved);
+});
+
+test('Solves testPuzzle1', () => {
+  const solvedPuzzle: number[][] = SudokuSolver.solve(testPuzzle1);
+  expect(solvedPuzzle.flat().filter((v) => !!v).length).toBe(81);
+});
+
+test('Solves testPuzzle2', () => {
+  const solvedPuzzle: number[][] = SudokuSolver.solve(testPuzzle2);
+  expect(solvedPuzzle.flat().filter((v) => !!v).length).toBe(81);
 });

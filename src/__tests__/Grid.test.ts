@@ -86,8 +86,8 @@ test('Grid block from location returns wrong block number', () => {
 
 test('Grid returns correct cell collection for a column', () => {
   const g = Grid.fromGrid(testPuzzle1);
-  const col2 = [0, 8, 0, 7, 0, 0, 0, 9, 0];
-  const col7 = [2, 0, 5, 0, 0, 0, 6, 0, 0];
+  const col2 = [0, 8, 9, 2, 0, 5, 0, 4, 0];
+  const col7 = [7, 0, 5, 0, 9, 0, 0, 0, 0];
 
   expect(g.values.length).toBe(81);
 
@@ -112,8 +112,8 @@ test('Grid returns correct cell collection for a column', () => {
 
 test('Grid returns correct cell collection for a column', () => {
   const g = Grid.fromGrid(testPuzzle1);
-  const row3 = [6, 0, 2, 0, 0, 0, 5, 0, 0];
-  const row7 = [0, 0, 5, 0, 0, 0, 6, 0, 3];
+  const row3 = [1, 9, 0, 0, 0, 4, 5, 0, 0];
+  const row7 = [0, 0, 9, 3, 0, 0, 0, 7, 4];
 
   expect(g.values.length).toBe(81);
 
@@ -138,8 +138,8 @@ test('Grid returns correct cell collection for a column', () => {
 
 test('Grid returns correct cell collection for a block', () => {
   const g = Grid.fromGrid(testPuzzle1);
-  const block3 = [2, 0, 0, 0, 9, 0, 5, 0, 0];
-  const block9 = [6, 0, 3, 0, 7, 0, 0, 0, 0];
+  const block3 = [7, 0, 1, 0, 9, 0, 5, 0, 0];
+  const block9 = [0, 7, 4, 0, 3, 6, 0, 0, 0];
 
   expect(g.values.length).toBe(81);
 
