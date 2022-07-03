@@ -4,6 +4,14 @@ import { CellValue } from './CellValue';
 import { GridBlocks, GridColumns, GridLocation, GridRows, SudokuPossibleValue } from './ValueTypes';
 
 /**
+ * Describes a change to a grid.
+ */
+export type GridDifference = {
+  location: GridLocation;
+  value: SudokuPossibleValue;
+};
+
+/**
  * Defines an immutable grid structure of Sudoku cells.
  */
 export class Grid extends CellCollection {
@@ -53,6 +61,15 @@ export class Grid extends CellCollection {
   }
 
   /**
+   * Converts a raw CellCollection into a Grid.
+   * @param cells The cell collection from which to create the Grid.
+   * @returns A reference to the created Grid object.
+   */
+  static fromCellCollection(cells: CellCollection): Grid {
+    return new Grid(cells.values);
+  }
+
+  /**
    * Instantiates a new Grid object.
    * @param values An array of 81 Cells
    */
@@ -98,5 +115,33 @@ export class Grid extends CellCollection {
     const cells: Cell[] = this.values.filter((cell) => Grid.gridBlockFromLocation(cell.location) === block);
 
     return new CellCollection(cells);
+  }
+
+  /**
+   *Returns a value indicating whether the puzzle is completely solved or not.
+   */
+  get isSolved(): boolean {
+    return this.values.filter((cell) => !cell.value.hasKnownValue).length === 0;
+  }
+
+  /**
+   * returns a list of values that exist in 'this' Grid but not the passed in Grid.
+   * @param grid The grid to compare it to.
+   * @returns A list of values and their locations that appear in this Grid but not the
+   * Grid passed in the parameter.
+   */
+  differences(grid: Grid): Array<GridDifference> {
+    let rv: Array<GridDifference> = [];
+
+    rv = this.values
+      .filter((thisCell) => thisCell.value.hasKnownValue)
+      .filter((thisCell) => {
+        return !grid.cellAtLocation(thisCell.location)?.value.hasKnownValue;
+      })
+      .map<GridDifference>((cell) => {
+        return { location: { ...cell.location }, value: cell.value.value };
+      });
+
+    return rv;
   }
 }

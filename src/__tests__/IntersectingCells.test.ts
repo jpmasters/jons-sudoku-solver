@@ -1,7 +1,8 @@
 import { SudokuAllPossibleValues } from '../ValueTypes';
 import { Grid } from '../Grid';
-import { emptyPuzzle, testPuzzle2 } from './puzzles.test';
+import { testPuzzle2 } from './puzzles.test';
 import { IntersectingCells } from '../IntersectingCells';
+import { emptyPuzzle } from '../EmptyPuzzle';
 
 test('Can create an IntersectingCells object from a Grid', () => {
   const grid = Grid.fromGrid(testPuzzle2);
@@ -22,15 +23,6 @@ test('setValue throws if the location cannot be found', () => {
   expect(() => {
     intersectingCells.setValue({ column: 5, row: 3 }, 1);
   }).not.toThrow();
-});
-
-test('setValue throws if the value is already set in one of the other cells', () => {
-  const grid = Grid.fromGrid(testPuzzle2);
-  const intersectingCells: IntersectingCells = IntersectingCells.fromGridLocation(grid, { column: 5, row: 7 });
-
-  expect(() => {
-    intersectingCells.setValue({ column: 5, row: 7 }, 9);
-  }).toThrow();
 });
 
 test('setValue sets the value', () => {

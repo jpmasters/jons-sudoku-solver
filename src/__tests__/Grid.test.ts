@@ -1,7 +1,7 @@
 import { Cell } from '../Cell';
 import { Grid } from '../Grid';
 import { GridColumns, GridRows } from '../ValueTypes';
-import { testPuzzle1 } from './puzzles.test';
+import { testPuzzle1, testPuzzle3, testPuzzle3Solved } from './puzzles.test';
 
 test('Can create a grid from a 2D puzzle array', () => {
   const g = Grid.fromGrid(testPuzzle1);
@@ -160,4 +160,19 @@ test('Grid returns correct cell collection for a block', () => {
       expect(block9[i]).toBe(0);
     }
   });
+});
+
+test('Is solved works', () => {
+  const p1 = Grid.fromGrid(testPuzzle3);
+  const p2 = Grid.fromGrid(testPuzzle3Solved);
+  expect(p1.isSolved).toBeFalsy();
+  expect(p2.isSolved).toBeTruthy();
+});
+
+test('Difference works', () => {
+  const p1 = Grid.fromGrid(testPuzzle3);
+  const p2 = Grid.fromGrid(testPuzzle3Solved);
+
+  const diffs = p2.differences(p1);
+  expect(diffs.length).toBe(51);
 });

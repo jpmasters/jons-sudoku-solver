@@ -11,7 +11,7 @@ export class CellCollection {
    */
   constructor(values: Cell[]) {
     this.values = values.map<Cell>((c) => {
-      return new Cell(c.location, c.value.copy());
+      return new Cell({...c.location}, c.value.copy());
     });
   }
 

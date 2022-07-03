@@ -32,3 +32,4 @@ export type GridBlocks = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
  * Defines the location of a cell within a grid.
  */
 export type GridLocation = { column: GridColumns; row: GridRows };
+

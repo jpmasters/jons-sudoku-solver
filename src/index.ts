@@ -1,1 +1,3 @@
-export const SudokuSolver = (name: string) => `Hello ${name}`;
+import { SudokuSolver } from './SudokuSolver';
+
+export = SudokuSolver;
