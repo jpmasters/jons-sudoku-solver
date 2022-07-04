@@ -131,12 +131,6 @@ test('Solver solves!', () => {
   expect(solvedPuzzle).toEqual(testPuzzle3Solved);
 });
 
-test('Grid to puzzle array works', () => {
-  const p1 = Grid.fromGrid(testPuzzle3Solved);
-  const res = SudokuSolver.gridToPuzzleArray(p1);
-  expect(res).toEqual(testPuzzle3Solved);
-});
-
 test('Solves testPuzzle1', () => {
   const solvedPuzzle: number[][] = SudokuSolver.solve(testPuzzle1);
   expect(solvedPuzzle.flat().filter((v) => !!v).length).toBe(81);

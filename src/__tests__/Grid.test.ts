@@ -176,3 +176,9 @@ test('Difference works', () => {
   const diffs = p2.differences(p1);
   expect(diffs.length).toBe(51);
 });
+
+test('Grid to puzzle array works', () => {
+  const p1 = Grid.fromGrid(testPuzzle3Solved);
+  const res = p1.toPuzzleArray();
+  expect(res).toEqual(testPuzzle3Solved);
+});

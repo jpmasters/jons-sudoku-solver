@@ -45,26 +45,6 @@ export class SudokuSolver {
   }
 
   /**
-   * Converts the values in a Grid to a 2D array of numbers.
-   * @param grid The grid object to convert.
-   * @returns The Grid as a 2D array of numbers.
-   */
-  static gridToPuzzleArray(grid: Grid): number[][] {
-    // TODO: there must be a better way to do this without copying the
-    // same sub-array reference to every row??
-    const rv: number[][] = new Array(9).fill([]);
-    rv.forEach((v, i) => {
-      rv[i] = new Array(9).fill(0);
-    });
-
-    grid.values.forEach((cell) => {
-      rv[cell.location.row - 1].splice(cell.location.column - 1, 1, cell.value.hasKnownValue ? cell.value.value : 0);
-    });
-
-    return rv;
-  }
-
-  /**
    * Solves the given 9x9 Sudoku grid.
    * TODO: Needs a better way to handle puzzles it cant solve (than return incomplete solution)
    * TODO: Add a callback method of some kind to allow the user to monitor the grids and changes at each iteration.
@@ -98,6 +78,6 @@ export class SudokuSolver {
     }
 
     // concert it into something we can return
-    return this.gridToPuzzleArray(res.grid);
+    return res.grid.toPuzzleArray();
   }
 }

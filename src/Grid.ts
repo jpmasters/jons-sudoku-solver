@@ -145,4 +145,23 @@ export class Grid extends CellCollection {
 
     return rv;
   }
+
+  /**
+   * Converts the values in this Grid to a 2D array of numbers.
+   * @returns The Grid as a 2D array of numbers.
+   */
+  toPuzzleArray(): number[][] {
+    // TODO: there must be a better way to do this without copying the
+    // same sub-array reference to every row??
+    const rv: number[][] = new Array(9).fill([]);
+    rv.forEach((v, i) => {
+      rv[i] = new Array(9).fill(0);
+    });
+
+    this.values.forEach((cell) => {
+      rv[cell.location.row - 1].splice(cell.location.column - 1, 1, cell.value.hasKnownValue ? cell.value.value : 0);
+    });
+
+    return rv;
+  }
 }
