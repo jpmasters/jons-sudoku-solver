@@ -7,6 +7,11 @@ import { SudokuAllPossibleValues, SudokuPossibleValue, SudokuPossibleValues } fr
  */
 export class CellValue {
   /**
+   * Holds the vaue potentials as a fixed length array of booleans
+   */
+  private _valuePotentials: boolean[];
+
+  /**
    * Instantiates a new instance of a Sudoku grid cell. The cell is designed to
    * be immutable. If the cell is constructed without initial values, it will
    * create it with all potential values.
@@ -45,12 +50,22 @@ export class CellValue {
    * Gets the 9 possible cell value probabilities (0 - 1) as a zero based array.
    * E.g. if the probability that the cell contains a 3 is 50% then the value at
    * index 4 contains 0.5.
+   * TODO: Get rid of this and just use an array of possible values.
    */
   get valuePotentials(): boolean[] {
     return [...this._valuePotentials];
   }
 
-  private _valuePotentials: boolean[];
+  /**
+   * Returns the potential values as an array of SudokuPossibleValues.
+   */
+  get potentialValues(): SudokuPossibleValue[] {
+    const rv: SudokuPossibleValue[] = this._valuePotentials.reduce<SudokuPossibleValue[]>((prev, curr, i) => {
+      if (curr) prev.push((i + 1) as unknown as SudokuPossibleValue);
+      return prev;
+    }, []);
+    return rv;
+  }
 
   /**
    * Returns a value indicating whether or not the cell has a known value.

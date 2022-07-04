@@ -1,6 +1,8 @@
 import { emptyPuzzle } from './EmptyPuzzle';
 import { GridDifference, Grid } from './Grid';
 import { ChangeResult, SolverHelpers } from './SolverHelpers';
+import { SolverStrategies } from './SolverStrategies';
+import { SudokuAllPossibleValues } from './ValueTypes';
 
 /**
  * Implements a class that can solve a 9x9 Sudoku provided as a number[9][9].
@@ -36,6 +38,15 @@ export class SudokuSolver {
     while (res.changes.length) {
       // apply them to the target grid
       res = SolverHelpers.applyChangeList(res.grid, res.changes);
+
+      // if we got zero changes, try our strategies
+      if (!res.grid.isSolved && res.changes.length === 0) {
+        res.changes.push(
+          ...SudokuAllPossibleValues.map((row) => SolverStrategies.onlyValueInBlock(res.grid.row(row))).flat(),
+          ...SudokuAllPossibleValues.map((column) => SolverStrategies.onlyValueInBlock(res.grid.column(column))).flat(),
+          ...SudokuAllPossibleValues.map((block) => SolverStrategies.onlyValueInBlock(res.grid.block(block))).flat(),
+        );
+      }
     }
 
     // convert it into something we can return

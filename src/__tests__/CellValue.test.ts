@@ -68,3 +68,18 @@ test('Remove a potential value sets it (and only it) to false.', () => {
   expect(d.hasKnownValue).toBeFalsy();
   expect(d.valuePotentials).toEqual(dCheck);
 });
+
+test('potentialValues returns correct values', () => {
+  let c = new CellValue();
+  expect(c.potentialValues).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9]);
+
+  c = c.removePotential(5);
+  expect(c.potentialValues).toEqual([1, 2, 3, 4, 6, 7, 8, 9]);
+
+  c = new CellValue([1, 2, 4]);
+  expect(c.potentialValues).toEqual([1, 2, 4]);
+
+  c = new CellValue([3]);
+  expect(c.hasKnownValue).toBeTruthy();
+  expect(c.potentialValues).toEqual([3]);
+});

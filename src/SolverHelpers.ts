@@ -8,7 +8,9 @@ export interface ChangeResult {
   grid: Grid;
   changes: GridDifference[];
 }
-
+/**
+ * Implements a class that provides helper methods for solving puzzles.
+ */
 export class SolverHelpers {
   /**
    * Applies a list of changes to a Grid and returns a new grid with the results.

@@ -1,5 +1,5 @@
 import { CellValue } from './CellValue';
-import { GridLocation } from './ValueTypes';
+import { GridLocation, SudokuPossibleValue } from './ValueTypes';
 
 /**
  * Describes a cell within a Sudoku grid.
