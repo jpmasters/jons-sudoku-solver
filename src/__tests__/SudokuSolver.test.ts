@@ -3,16 +3,16 @@ import { GridDifference, Grid } from '../Grid';
 import { SudokuSolver } from '../SudokuSolver';
 import { testPuzzle1, testPuzzle2, testPuzzle3, testPuzzle3Solved } from './puzzles.test';
 
-const invalidPuzzle1: Array<Array<number>> = [];
+const invalidPuzzle1: number[][] = [];
 
-const invalidPuzzle2: Array<Array<number>> = [[0, 0, 0, 0]];
+const invalidPuzzle2: number[][] = [[0, 0, 0, 0]];
 
-const invalidPuzzle3: Array<Array<number>> = [
+const invalidPuzzle3: number[][] = [
   [0, 0, 0, 0, 0, 0, 0, 0, 0],
   [0, 0, 0, 0, 0, 0, 0, 0, 0],
 ];
 
-const invalidPuzzle4: Array<Array<number>> = [
+const invalidPuzzle4: number[][] = [
   [0, 0, 0, 0, 0, 0, 0, 0, 0],
   [0, 0, 0, 0, 0, 0, 0, 0, 0],
   [0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -25,7 +25,7 @@ const invalidPuzzle4: Array<Array<number>> = [
   [0, 0, 0, 0, 0, 0, 0, 0, 0],
 ];
 
-const invalidPuzzle5: Array<Array<number>> = [
+const invalidPuzzle5: number[][] = [
   [0, 0, 0, 0, 0, 0, 0, 0, 0],
   [0, 0, 0, 0, 0, 0, 0, 0, 0],
   [0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -37,7 +37,7 @@ const invalidPuzzle5: Array<Array<number>> = [
   [0, 0, 0, 0, 0, 0, 0, 0, 0],
 ];
 
-const invalidPuzzle6: Array<Array<number>> = [
+const invalidPuzzle6: number[][] = [
   [0, 0, 0, 0, 0, 0, 0, 0, 0],
   [0, 0, 0, 0, 0, 0, 0, 0, 0],
   [0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -49,7 +49,7 @@ const invalidPuzzle6: Array<Array<number>> = [
   [0, 0, 0, 0, 0, 0, 0, 0, 0],
 ];
 
-const invalidPuzzle7: Array<Array<number>> = [
+const invalidPuzzle7: number[][] = [
   [0, 0, 0, 0, 0, 0, 0, 0, 0],
   [0, 0, 0, 0, 0, 0, 0, 0, 0],
   [0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -97,7 +97,7 @@ test('Solver accepts 9x9 grid only.', () => {
 
 test('Apply changes works', () => {
   const gInitial = Grid.fromGrid(testPuzzle3);
-  let cl: Array<GridDifference> = [];
+  let cl: GridDifference[] = [];
   gInitial.values.forEach((cell) => {
     if (cell.value.hasKnownValue) {
       cl.push({ location: { ...cell.location }, value: cell.value.value });

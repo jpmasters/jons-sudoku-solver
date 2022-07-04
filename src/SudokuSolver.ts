@@ -8,7 +8,7 @@ import { IntersectingCells } from './IntersectingCells';
  */
 export interface ChangeResult {
   grid: Grid;
-  changes: Array<GridDifference>;
+  changes: GridDifference[];
 }
 
 /**
@@ -22,7 +22,7 @@ export class SudokuSolver {
    * @param changes A list of cxhanges to apply to the Grid.
    * @returns An object holding the new grid.
    */
-  static applyChangeList(grid: Grid, changes: Array<GridDifference>): ChangeResult {
+  static applyChangeList(grid: Grid, changes: GridDifference[]): ChangeResult {
     const gridCopy: Grid = Grid.fromCellCollection(grid);
 
     changes.forEach((change) => {
@@ -32,7 +32,7 @@ export class SudokuSolver {
     });
 
     return {
-      grid: grid,
+      grid,
       changes: grid
         .differences(gridCopy)
         .filter(
@@ -49,10 +49,10 @@ export class SudokuSolver {
    * @param grid The grid object to convert.
    * @returns The Grid as a 2D array of numbers.
    */
-  static gridToPuzzleArray(grid: Grid): Array<Array<number>> {
+  static gridToPuzzleArray(grid: Grid): number[][] {
     // TODO: there must be a better way to do this without copying the
     // same sub-array reference to every row??
-    let rv: Array<Array<number>> = new Array(9).fill([]);
+    const rv: number[][] = new Array(9).fill([]);
     rv.forEach((v, i) => {
       rv[i] = new Array(9).fill(0);
     });
@@ -71,7 +71,7 @@ export class SudokuSolver {
    * @param puzzle A puzzle defined a as a 2D array of numbers with zeros representing unknown values.
    * @returns A solved puzzle defined as a 2D array of numbers.
    */
-  static solve(puzzle: Array<Array<number>>): Array<Array<number>> {
+  static solve(puzzle: number[][]): number[][] {
     // make sure we have a valid grid as this is an external interface method.
     if (puzzle.length !== 9) throw new Error('Grid must contain 9 rows.');
     if (puzzle.filter((column) => column.length !== 9).length) throw new Error('Grid must contain 9 columns.');
@@ -79,17 +79,17 @@ export class SudokuSolver {
       throw new Error('Grid must contain values between 0 and 9 where 0 is an unknown value.');
     if (puzzle.flat().filter((val) => val !== 0).length === 0) throw new Error('Grid must have some initial values.');
 
-    let rv = Array(9).fill(Array(9).fill(0));
+    const rv = Array(9).fill(Array(9).fill(0));
     rv.forEach((v, i) => {
       rv[i] = new Array(9).fill(0);
     });
 
-    let sourceGrid = Grid.fromGrid(puzzle);
-    let targetGrid: Grid = Grid.fromGrid(emptyPuzzle);
-    let changes: Array<GridDifference> = sourceGrid.differences(targetGrid);
+    const sourceGrid = Grid.fromGrid(puzzle);
+    const targetGrid: Grid = Grid.fromGrid(emptyPuzzle);
+    const changes: GridDifference[] = sourceGrid.differences(targetGrid);
 
     // get the initial set of changes
-    let res: ChangeResult = { grid: targetGrid, changes: changes };
+    let res: ChangeResult = { grid: targetGrid, changes };
 
     // now get the rest
     while (res.changes.length) {

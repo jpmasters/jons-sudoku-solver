@@ -40,7 +40,7 @@ export class Grid extends CellCollection {
     if (values.length !== 9) throw new Error('A 9x9 grid of SudokuPossibleValues (1-9) must be supplied.');
 
     // map each row of numbers to a row of cells
-    let cells: Cell[] = values
+    const cells: Cell[] = values
       .map((row, y) => {
         // ensure we have 9 values per row
         if (row.length !== 9) throw new Error('A 9x9 grid of SudokuPossibleValues (1-9) must be supplied.');
@@ -118,7 +118,8 @@ export class Grid extends CellCollection {
   }
 
   /**
-   *Returns a value indicating whether the puzzle is completely solved or not.
+   * Returns a value indicating whether the puzzle is completely solved or not.
+   * @returns True if the puzzle is solved or false if it isn't.
    */
   get isSolved(): boolean {
     return this.values.filter((cell) => !cell.value.hasKnownValue).length === 0;
@@ -130,8 +131,8 @@ export class Grid extends CellCollection {
    * @returns A list of values and their locations that appear in this Grid but not the
    * Grid passed in the parameter.
    */
-  differences(grid: Grid): Array<GridDifference> {
-    let rv: Array<GridDifference> = [];
+  differences(grid: Grid): GridDifference[] {
+    let rv: GridDifference[] = [];
 
     rv = this.values
       .filter((thisCell) => thisCell.value.hasKnownValue)

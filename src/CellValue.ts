@@ -25,7 +25,7 @@ export class CellValue {
    * @returns A dseep copy of the CellValue.
    */
   copy(): CellValue {
-    let rv = new CellValue();
+    const rv = new CellValue();
     rv._valuePotentials = [...this._valuePotentials];
     return rv;
   }
@@ -36,7 +36,7 @@ export class CellValue {
    * @returns A new CellValue with the updated potentials.
    */
   removePotential(value: SudokuPossibleValue): CellValue {
-    let rv = this.copy();
+    const rv = this.copy();
     rv._valuePotentials[value - 1] = false;
     return rv;
   }
