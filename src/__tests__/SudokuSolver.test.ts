@@ -95,37 +95,6 @@ test('Solver accepts 9x9 grid only.', () => {
   }).toThrowError();
 });
 
-test('Apply changes works', () => {
-  const gInitial = Grid.fromGrid(testPuzzle3);
-  let cl: GridDifference[] = [];
-  gInitial.values.forEach((cell) => {
-    if (cell.value.hasKnownValue) {
-      cl.push({ location: { ...cell.location }, value: cell.value.value });
-    }
-  });
-  let gStart = Grid.fromGrid(emptyPuzzle);
-  const updatedGrid = SudokuSolver.applyChangeList(gStart, cl);
-
-  gInitial.values
-    .filter((iVal) => iVal.value.hasKnownValue)
-    .forEach((iVal) => {
-      expect(
-        updatedGrid.grid.cellAtLocation({ row: iVal.location.row, column: iVal.location.column })?.value.value,
-      ).toBe(iVal.value.value);
-    });
-
-  const gSolved = Grid.fromGrid(testPuzzle3Solved);
-  const newKnownValues = updatedGrid.grid.values
-    .filter((val) => val.value.hasKnownValue)
-    .filter((val) => !gInitial.cellAtLocation(val.location)?.value.hasKnownValue);
-
-  expect(newKnownValues.length).toBeGreaterThan(0);
-
-  newKnownValues.forEach((cell) => {
-    expect(gSolved.cellAtLocation(cell.location)?.value.value).toBe(cell.value.value);
-  });
-});
-
 test('Solver solves!', () => {
   const solvedPuzzle: number[][] = SudokuSolver.solve(testPuzzle3);
   expect(solvedPuzzle).toEqual(testPuzzle3Solved);
