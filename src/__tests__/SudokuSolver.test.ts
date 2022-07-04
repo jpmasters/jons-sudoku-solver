@@ -1,7 +1,13 @@
 import { emptyPuzzle } from '../EmptyPuzzle';
 import { GridDifference, Grid } from '../Grid';
 import { SudokuSolver } from '../SudokuSolver';
-import { testPuzzle1, testPuzzle2, testPuzzle3, testPuzzle3Solved } from './puzzles.test';
+import {
+  easyTestPuzzle1,
+  easyTestPuzzle2,
+  easyTestPuzzle3,
+  easyTestPuzzle3Solved,
+  hardTestPuzzle1,
+} from './puzzles.test';
 
 const invalidPuzzle1: number[][] = [];
 
@@ -96,16 +102,21 @@ test('Solver accepts 9x9 grid only.', () => {
 });
 
 test('Solver solves!', () => {
-  const solvedPuzzle: number[][] = SudokuSolver.solve(testPuzzle3);
-  expect(solvedPuzzle).toEqual(testPuzzle3Solved);
+  const solvedPuzzle: number[][] = SudokuSolver.solve(easyTestPuzzle3);
+  expect(solvedPuzzle).toEqual(easyTestPuzzle3Solved);
 });
 
 test('Solves testPuzzle1', () => {
-  const solvedPuzzle: number[][] = SudokuSolver.solve(testPuzzle1);
+  const solvedPuzzle: number[][] = SudokuSolver.solve(easyTestPuzzle1);
   expect(solvedPuzzle.flat().filter((v) => !!v).length).toBe(81);
 });
 
 test('Solves testPuzzle2', () => {
-  const solvedPuzzle: number[][] = SudokuSolver.solve(testPuzzle2);
+  const solvedPuzzle: number[][] = SudokuSolver.solve(easyTestPuzzle2);
+  expect(solvedPuzzle.flat().filter((v) => !!v).length).toBe(81);
+});
+
+test('Solves hardPuzzle1', () => {
+  const solvedPuzzle: number[][] = SudokuSolver.solve(hardTestPuzzle1);
   expect(solvedPuzzle.flat().filter((v) => !!v).length).toBe(81);
 });

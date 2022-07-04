@@ -1,16 +1,16 @@
 import { Cell } from '../Cell';
 import { Grid } from '../Grid';
 import { GridColumns, GridRows } from '../ValueTypes';
-import { testPuzzle1, testPuzzle3, testPuzzle3Solved } from './puzzles.test';
+import { easyTestPuzzle1, easyTestPuzzle3, easyTestPuzzle3Solved } from './puzzles.test';
 
 test('Can create a grid from a 2D puzzle array', () => {
-  const g = Grid.fromGrid(testPuzzle1);
+  const g = Grid.fromGrid(easyTestPuzzle1);
 
   expect(g).toBeInstanceOf(Grid);
 });
 
 test('Grid has a 9x9 cell array', () => {
-  const g = Grid.fromGrid(testPuzzle1);
+  const g = Grid.fromGrid(easyTestPuzzle1);
 
   expect(g.values).not.toBeNull();
   expect(g.values.length).toBe(81);
@@ -40,14 +40,14 @@ test('Grid cannot be created with invalid arrays', () => {
 });
 
 test('Grid is created in the correct state', () => {
-  const g = Grid.fromGrid(testPuzzle1);
+  const g = Grid.fromGrid(easyTestPuzzle1);
 
   expect(g.values.length).toBe(81);
 
   g.values.forEach((c) => {
-    if (testPuzzle1[c.location.row - 1][c.location.column - 1]) {
+    if (easyTestPuzzle1[c.location.row - 1][c.location.column - 1]) {
       expect(c.value.hasKnownValue).toBeTruthy();
-      expect(c.value.value).toBe(testPuzzle1[c.location.row - 1][c.location.column - 1]);
+      expect(c.value.value).toBe(easyTestPuzzle1[c.location.row - 1][c.location.column - 1]);
     } else {
       expect(c.value.hasKnownValue).not.toBeTruthy();
     }
@@ -85,7 +85,7 @@ test('Grid block from location returns wrong block number', () => {
 });
 
 test('Grid returns correct cell collection for a column', () => {
-  const g = Grid.fromGrid(testPuzzle1);
+  const g = Grid.fromGrid(easyTestPuzzle1);
   const col2 = [0, 8, 9, 2, 0, 5, 0, 4, 0];
   const col7 = [7, 0, 5, 0, 9, 0, 0, 0, 0];
 
@@ -111,7 +111,7 @@ test('Grid returns correct cell collection for a column', () => {
 });
 
 test('Grid returns correct cell collection for a column', () => {
-  const g = Grid.fromGrid(testPuzzle1);
+  const g = Grid.fromGrid(easyTestPuzzle1);
   const row3 = [1, 9, 0, 0, 0, 4, 5, 0, 0];
   const row7 = [0, 0, 9, 3, 0, 0, 0, 7, 4];
 
@@ -137,7 +137,7 @@ test('Grid returns correct cell collection for a column', () => {
 });
 
 test('Grid returns correct cell collection for a block', () => {
-  const g = Grid.fromGrid(testPuzzle1);
+  const g = Grid.fromGrid(easyTestPuzzle1);
   const block3 = [7, 0, 1, 0, 9, 0, 5, 0, 0];
   const block9 = [0, 7, 4, 0, 3, 6, 0, 0, 0];
 
@@ -163,22 +163,22 @@ test('Grid returns correct cell collection for a block', () => {
 });
 
 test('Is solved works', () => {
-  const p1 = Grid.fromGrid(testPuzzle3);
-  const p2 = Grid.fromGrid(testPuzzle3Solved);
+  const p1 = Grid.fromGrid(easyTestPuzzle3);
+  const p2 = Grid.fromGrid(easyTestPuzzle3Solved);
   expect(p1.isSolved).toBeFalsy();
   expect(p2.isSolved).toBeTruthy();
 });
 
 test('Difference works', () => {
-  const p1 = Grid.fromGrid(testPuzzle3);
-  const p2 = Grid.fromGrid(testPuzzle3Solved);
+  const p1 = Grid.fromGrid(easyTestPuzzle3);
+  const p2 = Grid.fromGrid(easyTestPuzzle3Solved);
 
   const diffs = p2.differences(p1);
   expect(diffs.length).toBe(51);
 });
 
 test('Grid to puzzle array works', () => {
-  const p1 = Grid.fromGrid(testPuzzle3Solved);
+  const p1 = Grid.fromGrid(easyTestPuzzle3Solved);
   const res = p1.toPuzzleArray();
-  expect(res).toEqual(testPuzzle3Solved);
+  expect(res).toEqual(easyTestPuzzle3Solved);
 });

@@ -3,7 +3,7 @@ import { GridDifference, Grid } from './Grid';
 import { ChangeResult, SolverHelpers } from './SolverHelpers';
 
 /**
- * Implemenbts a class that can solve a 9x9 Sudoku provided as a number[9][9].
+ * Implements a class that can solve a 9x9 Sudoku provided as a number[9][9].
  */
 export class SudokuSolver {
   /**
@@ -26,11 +26,10 @@ export class SudokuSolver {
       rv[i] = new Array(9).fill(0);
     });
 
+    // get the initial set of changes
     const sourceGrid = Grid.fromGrid(puzzle);
     const targetGrid: Grid = Grid.fromGrid(emptyPuzzle);
     const changes: GridDifference[] = sourceGrid.differences(targetGrid);
-
-    // get the initial set of changes
     let res: ChangeResult = { grid: targetGrid, changes };
 
     // now get the rest
@@ -39,7 +38,7 @@ export class SudokuSolver {
       res = SolverHelpers.applyChangeList(res.grid, res.changes);
     }
 
-    // concert it into something we can return
+    // convert it into something we can return
     return res.grid.toPuzzleArray();
   }
 }

@@ -1,4 +1,4 @@
-export const testPuzzle1 = [
+export const easyTestPuzzle1 = [
   [0, 0, 0, 2, 6, 0, 7, 0, 1],
   [6, 8, 0, 0, 7, 0, 0, 9, 0],
   [1, 9, 0, 0, 0, 4, 5, 0, 0],
@@ -10,7 +10,7 @@ export const testPuzzle1 = [
   [7, 0, 3, 0, 1, 8, 0, 0, 0],
 ];
 
-export const testPuzzle2 = [
+export const easyTestPuzzle2 = [
   [0, 3, 0, 0, 0, 0, 0, 1, 0],
   [9, 0, 0, 0, 0, 0, 0, 0, 5],
   [8, 0, 5, 4, 0, 9, 2, 0, 7],
@@ -22,7 +22,7 @@ export const testPuzzle2 = [
   [0, 4, 0, 0, 0, 0, 0, 6, 0],
 ];
 
-export const testPuzzle3 = [
+export const easyTestPuzzle3 = [
   [5, 3, 0, 0, 7, 0, 0, 0, 0],
   [6, 0, 0, 1, 9, 5, 0, 0, 0],
   [0, 9, 8, 0, 0, 0, 0, 6, 0],
@@ -34,7 +34,7 @@ export const testPuzzle3 = [
   [0, 0, 0, 0, 8, 0, 0, 7, 9],
 ];
 
-export const testPuzzle3Solved = [
+export const easyTestPuzzle3Solved = [
   [5, 3, 4, 6, 7, 8, 9, 1, 2],
   [6, 7, 2, 1, 9, 5, 3, 4, 8],
   [1, 9, 8, 3, 4, 2, 5, 6, 7],
@@ -46,7 +46,22 @@ export const testPuzzle3Solved = [
   [3, 4, 5, 2, 8, 6, 1, 7, 9],
 ];
 
+export const hardTestPuzzle1 = [
+  [0, 2, 0, 6, 0, 8, 0, 0, 9],
+  [7, 0, 0, 0, 0, 1, 5, 0, 0],
+  [5, 0, 0, 0, 0, 0, 0, 0, 2],
+  [0, 0, 0, 0, 0, 2, 3, 4, 5],
+  [0, 9, 4, 0, 1, 0, 0, 0, 6],
+  [0, 0, 5, 0, 0, 7, 0, 0, 0],
+  [0, 7, 0, 0, 0, 0, 9, 1, 0],
+  [0, 0, 0, 3, 0, 0, 0, 0, 0],
+  [6, 0, 0, 0, 0, 0, 0, 0, 0],
+];
+
 test('Test puzzles are complete', () => {
-  expect(testPuzzle1.flat().length).toBe(81);
-  expect(testPuzzle2.flat().length).toBe(81);
+  expect(easyTestPuzzle1.flat().length).toBe(81);
+  expect(easyTestPuzzle2.flat().length).toBe(81);
+  expect(easyTestPuzzle3.flat().length).toBe(81);
+  expect(easyTestPuzzle3Solved.flat().length).toBe(81);
+  expect(hardTestPuzzle1.flat().length).toBe(81);
 });

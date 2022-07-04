@@ -1,10 +1,10 @@
 import { emptyPuzzle } from '../EmptyPuzzle';
 import { Grid, GridDifference } from '../Grid';
 import { SolverHelpers } from '../SolverHelpers';
-import { testPuzzle3, testPuzzle3Solved } from './puzzles.test';
+import { easyTestPuzzle3, easyTestPuzzle3Solved } from './puzzles.test';
 
 test('Apply changes works', () => {
-  const gInitial = Grid.fromGrid(testPuzzle3);
+  const gInitial = Grid.fromGrid(easyTestPuzzle3);
   let cl: GridDifference[] = [];
   gInitial.values.forEach((cell) => {
     if (cell.value.hasKnownValue) {
@@ -22,7 +22,7 @@ test('Apply changes works', () => {
       ).toBe(iVal.value.value);
     });
 
-  const gSolved = Grid.fromGrid(testPuzzle3Solved);
+  const gSolved = Grid.fromGrid(easyTestPuzzle3Solved);
   const newKnownValues = updatedGrid.grid.values
     .filter((val) => val.value.hasKnownValue)
     .filter((val) => !gInitial.cellAtLocation(val.location)?.value.hasKnownValue);

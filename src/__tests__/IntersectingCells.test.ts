@@ -1,11 +1,11 @@
 import { SudokuAllPossibleValues } from '../ValueTypes';
 import { Grid } from '../Grid';
-import { testPuzzle2 } from './puzzles.test';
+import { easyTestPuzzle2 } from './puzzles.test';
 import { IntersectingCells } from '../IntersectingCells';
 import { emptyPuzzle } from '../EmptyPuzzle';
 
 test('Can create an IntersectingCells object from a Grid', () => {
-  const grid = Grid.fromGrid(testPuzzle2);
+  const grid = Grid.fromGrid(easyTestPuzzle2);
   const intersectingCells: IntersectingCells = IntersectingCells.fromGridLocation(grid, { column: 5, row: 7 });
 
   expect(intersectingCells).toBeInstanceOf(IntersectingCells);
@@ -13,7 +13,7 @@ test('Can create an IntersectingCells object from a Grid', () => {
 });
 
 test('setValue throws if the location cannot be found', () => {
-  const grid = Grid.fromGrid(testPuzzle2);
+  const grid = Grid.fromGrid(easyTestPuzzle2);
   const intersectingCells: IntersectingCells = IntersectingCells.fromGridLocation(grid, { column: 5, row: 7 });
 
   expect(() => {
@@ -26,7 +26,7 @@ test('setValue throws if the location cannot be found', () => {
 });
 
 test('setValue sets the value', () => {
-  const grid = Grid.fromGrid(testPuzzle2);
+  const grid = Grid.fromGrid(easyTestPuzzle2);
   const intersectingCells: IntersectingCells = IntersectingCells.fromGridLocation(grid, { column: 5, row: 7 });
 
   const cc2 = intersectingCells.setValue({ column: 5, row: 5 }, 4);
