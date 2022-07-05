@@ -35,7 +35,9 @@ test('Getting a cell from an invalid location returns null', () => {
     expect(c).toBeInstanceOf(Cell);
   });
 
-  expect(()=>{const testCell = cc.cellAtLocation({ column: 1, row: 1 })}).toThrowError();
+  expect(() => {
+    const testCell = cc.cellAtLocation({ column: 1, row: 1 });
+  }).toThrowError();
 });
 
 test('Merging cell collections returns returns items from both collections.', () => {

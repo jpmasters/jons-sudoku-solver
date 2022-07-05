@@ -207,7 +207,7 @@ test('Difference works', () => {
 
   diffs = p3.differences(p4);
   expect(diffs.length).toBe(1);
-  expect(diffs[0]).toEqual({location: {row: 1, column: 1}, valuesToRemove: [2, 3, 4, 5, 6, 7, 8, 9]});
+  expect(diffs[0]).toEqual({ location: { row: 1, column: 1 }, valuesToRemove: [2, 3, 4, 5, 6, 7, 8, 9] });
 });
 
 test('Grid to puzzle array works', () => {
