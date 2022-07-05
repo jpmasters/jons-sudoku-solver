@@ -1,5 +1,4 @@
 import { emptyPuzzle } from '../EmptyPuzzle';
-import { GridDifference, Grid } from '../Grid';
 import { SudokuSolver } from '../SudokuSolver';
 import {
   easyTestPuzzle1,

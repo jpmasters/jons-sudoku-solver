@@ -1,6 +1,5 @@
 import { Cell } from './Cell';
 import { CellCollection } from './CellCollection';
-import { CellValue } from './CellValue';
 import { GridLocation, SudokuPossibleValue } from './ValueTypes';
 import { Grid } from './Grid';
 
@@ -20,7 +19,7 @@ export class IntersectingCells extends CellCollection {
     const cells: Cell[] = grid
       .row(location.row)
       .mergedWith(grid.column(location.column))
-      .mergedWith(grid.block(Grid.gridBlockFromLocation(location))).values;
+      .mergedWith(grid.block(Grid.gridBlockFromLocation(location))).cells;
 
     return new IntersectingCells(cells);
   }
@@ -31,7 +30,7 @@ export class IntersectingCells extends CellCollection {
    * @returns A new IntersectingCells object.
    */
   static fromCellCollection(cells: CellCollection): IntersectingCells {
-    return new IntersectingCells(cells.values);
+    return new IntersectingCells(cells.cells);
   }
 
   /**
@@ -43,28 +42,19 @@ export class IntersectingCells extends CellCollection {
   }
 
   /**
-   * Creates a copy of the CellCollection with a specific value set and all other cells
-   * have that value potential removed.
-   * If the location can't be found in the CellCollection an error is thrown.
-   * @param location The location to set the value for.
-   * @param value The value to set.
-   * @returns A new CellCollection with the updated value.
+   * Removes the values provided from the specified Cell and returns a new IntersectingCell
+   * object with the updated values.
+   * @param location The location at which to remove the potentials.
+   * @param values The values to remove.
+   * @returns A new IntersectingCells object with the updated values.
    */
-  setValue(location: GridLocation, value: SudokuPossibleValue): CellCollection {
+  removePotentials(location: GridLocation, values: SudokuPossibleValue[]): IntersectingCells {
     // check for a valid location
     if (!this.hasLocation(location))
       throw new Error(`A value at location {${location.column}, ${location.row}} could not be found.`);
 
-    // create a new CellCollection with the new value
-    const newCellValues: Cell[] = this.values.map((c) => {
-      const newValue: CellValue =
-        c.location.column === location.column && c.location.row === location.row
-          ? new CellValue([value])
-          : c.value.removePotential(value);
-
-      return new Cell({ column: c.location.column, row: c.location.row }, newValue);
-    });
-
-    return new CellCollection(newCellValues);
+    const thisCell = this.cellAtLocation(location);
+    const newCell: Cell = new Cell(location, thisCell.value.removePotentials(values));
+    return IntersectingCells.fromCellCollection(this.mergedWith(new CellCollection([newCell])));
   }
 }

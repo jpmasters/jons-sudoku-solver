@@ -30,26 +30,59 @@ export class SudokuSolver {
 
     // get the initial set of changes
     const sourceGrid = Grid.fromGrid(puzzle);
-    const targetGrid: Grid = Grid.fromGrid(emptyPuzzle);
-    const changes: GridDifference[] = sourceGrid.differences(targetGrid);
-    let res: ChangeResult = { grid: targetGrid, changes };
+    let targetGrid: Grid = Grid.fromGrid(emptyPuzzle);
+    let changes: GridDifference[] = sourceGrid.differences(targetGrid);
 
     // now get the rest
-    while (res.changes.length) {
+    while (changes.length) {
       // apply them to the target grid
-      res = SolverHelpers.applyChangeList(res.grid, res.changes);
+      targetGrid = SolverHelpers.applyChangeList(targetGrid, changes);
+
+      changes = [];
 
       // if we got zero changes, try our strategies
-      if (!res.grid.isSolved && res.changes.length === 0) {
-        res.changes.push(
-          ...SudokuAllPossibleValues.map((row) => SolverStrategies.onlyValueInBlock(res.grid.row(row))).flat(),
-          ...SudokuAllPossibleValues.map((column) => SolverStrategies.onlyValueInBlock(res.grid.column(column))).flat(),
-          ...SudokuAllPossibleValues.map((block) => SolverStrategies.onlyValueInBlock(res.grid.block(block))).flat(),
-        );
+      if (!targetGrid.isSolved) {
+        if (!changes.length) {
+          SudokuSolver.solveCollapsedValues(changes, targetGrid);
+        }
+
+        if (!changes.length) {
+          SudokuSolver.solveSingleValues(changes, targetGrid);
+        }
+
+        if (!changes.length) {
+          SudokuSolver.solveHiddenPairs(changes, targetGrid);
+        }
       }
     }
 
     // convert it into something we can return
-    return res.grid.toPuzzleArray();
+    return targetGrid.toPuzzleArray();
+  }
+
+  private static solveSingleValues(changes: GridDifference[], targetGrid: Grid) {
+    changes.push(
+      ...SudokuAllPossibleValues.map((row) => SolverStrategies.findSingleValues(targetGrid.row(row))).flat(),
+      ...SudokuAllPossibleValues.map((column) => SolverStrategies.findSingleValues(targetGrid.column(column))).flat(),
+      ...SudokuAllPossibleValues.map((block) => SolverStrategies.findSingleValues(targetGrid.block(block))).flat(),
+    );
+  }
+
+  private static solveCollapsedValues(changes: GridDifference[], targetGrid: Grid) {
+    changes.push(
+      ...SudokuAllPossibleValues.map((row) => SolverStrategies.findCollapsedValues(targetGrid.row(row))).flat(),
+      ...SudokuAllPossibleValues.map((column) =>
+        SolverStrategies.findCollapsedValues(targetGrid.column(column)),
+      ).flat(),
+      ...SudokuAllPossibleValues.map((block) => SolverStrategies.findCollapsedValues(targetGrid.block(block))).flat(),
+    );
+  }
+
+  private static solveHiddenPairs(changes: GridDifference[], targetGrid: Grid) {
+    changes.push(
+      ...SudokuAllPossibleValues.map((row) => SolverStrategies.findHiddenPairs(targetGrid.row(row))).flat(),
+      ...SudokuAllPossibleValues.map((column) => SolverStrategies.findHiddenPairs(targetGrid.column(column))).flat(),
+      ...SudokuAllPossibleValues.map((block) => SolverStrategies.findHiddenPairs(targetGrid.block(block))).flat(),
+    );
   }
 }

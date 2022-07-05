@@ -11,8 +11,8 @@ test('Getting a Cell from a location works', () => {
     new Cell({ column: 9, row: 5 }, new CellValue([2, 3, 4])),
   ]);
 
-  expect(cc.values.length).toBe(5);
-  cc.values.forEach((c) => {
+  expect(cc.cells.length).toBe(5);
+  cc.cells.forEach((c) => {
     expect(c).toBeInstanceOf(Cell);
   });
 
@@ -30,13 +30,12 @@ test('Getting a cell from an invalid location returns null', () => {
     new Cell({ column: 9, row: 5 }, new CellValue([2, 3, 4])),
   ]);
 
-  expect(cc.values.length).toBe(5);
-  cc.values.forEach((c) => {
+  expect(cc.cells.length).toBe(5);
+  cc.cells.forEach((c) => {
     expect(c).toBeInstanceOf(Cell);
   });
 
-  const testCell = cc.cellAtLocation({ column: 1, row: 1 });
-  expect(testCell).toBeNull();
+  expect(()=>{const testCell = cc.cellAtLocation({ column: 1, row: 1 })}).toThrowError();
 });
 
 test('Merging cell collections returns returns items from both collections.', () => {
@@ -57,9 +56,9 @@ test('Merging cell collections returns returns items from both collections.', ()
 
   const mergedCells = cc1.mergedWith(cc2);
 
-  expect(mergedCells.values.length).toBe(8);
+  expect(mergedCells.cells.length).toBe(8);
 
-  const replacedCell = mergedCells.values.find((c) => {
+  const replacedCell = mergedCells.cells.find((c) => {
     return c.location.column === 8 && c.location.row === 5;
   });
 

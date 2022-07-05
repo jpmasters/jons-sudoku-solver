@@ -1,5 +1,6 @@
 import { CellCollection } from './CellCollection';
 import { GridDifference } from './Grid';
+import { Helpers } from './Helpers';
 import { GridLocation, SudokuAllPossibleValues, SudokuPossibleValue, SudokuPossibleValues } from './ValueTypes';
 
 /**
@@ -22,14 +23,13 @@ interface ReducedValues {
  */
 export class SolverStrategies {
   /**
-   * Searches a given Row, Column or Block for cells where its value doesn't appear
-   * in any of the other cells implying that it should have that value.
-   * @param block A reference to a row, column or block that holds 9 unique values.
-   * @returns An array of changes that can be applied back to the grid.
+   * Pivots the cell values into an object that provides the frequency and locations
+   * of values in the specified row, column or block.
+   * @param block A reference to a Grid Row, Column or Block.
+   * @returns A reference to a ReducedValues object that shows value frequency.
    */
-  static onlyValueInBlock(block: CellCollection): GridDifference[] {
-    const rv: GridDifference[] = [];
-    const reducedCells = block.values
+  private static reduceCells(block: CellCollection): ReducedValues {
+    return block.cells
       .filter((cell) => !cell.value.hasKnownValue)
       .map((cell) => {
         return { location: { ...cell.location }, values: cell.value.potentialValues };
@@ -43,15 +43,97 @@ export class SolverStrategies {
 
         return prev;
       }, {});
+  }
+
+  /**
+   * Searches a given Row, Column or Block for cells where its potentials have collapsed into a
+   * single value. It then returns an array of objects to remove the potential to other
+   * cells in the block.
+   * @param block A reference to a row, column or block that holds 9 unique values.
+   * @returns An array of changes that can be applied back to the grid.
+   */
+  static findCollapsedValues(block: CellCollection): GridDifference[] {
+    const cellsWithKnownValues = block.cells.filter((cell) => cell.value.hasKnownValue);
+    const rv: GridDifference[] = [];
+    cellsWithKnownValues.forEach((cell) => {
+      rv.push(
+        ...block.cells
+          .filter(
+            (bc) =>
+              !Helpers.locationsMatch(bc.location, cell.location) &&
+              bc.value.potentialValues.includes(cell.value.value),
+          )
+          .map<GridDifference>((bc) => {
+            return {
+              location: { ...bc.location },
+              valuesToRemove: [cell.value.value],
+            };
+          }),
+      );
+    });
+    return rv;
+  }
+
+  /**
+   * Searches a given Row, Column or Block for cells where its value doesn't appear
+   * in any of the other cells implying that it should have that value.
+   * @param block A reference to a row, column or block that holds 9 unique values.
+   * @returns An array of changes that can be applied back to the grid.
+   */
+  static findSingleValues(block: CellCollection): GridDifference[] {
+    const rv: GridDifference[] = [];
+    const reducedCells = SolverStrategies.reduceCells(block);
 
     SudokuAllPossibleValues.forEach((value) => {
       if (value in reducedCells) {
         if ((reducedCells[value] as ReducedValues[]).length === 1) {
           const location: GridLocation = (reducedCells[value] as ReducedValues[]).at(0) as GridLocation;
-          rv.push({ location, value });
+          const newVals: SudokuPossibleValue[] = block
+            .cellAtLocation({ column: location.column, row: location.row })
+            .value.potentialValues.filter((cv) => cv !== value);
+          rv.push({ location, valuesToRemove: newVals });
         }
       }
     });
+
+    return rv;
+  }
+
+  /**
+   * Searches a given row, column or block for hiddden pairs and returns an
+   * array of objects to remove unneeded potentials in those pairs.
+   * @param block A reference to a row, column or block to process.
+   * @returns An array of GridDifference objects to apply back to the Grid.
+   */
+  static findHiddenPairs(block: CellCollection): GridDifference[] {
+    const rv: GridDifference[] = [];
+    const reducedCells = SolverStrategies.reduceCells(block);
+
+    // we're looking for sets of 2 cells that hold the same pair of values
+    // along with a load of other values
+    const pairs = SudokuAllPossibleValues.filter((value) => {
+      return value in reducedCells && (reducedCells[value] as ReducedValues[]).length === 2;
+    }).filter((value, i, arr) => {
+      return arr
+        .filter((v) => v !== value)
+        .some((v2) =>
+          Helpers.locationArraysMatch(reducedCells[v2] as GridLocation[], reducedCells[value] as GridLocation[]),
+        );
+    });
+
+    if (pairs.length > 2) throw new Error('Did not expect multiple pairs to be possible.');
+
+    if (pairs.length === 2) {
+      rv.push(
+        ...block.cells
+          .filter((cell) => Helpers.arrayContainsAll(cell.value.potentialValues, pairs))
+          .map<GridDifference>((cell) => {
+            const vr: SudokuPossibleValue[] = cell.value.potentialValues.filter((v) => !pairs.includes(v));
+            return { location: { ...cell.location }, valuesToRemove: [...vr] };
+          })
+          .filter((diff) => diff.valuesToRemove.length),
+      );
+    }
 
     return rv;
   }

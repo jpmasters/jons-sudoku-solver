@@ -1,4 +1,5 @@
 import { CellValue } from '../CellValue';
+import { SudokuAllPossibleValues } from '../ValueTypes';
 
 test('Default constructor instantiates a cell value with all possible states', () => {
   const c = new CellValue();
@@ -10,7 +11,7 @@ test('Default constructor instantiates a cell value with all possible states', (
   expect(c.hasKnownValue).toBeFalsy();
 
   // has the correct values
-  expect(c.valuePotentials).toStrictEqual(Array(9).fill(true));
+  expect(c.potentialValues).toStrictEqual(SudokuAllPossibleValues);
 });
 
 test('Reading the value before it is 100% known throws an exception.', () => {
@@ -37,43 +38,37 @@ test('Copy returns a new CellValue', () => {
 test('Copy returns a CellValue with the correct values', () => {
   const c = new CellValue([3, 4, 5]);
   const d = c.copy();
-  expect(d.valuePotentials).toStrictEqual([false, false, true, true, true, false, false, false, false]);
+  expect(d.potentialValues).toEqual([3, 4, 5]);
 });
 
 test('Copy returns a deep copy', () => {
   const c = new CellValue([3, 4, 5]);
   const d = c.copy();
 
-  expect(d.valuePotentials).not.toBe(c.valuePotentials);
+  expect(d.potentialValues).not.toBe(c.potentialValues);
 });
 
 test('Remove a potential value sets it (and only it) to false.', () => {
   const c = new CellValue();
 
-  expect(c.valuePotentials.length).toBe(9);
-  c.valuePotentials.forEach((v) => {
-    expect(v).toBeTruthy();
-  });
+  expect(c.potentialValues).toStrictEqual(SudokuAllPossibleValues);
 
-  const d = c.removePotential(5);
-  const cCheck = Array(9).fill(true);
-  let dCheck = Array(9).fill(true);
-  dCheck[4] = false;
+  const d = c.removePotentials([5, 8]);
 
   // c should be untouched
-  expect(c.valuePotentials).toEqual(cCheck);
+  expect(c.potentialValues).toEqual(SudokuAllPossibleValues);
 
   // d should have the removed potential set to false
   // and it should not have settled onm a value yet
   expect(d.hasKnownValue).toBeFalsy();
-  expect(d.valuePotentials).toEqual(dCheck);
+  expect(d.potentialValues).toEqual([1, 2, 3, 4, 6, 7, 9]);
 });
 
 test('potentialValues returns correct values', () => {
   let c = new CellValue();
   expect(c.potentialValues).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9]);
 
-  c = c.removePotential(5);
+  c = c.removePotentials([5]);
   expect(c.potentialValues).toEqual([1, 2, 3, 4, 6, 7, 8, 9]);
 
   c = new CellValue([1, 2, 4]);
@@ -82,4 +77,26 @@ test('potentialValues returns correct values', () => {
   c = new CellValue([3]);
   expect(c.hasKnownValue).toBeTruthy();
   expect(c.potentialValues).toEqual([3]);
+});
+
+test('Add potentials works', () => {
+  // create an incomplete CellValue
+  let c = new CellValue([1, 2, 3, 4, 5]);
+  expect(c.potentialValues).toEqual([1, 2, 3, 4, 5]);
+  expect(c.hasKnownValue).toBeFalsy();
+
+  // add an overlapping set of values
+  let d = c.addPotentials([4, 5, 6, 7, 8, 9]);
+
+  // original CellValue should be untouched
+  expect(c.potentialValues).toEqual([1, 2, 3, 4, 5]);
+
+  // new one should have a complete set of values
+  expect(d.potentialValues).toEqual(SudokuAllPossibleValues);
+
+  // and without values being added twice
+  expect(d.potentialValues.length).toBe(9);
+
+  // and should not have a known value
+  expect(d.hasKnownValue).toBeFalsy();
 });

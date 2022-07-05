@@ -4,32 +4,22 @@ import { SolverHelpers } from '../SolverHelpers';
 import { easyTestPuzzle3, easyTestPuzzle3Solved } from './puzzles.test';
 
 test('Apply changes works', () => {
-  const gInitial = Grid.fromGrid(easyTestPuzzle3);
-  let cl: GridDifference[] = [];
-  gInitial.values.forEach((cell) => {
-    if (cell.value.hasKnownValue) {
-      cl.push({ location: { ...cell.location }, value: cell.value.value });
-    }
-  });
-  let gStart = Grid.fromGrid(emptyPuzzle);
-  const updatedGrid = SolverHelpers.applyChangeList(gStart, cl);
+  const sourceGrid = Grid.fromGrid([
+    [1, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+  ]);
 
-  gInitial.values
-    .filter((iVal) => iVal.value.hasKnownValue)
-    .forEach((iVal) => {
-      expect(
-        updatedGrid.grid.cellAtLocation({ row: iVal.location.row, column: iVal.location.column })?.value.value,
-      ).toBe(iVal.value.value);
-    });
+  let targetGrid = Grid.fromGrid(emptyPuzzle);
 
-  const gSolved = Grid.fromGrid(easyTestPuzzle3Solved);
-  const newKnownValues = updatedGrid.grid.values
-    .filter((val) => val.value.hasKnownValue)
-    .filter((val) => !gInitial.cellAtLocation(val.location)?.value.hasKnownValue);
+  let cl: GridDifference[] = sourceGrid.differences(targetGrid);
 
-  expect(newKnownValues.length).toBeGreaterThan(0);
-
-  newKnownValues.forEach((cell) => {
-    expect(gSolved.cellAtLocation(cell.location)?.value.value).toBe(cell.value.value);
-  });
+  const updatedGrid = SolverHelpers.applyChangeList(targetGrid, cl);
+  expect(updatedGrid.toPuzzleArray()).toEqual(sourceGrid.toPuzzleArray());
 });

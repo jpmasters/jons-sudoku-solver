@@ -1,5 +1,6 @@
 import { Grid, GridDifference } from './Grid';
-import { IntersectingCells } from './IntersectingCells';
+import { Cell } from './Cell';
+import { CellCollection } from './CellCollection';
 
 /**
  * Defines the result of applying changes to a Grid.
@@ -18,25 +19,14 @@ export class SolverHelpers {
    * @param changes A list of cxhanges to apply to the Grid.
    * @returns An object holding the new grid.
    */
-  static applyChangeList(grid: Grid, changes: GridDifference[]): ChangeResult {
-    const gridCopy: Grid = Grid.fromCellCollection(grid);
-
+  static applyChangeList(grid: Grid, changes: GridDifference[]): Grid {
     changes.forEach((change) => {
-      let i = IntersectingCells.fromGridLocation(grid, change.location);
-      i = IntersectingCells.fromCellCollection(i.setValue(change.location, change.value));
-      grid = Grid.fromCellCollection(grid.mergedWith(i));
+      const newCellValue = grid.cellAtLocation(change.location).value.removePotentials(change.valuesToRemove);
+      const newCell = new Cell({ ...change.location }, newCellValue);
+
+      grid = Grid.fromCellCollection(grid.mergedWith(new CellCollection([newCell])));
     });
 
-    return {
-      grid,
-      changes: grid
-        .differences(gridCopy)
-        .filter(
-          (diff) =>
-            changes.findIndex(
-              (diff2) => diff.location.row === diff2.location.row && diff.location.column === diff2.location.column,
-            ) === -1,
-        ),
-    };
+    return grid;
   }
 }

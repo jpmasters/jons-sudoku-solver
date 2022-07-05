@@ -3,13 +3,12 @@ import { SudokuAllPossibleValues, SudokuPossibleValue, SudokuPossibleValues } fr
 /**
  * This class represents a cell in a Sudoku grid and holds all the potential
  * values that the cell can have. It is designed to be immutable.
- * TODO: Might be better to reimplement this class to use an array of values rather than an array of flags.
  */
 export class CellValue {
   /**
    * Holds the vaue potentials as a fixed length array of booleans
    */
-  private _valuePotentials: boolean[];
+  private _valuePotentials: SudokuPossibleValue[];
 
   /**
    * Instantiates a new instance of a Sudoku grid cell. The cell is designed to
@@ -19,10 +18,7 @@ export class CellValue {
    * @param value Optional initial cell value.
    */
   constructor(value: SudokuPossibleValues = SudokuAllPossibleValues) {
-    this._valuePotentials = Array(9).fill(false);
-    value.forEach((v) => {
-      this._valuePotentials[v - 1] = true;
-    });
+    this._valuePotentials = [...value].sort((a, b) => a - b);
   }
 
   /**
@@ -37,41 +33,50 @@ export class CellValue {
 
   /**
    * Returns a copy of the CellValue with the specified potential removed.
-   * @param value The potential to remove from the value.
+   * @param values The potential values to remove from the value.
    * @returns A new CellValue with the updated potentials.
    */
-  removePotential(value: SudokuPossibleValue): CellValue {
+  removePotentials(values: SudokuPossibleValue[]): CellValue {
     const rv = this.copy();
-    rv._valuePotentials[value - 1] = false;
+    values.forEach((val) => {
+      if (rv._valuePotentials.includes(val)) {
+        rv._valuePotentials.splice(
+          rv._valuePotentials.findIndex((v) => v === val),
+          1,
+        );
+      }
+    });
+
     return rv;
   }
 
   /**
-   * Gets the 9 possible cell value probabilities (0 - 1) as a zero based array.
-   * E.g. if the probability that the cell contains a 3 is 50% then the value at
-   * index 4 contains 0.5.
-   * TODO: Get rid of this and just use an array of possible values.
+   * Returns a copy of the CellValue with the specified potential removed.
+   * @param values A list of potential values to add.
+   * @returns A new CellValue with the updated potentials.
    */
-  get valuePotentials(): boolean[] {
-    return [...this._valuePotentials];
+  addPotentials(values: SudokuPossibleValue[]): CellValue {
+    const rv = new CellValue(
+      this._valuePotentials.concat([...values]).filter((val, i, arr) => {
+        return arr.findIndex((v) => v === val) === i;
+      }),
+    );
+
+    return rv;
   }
 
   /**
    * Returns the potential values as an array of SudokuPossibleValues.
    */
   get potentialValues(): SudokuPossibleValue[] {
-    const rv: SudokuPossibleValue[] = this._valuePotentials.reduce<SudokuPossibleValue[]>((prev, curr, i) => {
-      if (curr) prev.push((i + 1) as unknown as SudokuPossibleValue);
-      return prev;
-    }, []);
-    return rv;
+    return [...this._valuePotentials];
   }
 
   /**
    * Returns a value indicating whether or not the cell has a known value.
    */
   get hasKnownValue(): boolean {
-    return this._valuePotentials.filter((v) => v).length === 1;
+    return this._valuePotentials.length === 1;
   }
 
   /**
@@ -80,10 +85,6 @@ export class CellValue {
   get value(): SudokuPossibleValue {
     if (!this.hasKnownValue) throw Error('Cell value is not known. Check hasKnownValue first.');
 
-    // search for a potential of 100%
-    const i = this._valuePotentials.findIndex((v) => v);
-
-    // otherwise return the cell value
-    return (i + 1) as unknown as SudokuPossibleValue;
+    return this._valuePotentials[0];
   }
 }

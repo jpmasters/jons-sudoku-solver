@@ -10,7 +10,7 @@ export class CellCollection {
    * @param values A list of cells to initialise with. Cells will be deep copied.
    */
   constructor(values: Cell[]) {
-    this.values = values.map<Cell>((c) => {
+    this.cells = values.map<Cell>((c) => {
       return new Cell({ ...c.location }, c.value.copy());
     });
   }
@@ -18,19 +18,21 @@ export class CellCollection {
   /**
    * Holds the cell values.
    */
-  readonly values: Cell[];
+  readonly cells: Cell[];
 
   /**
    * Returns a copy of the Cell at the given location.
    * @param location The grid location to look for.
    * @returns A copy of the cell or null if there is no cell at the location.
    */
-  cellAtLocation(location: GridLocation): Cell | null {
-    const rv: Cell | undefined = this.values.find((c) => {
+  cellAtLocation(location: GridLocation): Cell {
+    const rv: Cell | undefined = this.cells.find((c) => {
       return c.location.column === location.column && c.location.row === location.row;
     });
 
-    return rv ? rv.copy() : null;
+    if (!rv) throw new Error(`No cell at location column: ${location.column} row: ${location.row}.`);
+
+    return rv.copy();
   }
 
   /**
@@ -42,7 +44,7 @@ export class CellCollection {
    */
   mergedWith(cells: CellCollection): CellCollection {
     // create the merged cells and de-dupe ensuring the cells passed in overwrite the existing ones
-    const mergedCells: Cell[] = cells.values.concat(this.values).filter((c, i, arr) => {
+    const mergedCells: Cell[] = cells.cells.concat(this.cells).filter((c, i, arr) => {
       return (
         arr.findIndex((c2) => c2.location.column === c.location.column && c2.location.row === c.location.row) === i
       );
@@ -57,9 +59,8 @@ export class CellCollection {
    * @returns True if the CellCollection contains a value for the location. False if not.
    */
   hasLocation(location: GridLocation): boolean {
-    return !!this.values.filter(
-      (cell) => cell.location.column === location.column && cell.location.row === location.row,
-    ).length;
+    return !!this.cells.filter((cell) => cell.location.column === location.column && cell.location.row === location.row)
+      .length;
   }
 
   /**
@@ -69,6 +70,6 @@ export class CellCollection {
    * @returns True if the CellCollection contains a value. False if not.
    */
   hasValue(value: SudokuPossibleValue): boolean {
-    return !!this.values.filter((cell) => cell.value.hasKnownValue && cell.value.value === value).length;
+    return !!this.cells.filter((cell) => cell.value.hasKnownValue && cell.value.value === value).length;
   }
 }

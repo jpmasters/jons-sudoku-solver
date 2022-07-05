@@ -1,3 +1,4 @@
+import { Helpers } from './Helpers';
 import { Cell } from './Cell';
 import { CellCollection } from './CellCollection';
 import { CellValue } from './CellValue';
@@ -8,7 +9,7 @@ import { GridBlocks, GridColumns, GridLocation, GridRows, SudokuPossibleValue } 
  */
 export type GridDifference = {
   location: GridLocation;
-  value: SudokuPossibleValue;
+  valuesToRemove: SudokuPossibleValue[];
 };
 
 /**
@@ -66,7 +67,7 @@ export class Grid extends CellCollection {
    * @returns A reference to the created Grid object.
    */
   static fromCellCollection(cells: CellCollection): Grid {
-    return new Grid(cells.values);
+    return new Grid(cells.cells);
   }
 
   /**
@@ -86,7 +87,7 @@ export class Grid extends CellCollection {
    * @returns A CellCollection containing a copy of the requested row.
    */
   row(row: GridRows): CellCollection {
-    const cells: Cell[] = this.values
+    const cells: Cell[] = this.cells
       .filter((cell) => cell.location.row === row)
       .sort((a, b) => a.location.column - b.location.column);
 
@@ -99,7 +100,7 @@ export class Grid extends CellCollection {
    * @returns A CellCollection containing a copy of the requested column.
    */
   column(column: GridColumns): CellCollection {
-    const cells: Cell[] = this.values
+    const cells: Cell[] = this.cells
       .filter((cell) => cell.location.column === column)
       .sort((a, b) => a.location.row - b.location.row);
 
@@ -112,7 +113,7 @@ export class Grid extends CellCollection {
    * @returns A CellCollection containing a copy of the requested column.
    */
   block(block: GridBlocks): CellCollection {
-    const cells: Cell[] = this.values.filter((cell) => Grid.gridBlockFromLocation(cell.location) === block);
+    const cells: Cell[] = this.cells.filter((cell) => Grid.gridBlockFromLocation(cell.location) === block);
 
     return new CellCollection(cells);
   }
@@ -122,26 +123,36 @@ export class Grid extends CellCollection {
    * @returns True if the puzzle is solved or false if it isn't.
    */
   get isSolved(): boolean {
-    return this.values.filter((cell) => !cell.value.hasKnownValue).length === 0;
+    return this.cells.filter((cell) => !cell.value.hasKnownValue).length === 0;
   }
 
   /**
-   * returns a list of values that exist in 'this' Grid but not the passed in Grid.
-   * @param grid The grid to compare it to.
-   * @returns A list of values and their locations that appear in this Grid but not the
-   * Grid passed in the parameter.
+   * returns a list of values that apply what's in this grid to what's in the grid parameter.
+   * @param targetGrid The grid to compare it to.
+   * @returns A list of values and their locations that differ between the Grids.
    */
-  differences(grid: Grid): GridDifference[] {
-    let rv: GridDifference[] = [];
+  differences(targetGrid: Grid): GridDifference[] {
+    const rv: GridDifference[] = [];
 
-    rv = this.values
-      .filter((thisCell) => thisCell.value.hasKnownValue)
-      .filter((thisCell) => {
-        return !grid.cellAtLocation(thisCell.location)?.value.hasKnownValue;
-      })
-      .map<GridDifference>((cell) => {
-        return { location: { ...cell.location }, value: cell.value.value };
-      });
+    this.cells.forEach((thisCell) => {
+      // do we have this cell in the incoming grid?
+      const targetCellIndex = targetGrid.cells.findIndex((targetCell) =>
+        Helpers.locationsMatch(thisCell.location, targetCell.location),
+      );
+
+      if (targetCellIndex !== -1) {
+        const targetCell: Cell = targetGrid.cells[targetCellIndex];
+
+        // values in the target cell that do not appear in this cell need to be removed
+        const valuesRemoved: SudokuPossibleValue[] = targetCell.value.potentialValues.filter(
+          (v) => !thisCell.value.potentialValues.includes(v),
+        );
+
+        if (valuesRemoved.length) {
+          rv.push({ location: { ...thisCell.location }, valuesToRemove: valuesRemoved });
+        }
+      }
+    });
 
     return rv;
   }
@@ -158,7 +169,7 @@ export class Grid extends CellCollection {
       rv[i] = new Array(9).fill(0);
     });
 
-    this.values.forEach((cell) => {
+    this.cells.forEach((cell) => {
       rv[cell.location.row - 1].splice(cell.location.column - 1, 1, cell.value.hasKnownValue ? cell.value.value : 0);
     });
 

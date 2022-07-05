@@ -3,53 +3,39 @@ import { Grid } from '../Grid';
 import { easyTestPuzzle2 } from './puzzles.test';
 import { IntersectingCells } from '../IntersectingCells';
 import { emptyPuzzle } from '../EmptyPuzzle';
+import { Cell } from '../Cell';
+import { CellValue } from '../CellValue';
+import { CellCollection } from '../CellCollection';
 
 test('Can create an IntersectingCells object from a Grid', () => {
   const grid = Grid.fromGrid(easyTestPuzzle2);
   const intersectingCells: IntersectingCells = IntersectingCells.fromGridLocation(grid, { column: 5, row: 7 });
 
   expect(intersectingCells).toBeInstanceOf(IntersectingCells);
-  expect(intersectingCells.values.length).toBe(21);
+  expect(intersectingCells.cells.length).toBe(21);
 });
 
-test('setValue throws if the location cannot be found', () => {
-  const grid = Grid.fromGrid(easyTestPuzzle2);
-  const intersectingCells: IntersectingCells = IntersectingCells.fromGridLocation(grid, { column: 5, row: 7 });
+test('removePotentials works', () => {
+  const cc = IntersectingCells.fromCellCollection(
+    new CellCollection([
+      new Cell({ column: 5, row: 5 }, new CellValue([4, 5, 6])),
+      new Cell({ column: 6, row: 5 }, new CellValue([7, 8, 9])),
+      new Cell({ column: 7, row: 5 }, new CellValue([1, 2, 3])),
+      new Cell({ column: 8, row: 5 }, new CellValue([1, 4, 8])),
+      new Cell({ column: 9, row: 5 }, new CellValue([2, 3, 4])),
+    ]),
+  );
 
+  const dd = cc.removePotentials({ column: 7, row: 5 }, [2, 3]);
+
+  // check the one we want to alter has changed
+  expect(dd.cellAtLocation({ column: 7, row: 5 }).value.potentialValues).toEqual([1]);
+
+  // check the one we don't want to alter hasn't changed
+  expect(dd.cellAtLocation({ column: 9, row: 5 }).value.potentialValues).toEqual([2, 3, 4]);
+
+  // check location validation works
   expect(() => {
-    intersectingCells.setValue({ column: 1, row: 1 }, 9);
-  }).toThrow();
-
-  expect(() => {
-    intersectingCells.setValue({ column: 5, row: 3 }, 1);
-  }).not.toThrow();
-});
-
-test('setValue sets the value', () => {
-  const grid = Grid.fromGrid(easyTestPuzzle2);
-  const intersectingCells: IntersectingCells = IntersectingCells.fromGridLocation(grid, { column: 5, row: 7 });
-
-  const cc2 = intersectingCells.setValue({ column: 5, row: 5 }, 4);
-  expect(cc2.hasValue(4)).toBeTruthy();
-  expect(cc2.cellAtLocation({ column: 5, row: 5 })?.value.value).toBe(4);
-  expect(cc2.values.filter((cell) => cell.location.column === 5 && cell.location.row === 5).length).toBe(1);
-});
-
-test('setValue having set a value removes that as a potentia value for all other cells in the collection.', () => {
-  const grid = Grid.fromGrid(emptyPuzzle);
-  const cc1: IntersectingCells = IntersectingCells.fromGridLocation(grid, { column: 5, row: 7 });
-
-  const cc2 = cc1.setValue({ column: 5, row: 5 }, 9);
-
-  expect(cc2.values.length).toBe(21);
-  expect(cc2.cellAtLocation({ column: 5, row: 5 })?.value.value).toBe(9);
-  cc2.values
-    .filter((cell) => cell.location.column !== 5 || cell.location.row !== 5)
-    .forEach((cell) => {
-      SudokuAllPossibleValues.forEach((val, i) => {
-        val === 9
-          ? expect(cell.value.valuePotentials[i]).toBeFalsy()
-          : expect(cell.value.valuePotentials[i]).toBeTruthy();
-      });
-    });
+    cc.removePotentials({ column: 1, row: 1 }, [1, 2, 3]);
+  }).toThrowError();
 });

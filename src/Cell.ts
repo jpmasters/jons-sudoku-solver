@@ -1,5 +1,5 @@
 import { CellValue } from './CellValue';
-import { GridLocation, SudokuPossibleValue } from './ValueTypes';
+import { GridLocation } from './ValueTypes';
 
 /**
  * Describes a cell within a Sudoku grid.
@@ -14,13 +14,7 @@ export class Cell {
    */
   constructor(location: GridLocation, value: CellValue = new CellValue()) {
     this.value = value.copy();
-
-    // the location must be in range
-    if (location.column < 1 || location.column > 9 || location.row < 1 || location.row > 9) {
-      throw new Error('Location is out of range. x and y values should be between 1 and 9');
-    }
-
-    this.location = location;
+    this.location = { ...location };
   }
 
   /**
@@ -28,7 +22,7 @@ export class Cell {
    * @returns A deep copy of the Cell.
    */
   copy(): Cell {
-    return new Cell({ column: this.location.column, row: this.location.row }, this.value.copy());
+    return new Cell({ ...this.location }, this.value.copy());
   }
 
   /**
