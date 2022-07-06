@@ -28,73 +28,72 @@ export class SudokuSolver {
       rv[i] = new Array(9).fill(0);
     });
 
-    // get the initial set of changes
-    const sourceGrid = Grid.fromGrid(puzzle);
-    let targetGrid: Grid = Grid.fromGrid(emptyPuzzle);
-    let changes: GridDifference[] = sourceGrid.differences(targetGrid);
+    // the targetGrid holds our work in progress
+    let targetGrid: Grid = Grid.fromGrid(puzzle);
 
-    // now get the rest
-    while (changes.length) {
+    // this change list is a list of changes we want to make
+    // to the Grid in the iteration
+    const changes: GridDifference[] = [];
+
+    do {
+      // clear out the previous changes
+      changes.length = 0;
+
+      if (!changes.length) {
+        changes.push(...SudokuSolver.solveCollapsedValues(targetGrid));
+      }
+
+      if (!changes.length) {
+        changes.push(...SudokuSolver.solveSingleValues(targetGrid));
+      }
+
+      if (!changes.length) {
+        changes.push(...SudokuSolver.solveObviousPairs(targetGrid));
+      }
+
+      if (!changes.length) {
+        changes.push(...SudokuSolver.solveHiddenPairs(targetGrid));
+      }
+
       // apply them to the target grid
       targetGrid = SolverHelpers.applyChangeList(targetGrid, changes);
-
-      changes = [];
-
-      // if we got zero changes, try our strategies
-      if (!targetGrid.isSolved) {
-        if (!changes.length) {
-          SudokuSolver.solveCollapsedValues(changes, targetGrid);
-        }
-
-        if (!changes.length) {
-          SudokuSolver.solveSingleValues(changes, targetGrid);
-        }
-
-        if (!changes.length) {
-          SudokuSolver.solveObviousPairs(changes, targetGrid);
-        }
-
-        if (!changes.length) {
-          SudokuSolver.solveHiddenPairs(changes, targetGrid);
-        }
-      }
-    }
+    } while (changes.length || !targetGrid.isSolved);
 
     // convert it into something we can return
     return targetGrid.toPuzzleArray();
   }
 
-  private static solveSingleValues(changes: GridDifference[], targetGrid: Grid) {
-    changes.push(
+  private static solveSingleValues(targetGrid: Grid): GridDifference[] {
+    return [
       ...SudokuAllPossibleValues.map((row) => SolverStrategies.findSingleValues(targetGrid.row(row))).flat(),
       ...SudokuAllPossibleValues.map((column) => SolverStrategies.findSingleValues(targetGrid.column(column))).flat(),
       ...SudokuAllPossibleValues.map((block) => SolverStrategies.findSingleValues(targetGrid.block(block))).flat(),
-    );
+    ];
   }
 
-  private static solveCollapsedValues(changes: GridDifference[], targetGrid: Grid) {
-    changes.push(
+  private static solveCollapsedValues(targetGrid: Grid): GridDifference[] {
+    return [
       ...SudokuAllPossibleValues.map((row) => SolverStrategies.findCollapsedValues(targetGrid.row(row))).flat(),
       ...SudokuAllPossibleValues.map((column) =>
         SolverStrategies.findCollapsedValues(targetGrid.column(column)),
       ).flat(),
       ...SudokuAllPossibleValues.map((block) => SolverStrategies.findCollapsedValues(targetGrid.block(block))).flat(),
-    );
+    ];
   }
 
-  private static solveObviousPairs(changes: GridDifference[], targetGrid: Grid) {
-    changes.push(
+  private static solveObviousPairs(targetGrid: Grid): GridDifference[] {
+    return [
       ...SudokuAllPossibleValues.map((row) => SolverStrategies.findObviousPairs(targetGrid.row(row))).flat(),
       ...SudokuAllPossibleValues.map((column) => SolverStrategies.findObviousPairs(targetGrid.column(column))).flat(),
       ...SudokuAllPossibleValues.map((block) => SolverStrategies.findObviousPairs(targetGrid.block(block))).flat(),
-    );
+    ];
   }
 
-  private static solveHiddenPairs(changes: GridDifference[], targetGrid: Grid) {
-    changes.push(
+  private static solveHiddenPairs(targetGrid: Grid): GridDifference[] {
+    return [
       ...SudokuAllPossibleValues.map((row) => SolverStrategies.findHiddenPairs(targetGrid.row(row))).flat(),
       ...SudokuAllPossibleValues.map((column) => SolverStrategies.findHiddenPairs(targetGrid.column(column))).flat(),
       ...SudokuAllPossibleValues.map((block) => SolverStrategies.findHiddenPairs(targetGrid.block(block))).flat(),
-    );
+    ];
   }
 }

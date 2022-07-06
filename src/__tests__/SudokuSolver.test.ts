@@ -6,6 +6,8 @@ import {
   easyTestPuzzle3,
   easyTestPuzzle3Solved,
   hardTestPuzzle1,
+  hardTestPuzzle2,
+  hardTestPuzzle2Solved,
 } from './puzzles.test';
 
 const invalidPuzzle1: number[][] = [];
@@ -113,6 +115,12 @@ test('Solves testPuzzle1', () => {
 test('Solves testPuzzle2', () => {
   const solvedPuzzle: number[][] = SudokuSolver.solve(easyTestPuzzle2);
   expect(solvedPuzzle.flat().filter((v) => !!v).length).toBe(81);
+});
+
+test('Solves hardPuzzle2', () => {
+  const solvedPuzzle: number[][] = SudokuSolver.solve(hardTestPuzzle2);
+  expect(solvedPuzzle.flat().filter((v) => !!v).length).toBe(81);
+  expect(solvedPuzzle).toEqual(hardTestPuzzle2Solved);
 });
 
 // test('Solves hardPuzzle1', () => {

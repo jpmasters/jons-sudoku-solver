@@ -1,5 +1,6 @@
 import { Cell } from './Cell';
-import { GridLocation, SudokuPossibleValue } from './ValueTypes';
+import { Helpers } from './Helpers';
+import { GridLocation, SudokuAllPossibleValues, SudokuPossibleValue } from './ValueTypes';
 
 /**
  * Base class for immutable groups of Cells.
@@ -71,5 +72,13 @@ export class CellCollection {
    */
   hasValue(value: SudokuPossibleValue): boolean {
     return !!this.cells.filter((cell) => cell.value.hasKnownValue && cell.value.value === value).length;
+  }
+
+  /**
+   * returns a value indicating whether the Grid is ann empty Grid.
+   * @returns True if the grid has no values set (i.e. every Cell has all potential values)
+   */
+  hasNoValues(): boolean {
+    return this.cells.every((c) => Helpers.arrayContainsAll(c.value.potentialValues, SudokuAllPossibleValues));
   }
 }
