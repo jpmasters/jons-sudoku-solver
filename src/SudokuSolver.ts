@@ -51,6 +51,10 @@ export class SudokuSolver {
         }
 
         if (!changes.length) {
+          SudokuSolver.solveObviousPairs(changes, targetGrid);
+        }
+
+        if (!changes.length) {
           SudokuSolver.solveHiddenPairs(changes, targetGrid);
         }
       }
@@ -75,6 +79,14 @@ export class SudokuSolver {
         SolverStrategies.findCollapsedValues(targetGrid.column(column)),
       ).flat(),
       ...SudokuAllPossibleValues.map((block) => SolverStrategies.findCollapsedValues(targetGrid.block(block))).flat(),
+    );
+  }
+
+  private static solveObviousPairs(changes: GridDifference[], targetGrid: Grid) {
+    changes.push(
+      ...SudokuAllPossibleValues.map((row) => SolverStrategies.findObviousPairs(targetGrid.row(row))).flat(),
+      ...SudokuAllPossibleValues.map((column) => SolverStrategies.findObviousPairs(targetGrid.column(column))).flat(),
+      ...SudokuAllPossibleValues.map((block) => SolverStrategies.findObviousPairs(targetGrid.block(block))).flat(),
     );
   }
 

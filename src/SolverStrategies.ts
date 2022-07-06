@@ -1,3 +1,4 @@
+import { Cell } from './Cell';
 import { CellCollection } from './CellCollection';
 import { GridDifference } from './Grid';
 import { Helpers } from './Helpers';
@@ -16,6 +17,14 @@ interface ReducedValues {
   7?: GridLocation[];
   8?: GridLocation[];
   9?: GridLocation[];
+}
+
+/***
+ * Useful structure for grouping values by location.
+ */
+interface GroupedValues {
+  value: SudokuPossibleValue[];
+  locations: GridLocation[];
 }
 
 /**
@@ -134,6 +143,59 @@ export class SolverStrategies {
           .filter((diff) => diff.valuesToRemove.length),
       );
     }
+
+    return rv;
+  }
+
+  /**
+   * Searches a given row, column or block for obvious pairs and returns an
+   * array of objects to remove unneeded potentials from the rest of the cells.
+   * @param block A reference to a row, column or block to process.
+   * @returns An array of GridDifference objects to apply back to the Grid.
+   */
+  static findObviousPairs(block: CellCollection): GridDifference[] {
+    // all cells with 2 potential values only
+    let cellsWithTwoPotentials: Cell[] = block.cells
+      .filter((cell) => cell.value.potentialValues.length === 2)
+      .filter((cell1, _, allCells) => {
+        return (
+          allCells.filter((c) => Helpers.arrayHasSameMembers(cell1.value.potentialValues, c.value.potentialValues))
+            .length === 2
+        );
+      });
+
+    let groupedPairs: GroupedValues[] = cellsWithTwoPotentials.reduce<GroupedValues[]>((prev, curr) => {
+      let i: number = prev.findIndex((gv) => Helpers.arrayHasSameMembers(gv.value, curr.value.potentialValues));
+      if (i === -1) {
+        prev.push({ value: curr.value.potentialValues, locations: [curr.location] });
+      } else {
+        prev[i].locations.push(curr.location);
+      }
+      return prev;
+    }, []);
+
+    // convert the pairs into changes
+    const rv: GridDifference[] = groupedPairs.reduce<GridDifference[]>((prev, curr) => {
+      const cellsToChange: Cell[] = block.cells
+        .filter((c) => {
+          return !(
+            Helpers.locationsMatch(c.location, curr.locations[0]) ||
+            Helpers.locationsMatch(c.location, curr.locations[1])
+          );
+        })
+        .filter((cell) => cell.value.potentialValues.some((v) => curr.value.includes(v)));
+
+      const newdiffs = cellsToChange.map<GridDifference>((cell) => {
+        return {
+          location: { ...cell.location },
+          valuesToRemove: cell.value.potentialValues.filter((v) => curr.value.includes(v)),
+        };
+      });
+
+      prev.push(...newdiffs);
+
+      return prev;
+    }, []);
 
     return rv;
   }
