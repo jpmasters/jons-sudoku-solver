@@ -28,7 +28,7 @@ test('findObviousPairs works', () => {
     },
   ];
 
-  const diffs = ObviousPairsSolver.findObviousPairs(cc);
+  const diffs = ObviousPairsSolver.solveForBlock(cc);
   expect(diffs).toEqual(expected);
 });
 
@@ -47,7 +47,7 @@ test('findObviousPairs pairs must match values', () => {
 
   const expected: CellValueChange[] = [];
 
-  const diffs = ObviousPairsSolver.findObviousPairs(cc);
+  const diffs = ObviousPairsSolver.solveForBlock(cc);
   expect(diffs).toEqual(expected);
 });
 
@@ -79,6 +79,6 @@ test('findObviousPairs find multiple pairs', () => {
     },
   ];
 
-  const diffs = ObviousPairsSolver.findObviousPairs(cc);
+  const diffs = ObviousPairsSolver.solveForBlock(cc);
   expect(diffs).toEqual(expected);
 });

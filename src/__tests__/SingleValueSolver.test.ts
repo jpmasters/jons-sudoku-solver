@@ -24,7 +24,7 @@ test('findSingleValues works', () => {
     },
   ];
 
-  const diffs = SingleValuesSolver.findSingleValues(cc);
+  const diffs = SingleValuesSolver.solveForBlock(cc);
   expect(diffs.length).toBe(1);
   expect(diffs).toEqual(expected);
 });

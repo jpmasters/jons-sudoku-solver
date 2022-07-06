@@ -12,13 +12,9 @@ export class CollapsedValueSolver {
    */
   static solve(targetGrid: Grid): CellValueChange[] {
     return [
-      ...SudokuAllPossibleValues.map((row) => CollapsedValueSolver.findCollapsedValues(targetGrid.row(row))).flat(),
-      ...SudokuAllPossibleValues.map((column) =>
-        CollapsedValueSolver.findCollapsedValues(targetGrid.column(column)),
-      ).flat(),
-      ...SudokuAllPossibleValues.map((block) =>
-        CollapsedValueSolver.findCollapsedValues(targetGrid.block(block)),
-      ).flat(),
+      ...SudokuAllPossibleValues.map((row) => CollapsedValueSolver.solveForBlock(targetGrid.row(row))).flat(),
+      ...SudokuAllPossibleValues.map((column) => CollapsedValueSolver.solveForBlock(targetGrid.column(column))).flat(),
+      ...SudokuAllPossibleValues.map((block) => CollapsedValueSolver.solveForBlock(targetGrid.block(block))).flat(),
     ];
   }
 
@@ -29,7 +25,7 @@ export class CollapsedValueSolver {
    * @param block A reference to a row, column or block that holds 9 unique values.
    * @returns An array of changes that can be applied back to the grid.
    */
-  static findCollapsedValues(block: CellCollection): CellValueChange[] {
+  static solveForBlock(block: CellCollection): CellValueChange[] {
     const cellsWithKnownValues = block.cells.filter((cell) => cell.value.hasKnownValue);
     const rv: CellValueChange[] = [];
     cellsWithKnownValues.forEach((cell) => {

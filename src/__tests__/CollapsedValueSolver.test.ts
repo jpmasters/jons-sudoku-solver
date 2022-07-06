@@ -1,8 +1,8 @@
-import { Cell } from "../Cell";
-import { CellCollection } from "../CellCollection";
-import { CellValue } from "../CellValue";
-import { CellValueChange } from "../Grid";
-import { CollapsedValueSolver } from "../solvers/CollapsedValuesSolver";
+import { Cell } from '../Cell';
+import { CellCollection } from '../CellCollection';
+import { CellValue } from '../CellValue';
+import { CellValueChange } from '../Grid';
+import { CollapsedValueSolver } from '../solvers/CollapsedValuesSolver';
 
 test('findCollapsedValues works', () => {
   const cc: CellCollection = new CellCollection([
@@ -22,6 +22,6 @@ test('findCollapsedValues works', () => {
     { location: { row: 6, column: 3 }, valuesToRemove: [7] },
   ];
 
-  const diffs = CollapsedValueSolver.findCollapsedValues(cc);
+  const diffs = CollapsedValueSolver.solveForBlock(cc);
   expect(diffs).toEqual(expected);
 });

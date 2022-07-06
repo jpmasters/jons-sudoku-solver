@@ -14,9 +14,9 @@ export class ObviousPairsSolver {
    */
   static solve(targetGrid: Grid): CellValueChange[] {
     return [
-      ...SudokuAllPossibleValues.map((row) => ObviousPairsSolver.findObviousPairs(targetGrid.row(row))).flat(),
-      ...SudokuAllPossibleValues.map((column) => ObviousPairsSolver.findObviousPairs(targetGrid.column(column))).flat(),
-      ...SudokuAllPossibleValues.map((block) => ObviousPairsSolver.findObviousPairs(targetGrid.block(block))).flat(),
+      ...SudokuAllPossibleValues.map((row) => ObviousPairsSolver.solveForBlock(targetGrid.row(row))).flat(),
+      ...SudokuAllPossibleValues.map((column) => ObviousPairsSolver.solveForBlock(targetGrid.column(column))).flat(),
+      ...SudokuAllPossibleValues.map((block) => ObviousPairsSolver.solveForBlock(targetGrid.block(block))).flat(),
     ];
   }
 
@@ -26,7 +26,7 @@ export class ObviousPairsSolver {
    * @param block A reference to a row, column or block to process.
    * @returns An array of GridDifference objects to apply back to the Grid.
    */
-  static findObviousPairs(block: CellCollection): CellValueChange[] {
+  static solveForBlock(block: CellCollection): CellValueChange[] {
     // all cells with 2 potential values only
     const cellsWithTwoPotentials: Cell[] = block.cells
       .filter((cell) => cell.value.potentialValues.length === 2)

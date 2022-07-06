@@ -12,9 +12,9 @@ export class SingleValuesSolver {
    */
   static solve(targetGrid: Grid): CellValueChange[] {
     return [
-      ...SudokuAllPossibleValues.map((row) => SingleValuesSolver.findSingleValues(targetGrid.row(row))).flat(),
-      ...SudokuAllPossibleValues.map((column) => SingleValuesSolver.findSingleValues(targetGrid.column(column))).flat(),
-      ...SudokuAllPossibleValues.map((block) => SingleValuesSolver.findSingleValues(targetGrid.block(block))).flat(),
+      ...SudokuAllPossibleValues.map((row) => SingleValuesSolver.solveForBlock(targetGrid.row(row))).flat(),
+      ...SudokuAllPossibleValues.map((column) => SingleValuesSolver.solveForBlock(targetGrid.column(column))).flat(),
+      ...SudokuAllPossibleValues.map((block) => SingleValuesSolver.solveForBlock(targetGrid.block(block))).flat(),
     ];
   }
 
@@ -24,7 +24,7 @@ export class SingleValuesSolver {
    * @param block A reference to a row, column or block that holds 9 unique values.
    * @returns An array of changes that can be applied back to the grid.
    */
-  static findSingleValues(block: CellCollection): CellValueChange[] {
+  static solveForBlock(block: CellCollection): CellValueChange[] {
     const rv: CellValueChange[] = [];
     const reducedCells = SolverHelpers.reduceCells(block);
 

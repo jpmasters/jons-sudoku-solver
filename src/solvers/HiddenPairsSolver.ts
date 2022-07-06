@@ -13,9 +13,9 @@ export class HiddenPairsSolver {
    */
   static solve(targetGrid: Grid): CellValueChange[] {
     return [
-      ...SudokuAllPossibleValues.map((row) => HiddenPairsSolver.findHiddenPairs(targetGrid.row(row))).flat(),
-      ...SudokuAllPossibleValues.map((column) => HiddenPairsSolver.findHiddenPairs(targetGrid.column(column))).flat(),
-      ...SudokuAllPossibleValues.map((block) => HiddenPairsSolver.findHiddenPairs(targetGrid.block(block))).flat(),
+      ...SudokuAllPossibleValues.map((row) => HiddenPairsSolver.solveForBlock(targetGrid.row(row))).flat(),
+      ...SudokuAllPossibleValues.map((column) => HiddenPairsSolver.solveForBlock(targetGrid.column(column))).flat(),
+      ...SudokuAllPossibleValues.map((block) => HiddenPairsSolver.solveForBlock(targetGrid.block(block))).flat(),
     ];
   }
 
@@ -25,7 +25,7 @@ export class HiddenPairsSolver {
    * @param block A reference to a row, column or block to process.
    * @returns An array of GridDifference objects to apply back to the Grid.
    */
-  static findHiddenPairs(block: CellCollection): CellValueChange[] {
+  static solveForBlock(block: CellCollection): CellValueChange[] {
     const rv: CellValueChange[] = [];
     const reducedCells = SolverHelpers.reduceCells(block);
 

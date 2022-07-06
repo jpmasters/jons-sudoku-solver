@@ -28,7 +28,7 @@ test('findHiddenPairs works', () => {
     },
   ];
 
-  const diffs = HiddenPairsSolver.findHiddenPairs(cc);
+  const diffs = HiddenPairsSolver.solveForBlock(cc);
   expect(diffs).toEqual(expected);
 });
 
@@ -48,7 +48,7 @@ test('findHiddenPairs only selects pairs in the same cell!', () => {
   // should return nothing as their are no hidden pairs
   const expected: CellValueChange[] = [];
 
-  const diffs = HiddenPairsSolver.findHiddenPairs(cc);
+  const diffs = HiddenPairsSolver.solveForBlock(cc);
   expect(diffs).toEqual(expected);
 });
 
@@ -68,6 +68,6 @@ test('findHiddenPairs works when there are multiple cells with 2 values', () => 
   // should return nothing as their are no hidden pairs
   const expected: CellValueChange[] = [];
 
-  const diffs = HiddenPairsSolver.findHiddenPairs(cc);
+  const diffs = HiddenPairsSolver.solveForBlock(cc);
   expect(diffs).toEqual(expected);
 });
