@@ -1,6 +1,6 @@
-import { Grid, CellValueChange } from './Grid';
-import { Cell } from './Cell';
-import { CellCollection } from './CellCollection';
+import { Grid, CellValueChange } from '../Grid';
+import { Cell } from '../Cell';
+import { CellCollection } from '../CellCollection';
 
 /**
  * Defines the result of applying changes to a Grid.

@@ -1,8 +1,8 @@
-import { Cell } from './Cell';
-import { CellCollection } from './CellCollection';
-import { CellValueChange } from './Grid';
-import { Helpers } from './Helpers';
-import { GridLocation, SudokuAllPossibleValues, SudokuPossibleValue, SudokuPossibleValues } from './ValueTypes';
+import { Cell } from '../Cell';
+import { CellCollection } from '../CellCollection';
+import { CellValueChange } from '../Grid';
+import { Helpers } from '../Helpers';
+import { GridLocation, SudokuAllPossibleValues, SudokuPossibleValue, SudokuPossibleValues } from '../ValueTypes';
 
 /**
  * Structure to help reduce found values into values and counts at a location.

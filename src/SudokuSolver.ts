@@ -1,7 +1,6 @@
-import { emptyPuzzle } from './EmptyPuzzle';
 import { CellValueChange, Grid } from './Grid';
-import { ChangeResult, SolverHelpers } from './SolverHelpers';
-import { SolverStrategies } from './SolverStrategies';
+import { SolverHelpers } from './solvers/SolverHelpers';
+import { SolverStrategies } from './solvers/SolverStrategies';
 import { SudokuAllPossibleValues } from './ValueTypes';
 
 /**

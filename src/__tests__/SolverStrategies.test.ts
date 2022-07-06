@@ -1,7 +1,7 @@
 import { Grid, CellValueChange } from '../Grid';
 import { hardTestPuzzle1 } from './puzzles.test';
-import { ChangeResult, SolverHelpers } from '../SolverHelpers';
-import { SolverStrategies } from '../SolverStrategies';
+import { ChangeResult, SolverHelpers } from '../solvers/SolverHelpers';
+import { SolverStrategies } from '../solvers/SolverStrategies';
 import { emptyPuzzle } from '../EmptyPuzzle';
 import { CellCollection } from '../CellCollection';
 import { Cell } from '../Cell';

@@ -1,6 +1,6 @@
 import { emptyPuzzle } from '../EmptyPuzzle';
 import { Grid, CellValueChange } from '../Grid';
-import { SolverHelpers } from '../SolverHelpers';
+import { SolverHelpers } from '../solvers/SolverHelpers';
 
 test('Apply changes works', () => {
   const sourceGrid = Grid.fromGrid([
