@@ -69,7 +69,7 @@ test('Grid errors when it doesnt have 81 values', () => {
   }).toThrow();
 });
 
-test('Grid block from location returns wrong block number', () => {
+test('Grid block from location returns correct block number', () => {
   const testData = [
     [1, 1, 1],
     [4, 6, 5],
