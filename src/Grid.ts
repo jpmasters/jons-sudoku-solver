@@ -7,7 +7,7 @@ import { GridBlocks, GridColumns, GridLocation, GridRows, SudokuPossibleValue } 
 /**
  * Describes a change to a grid.
  */
-export type GridDifference = {
+export type CellValueChange = {
   location: GridLocation;
   valuesToRemove: SudokuPossibleValue[];
 };
@@ -131,8 +131,8 @@ export class Grid extends CellCollection {
    * @param targetGrid The grid to compare it to.
    * @returns A list of values and their locations that differ between the Grids.
    */
-  differences(targetGrid: Grid): GridDifference[] {
-    const rv: GridDifference[] = [];
+  differences(targetGrid: Grid): CellValueChange[] {
+    const rv: CellValueChange[] = [];
 
     this.cells.forEach((thisCell) => {
       // do we have this cell in the incoming grid?

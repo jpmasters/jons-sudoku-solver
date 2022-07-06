@@ -1,5 +1,5 @@
 import { emptyPuzzle } from './EmptyPuzzle';
-import { GridDifference, Grid } from './Grid';
+import { CellValueChange, Grid } from './Grid';
 import { ChangeResult, SolverHelpers } from './SolverHelpers';
 import { SolverStrategies } from './SolverStrategies';
 import { SudokuAllPossibleValues } from './ValueTypes';
@@ -33,7 +33,7 @@ export class SudokuSolver {
 
     // this change list is a list of changes we want to make
     // to the Grid in the iteration
-    const changes: GridDifference[] = [];
+    const changes: CellValueChange[] = [];
 
     do {
       // clear out the previous changes
@@ -63,7 +63,7 @@ export class SudokuSolver {
     return targetGrid.toPuzzleArray();
   }
 
-  private static solveSingleValues(targetGrid: Grid): GridDifference[] {
+  private static solveSingleValues(targetGrid: Grid): CellValueChange[] {
     return [
       ...SudokuAllPossibleValues.map((row) => SolverStrategies.findSingleValues(targetGrid.row(row))).flat(),
       ...SudokuAllPossibleValues.map((column) => SolverStrategies.findSingleValues(targetGrid.column(column))).flat(),
@@ -71,7 +71,7 @@ export class SudokuSolver {
     ];
   }
 
-  private static solveCollapsedValues(targetGrid: Grid): GridDifference[] {
+  private static solveCollapsedValues(targetGrid: Grid): CellValueChange[] {
     return [
       ...SudokuAllPossibleValues.map((row) => SolverStrategies.findCollapsedValues(targetGrid.row(row))).flat(),
       ...SudokuAllPossibleValues.map((column) =>
@@ -81,7 +81,7 @@ export class SudokuSolver {
     ];
   }
 
-  private static solveObviousPairs(targetGrid: Grid): GridDifference[] {
+  private static solveObviousPairs(targetGrid: Grid): CellValueChange[] {
     return [
       ...SudokuAllPossibleValues.map((row) => SolverStrategies.findObviousPairs(targetGrid.row(row))).flat(),
       ...SudokuAllPossibleValues.map((column) => SolverStrategies.findObviousPairs(targetGrid.column(column))).flat(),
@@ -89,7 +89,7 @@ export class SudokuSolver {
     ];
   }
 
-  private static solveHiddenPairs(targetGrid: Grid): GridDifference[] {
+  private static solveHiddenPairs(targetGrid: Grid): CellValueChange[] {
     return [
       ...SudokuAllPossibleValues.map((row) => SolverStrategies.findHiddenPairs(targetGrid.row(row))).flat(),
       ...SudokuAllPossibleValues.map((column) => SolverStrategies.findHiddenPairs(targetGrid.column(column))).flat(),

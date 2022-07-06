@@ -1,6 +1,6 @@
 import { Cell } from './Cell';
 import { CellCollection } from './CellCollection';
-import { GridDifference } from './Grid';
+import { CellValueChange } from './Grid';
 import { Helpers } from './Helpers';
 import { GridLocation, SudokuAllPossibleValues, SudokuPossibleValue, SudokuPossibleValues } from './ValueTypes';
 
@@ -61,9 +61,9 @@ export class SolverStrategies {
    * @param block A reference to a row, column or block that holds 9 unique values.
    * @returns An array of changes that can be applied back to the grid.
    */
-  static findCollapsedValues(block: CellCollection): GridDifference[] {
+  static findCollapsedValues(block: CellCollection): CellValueChange[] {
     const cellsWithKnownValues = block.cells.filter((cell) => cell.value.hasKnownValue);
-    const rv: GridDifference[] = [];
+    const rv: CellValueChange[] = [];
     cellsWithKnownValues.forEach((cell) => {
       rv.push(
         ...block.cells
@@ -72,7 +72,7 @@ export class SolverStrategies {
               !Helpers.locationsMatch(bc.location, cell.location) &&
               bc.value.potentialValues.includes(cell.value.value),
           )
-          .map<GridDifference>((bc) => {
+          .map<CellValueChange>((bc) => {
             return {
               location: { ...bc.location },
               valuesToRemove: [cell.value.value],
@@ -89,8 +89,8 @@ export class SolverStrategies {
    * @param block A reference to a row, column or block that holds 9 unique values.
    * @returns An array of changes that can be applied back to the grid.
    */
-  static findSingleValues(block: CellCollection): GridDifference[] {
-    const rv: GridDifference[] = [];
+  static findSingleValues(block: CellCollection): CellValueChange[] {
+    const rv: CellValueChange[] = [];
     const reducedCells = SolverStrategies.reduceCells(block);
 
     SudokuAllPossibleValues.forEach((value) => {
@@ -114,8 +114,8 @@ export class SolverStrategies {
    * @param block A reference to a row, column or block to process.
    * @returns An array of GridDifference objects to apply back to the Grid.
    */
-  static findHiddenPairs(block: CellCollection): GridDifference[] {
-    const rv: GridDifference[] = [];
+  static findHiddenPairs(block: CellCollection): CellValueChange[] {
+    const rv: CellValueChange[] = [];
     const reducedCells = SolverStrategies.reduceCells(block);
 
     // we're looking for sets of 2 cells that hold the same pair of values
@@ -136,7 +136,7 @@ export class SolverStrategies {
       rv.push(
         ...block.cells
           .filter((cell) => Helpers.arrayContainsAll(cell.value.potentialValues, pairs))
-          .map<GridDifference>((cell) => {
+          .map<CellValueChange>((cell) => {
             const vr: SudokuPossibleValue[] = cell.value.potentialValues.filter((v) => !pairs.includes(v));
             return { location: { ...cell.location }, valuesToRemove: [...vr] };
           })
@@ -153,7 +153,7 @@ export class SolverStrategies {
    * @param block A reference to a row, column or block to process.
    * @returns An array of GridDifference objects to apply back to the Grid.
    */
-  static findObviousPairs(block: CellCollection): GridDifference[] {
+  static findObviousPairs(block: CellCollection): CellValueChange[] {
     // all cells with 2 potential values only
     const cellsWithTwoPotentials: Cell[] = block.cells
       .filter((cell) => cell.value.potentialValues.length === 2)
@@ -175,7 +175,7 @@ export class SolverStrategies {
     }, []);
 
     // convert the pairs into changes
-    const rv: GridDifference[] = groupedPairs.reduce<GridDifference[]>((prev, curr) => {
+    const rv: CellValueChange[] = groupedPairs.reduce<CellValueChange[]>((prev, curr) => {
       const cellsToChange: Cell[] = block.cells
         .filter((c) => {
           return !(
@@ -185,7 +185,7 @@ export class SolverStrategies {
         })
         .filter((cell) => cell.value.potentialValues.some((v) => curr.value.includes(v)));
 
-      const newdiffs = cellsToChange.map<GridDifference>((cell) => {
+      const newdiffs = cellsToChange.map<CellValueChange>((cell) => {
         return {
           location: { ...cell.location },
           valuesToRemove: cell.value.potentialValues.filter((v) => curr.value.includes(v)),

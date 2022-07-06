@@ -1,5 +1,5 @@
 import { Cell } from '../Cell';
-import { Grid, GridDifference } from '../Grid';
+import { Grid, CellValueChange } from '../Grid';
 import { GridColumns, GridRows } from '../ValueTypes';
 import { easyTestPuzzle1, easyTestPuzzle3, easyTestPuzzle3Solved } from './puzzles.test';
 
@@ -173,7 +173,7 @@ test('Difference works', () => {
   const p1 = Grid.fromGrid(easyTestPuzzle3);
   const p2 = Grid.fromGrid(easyTestPuzzle3Solved);
 
-  let diffs: GridDifference[] = p2.differences(p1);
+  let diffs: CellValueChange[] = p2.differences(p1);
   expect(diffs.length).toBe(51);
   expect(diffs.flatMap((d) => d.valuesToRemove).length).not.toBe(0);
 

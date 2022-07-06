@@ -1,7 +1,6 @@
 import { emptyPuzzle } from '../EmptyPuzzle';
-import { Grid, GridDifference } from '../Grid';
+import { Grid, CellValueChange } from '../Grid';
 import { SolverHelpers } from '../SolverHelpers';
-import { easyTestPuzzle3, easyTestPuzzle3Solved } from './puzzles.test';
 
 test('Apply changes works', () => {
   const sourceGrid = Grid.fromGrid([
@@ -18,7 +17,7 @@ test('Apply changes works', () => {
 
   let targetGrid = Grid.fromGrid(emptyPuzzle);
 
-  let cl: GridDifference[] = sourceGrid.differences(targetGrid);
+  let cl: CellValueChange[] = sourceGrid.differences(targetGrid);
 
   const updatedGrid = SolverHelpers.applyChangeList(targetGrid, cl);
   expect(updatedGrid.toPuzzleArray()).toEqual(sourceGrid.toPuzzleArray());

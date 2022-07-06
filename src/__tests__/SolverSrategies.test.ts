@@ -1,4 +1,4 @@
-import { Grid, GridDifference } from '../Grid';
+import { Grid, CellValueChange } from '../Grid';
 import { hardTestPuzzle1 } from './puzzles.test';
 import { ChangeResult, SolverHelpers } from '../SolverHelpers';
 import { SolverStrategies } from '../SolverStrategies';
@@ -20,7 +20,7 @@ test('findCollapsedValues works', () => {
     new Cell({ row: 9, column: 3 }, new CellValue([2, 3, 8])),
   ]);
 
-  const expected: GridDifference[] = [
+  const expected: CellValueChange[] = [
     { location: { row: 5, column: 3 }, valuesToRemove: [7] },
     { location: { row: 6, column: 3 }, valuesToRemove: [7] },
   ];
@@ -42,7 +42,7 @@ test('findSingleValues works', () => {
     new Cell({ row: 9, column: 3 }, new CellValue([3, 8])),
   ]);
 
-  const expected: GridDifference[] = [
+  const expected: CellValueChange[] = [
     {
       location: { row: 8, column: 3 },
       valuesToRemove: [1, 8],
@@ -67,7 +67,7 @@ test('findHiddenPairs works', () => {
     new Cell({ row: 9, column: 3 }, new CellValue([2, 3, 8])),
   ]);
 
-  const expected: GridDifference[] = [
+  const expected: CellValueChange[] = [
     {
       location: { row: 2, column: 3 },
       valuesToRemove: [3, 8],
@@ -96,7 +96,7 @@ test('findHiddenPairs only selects pairs in the same cell!', () => {
   ]);
 
   // should return nothing as their are no hidden pairs
-  const expected: GridDifference[] = [];
+  const expected: CellValueChange[] = [];
 
   const diffs = SolverStrategies.findHiddenPairs(cc);
   expect(diffs).toEqual(expected);
@@ -116,7 +116,7 @@ test('findHiddenPairs works when there are multiple cells with 2 values', () => 
   ]);
 
   // should return nothing as their are no hidden pairs
-  const expected: GridDifference[] = [];
+  const expected: CellValueChange[] = [];
 
   const diffs = SolverStrategies.findHiddenPairs(cc);
   expect(diffs).toEqual(expected);
@@ -135,7 +135,7 @@ test('findObviousPairs works', () => {
     new Cell({ row: 3, column: 3 }, new CellValue([6, 9])),
   ]);
 
-  const expected: GridDifference[] = [
+  const expected: CellValueChange[] = [
     {
       location: { row: 2, column: 2 },
       valuesToRemove: [6],
@@ -163,7 +163,7 @@ test('findObviousPairs pairs must match values', () => {
     new Cell({ row: 4, column: 9 }, new CellValue([5])),
   ]);
 
-  const expected: GridDifference[] = [];
+  const expected: CellValueChange[] = [];
 
   const diffs = SolverStrategies.findObviousPairs(cc);
   expect(diffs).toEqual(expected);
@@ -182,7 +182,7 @@ test('findObviousPairs find multiple pairs', () => {
     new Cell({ row: 4, column: 9 }, new CellValue([5])),
   ]);
 
-  const expected: GridDifference[] = [
+  const expected: CellValueChange[] = [
     {
       location: { row: 4, column: 4 },
       valuesToRemove: [8],
