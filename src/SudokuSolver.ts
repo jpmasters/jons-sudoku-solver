@@ -1,7 +1,9 @@
 import { CellValueChange, Grid } from './Grid';
+import { CollapsedValueSolver } from './solvers/CollapsedValuesSolver';
+import { HiddenPairsSolver } from './solvers/HiddenPairsSolver';
+import { ObviousPairsSolver } from './solvers/ObviousPairsSolver';
+import { SingleValuesSolver } from './solvers/SingleValuesSolver';
 import { SolverHelpers } from './solvers/SolverHelpers';
-import { SolverStrategies } from './solvers/SolverStrategies';
-import { SudokuAllPossibleValues } from './ValueTypes';
 
 /**
  * Implements a class that can solve a 9x9 Sudoku provided as a number[9][9].
@@ -34,19 +36,19 @@ export class SudokuSolver {
       changes.length = 0;
 
       if (!changes.length) {
-        changes.push(...SudokuSolver.solveCollapsedValues(targetGrid));
+        changes.push(...CollapsedValueSolver.solve(targetGrid));
       }
 
       if (!changes.length) {
-        changes.push(...SudokuSolver.solveSingleValues(targetGrid));
+        changes.push(...SingleValuesSolver.solve(targetGrid));
       }
 
       if (!changes.length) {
-        changes.push(...SudokuSolver.solveObviousPairs(targetGrid));
+        changes.push(...ObviousPairsSolver.solve(targetGrid));
       }
 
       if (!changes.length) {
-        changes.push(...SudokuSolver.solveHiddenPairs(targetGrid));
+        changes.push(...HiddenPairsSolver.solve(targetGrid));
       }
 
       // apply them to the target grid
@@ -55,39 +57,5 @@ export class SudokuSolver {
 
     // convert it into something we can return
     return targetGrid.toPuzzleArray();
-  }
-
-  private static solveSingleValues(targetGrid: Grid): CellValueChange[] {
-    return [
-      ...SudokuAllPossibleValues.map((row) => SolverStrategies.findSingleValues(targetGrid.row(row))).flat(),
-      ...SudokuAllPossibleValues.map((column) => SolverStrategies.findSingleValues(targetGrid.column(column))).flat(),
-      ...SudokuAllPossibleValues.map((block) => SolverStrategies.findSingleValues(targetGrid.block(block))).flat(),
-    ];
-  }
-
-  private static solveCollapsedValues(targetGrid: Grid): CellValueChange[] {
-    return [
-      ...SudokuAllPossibleValues.map((row) => SolverStrategies.findCollapsedValues(targetGrid.row(row))).flat(),
-      ...SudokuAllPossibleValues.map((column) =>
-        SolverStrategies.findCollapsedValues(targetGrid.column(column)),
-      ).flat(),
-      ...SudokuAllPossibleValues.map((block) => SolverStrategies.findCollapsedValues(targetGrid.block(block))).flat(),
-    ];
-  }
-
-  private static solveObviousPairs(targetGrid: Grid): CellValueChange[] {
-    return [
-      ...SudokuAllPossibleValues.map((row) => SolverStrategies.findObviousPairs(targetGrid.row(row))).flat(),
-      ...SudokuAllPossibleValues.map((column) => SolverStrategies.findObviousPairs(targetGrid.column(column))).flat(),
-      ...SudokuAllPossibleValues.map((block) => SolverStrategies.findObviousPairs(targetGrid.block(block))).flat(),
-    ];
-  }
-
-  private static solveHiddenPairs(targetGrid: Grid): CellValueChange[] {
-    return [
-      ...SudokuAllPossibleValues.map((row) => SolverStrategies.findHiddenPairs(targetGrid.row(row))).flat(),
-      ...SudokuAllPossibleValues.map((column) => SolverStrategies.findHiddenPairs(targetGrid.column(column))).flat(),
-      ...SudokuAllPossibleValues.map((block) => SolverStrategies.findHiddenPairs(targetGrid.block(block))).flat(),
-    ];
   }
 }
