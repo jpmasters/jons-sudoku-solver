@@ -1,6 +1,6 @@
 # Jon's Sudoku Solver
 
-This package is a work in progress librry to solve classic 9x9 Sudoku puzzles.
+This package is a work in progress library to solve classic 9x9 Sudoku puzzles.
 
 ## Install from NPM
 
