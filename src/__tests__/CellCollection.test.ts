@@ -1,6 +1,7 @@
 import { Cell } from '../Cell';
 import { CellCollection } from '../CellCollection';
 import { CellValue } from '../CellValue';
+import { SudokuAllPossibleValues } from '../ValueTypes';
 
 test('Getting a Cell from a location works', () => {
   const cc = new CellCollection([
@@ -93,4 +94,25 @@ test('hasValue works', () => {
 
   expect(cc1.hasValue(3)).toBeTruthy();
   expect(cc1.hasValue(9)).toBeFalsy();
+});
+
+test('hasNoValues works', () => {
+  const cc1 = new CellCollection([
+    new Cell({ column: 5, row: 5 }, new CellValue(SudokuAllPossibleValues)),
+    new Cell({ column: 6, row: 5 }, new CellValue(SudokuAllPossibleValues)),
+    new Cell({ column: 7, row: 5 }, new CellValue(SudokuAllPossibleValues)),
+    new Cell({ column: 8, row: 5 }, new CellValue(SudokuAllPossibleValues)),
+    new Cell({ column: 9, row: 5 }, new CellValue(SudokuAllPossibleValues)),
+  ]);
+
+  const cc2 = new CellCollection([
+    new Cell({ column: 5, row: 5 }, new CellValue([1])),
+    new Cell({ column: 6, row: 5 }, new CellValue([2])),
+    new Cell({ column: 7, row: 5 }, new CellValue(SudokuAllPossibleValues)),
+    new Cell({ column: 8, row: 5 }, new CellValue(SudokuAllPossibleValues)),
+    new Cell({ column: 9, row: 5 }, new CellValue([5])),
+  ]);
+
+  expect(cc1.hasNoValues()).toBeTruthy();
+  expect(cc2.hasNoValues()).toBeFalsy();
 });
