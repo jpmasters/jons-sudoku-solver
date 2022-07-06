@@ -23,11 +23,6 @@ export class SudokuSolver {
       throw new Error('Grid must contain values between 0 and 9 where 0 is an unknown value.');
     if (puzzle.flat().filter((val) => val !== 0).length === 0) throw new Error('Grid must have some initial values.');
 
-    const rv = Array(9).fill(Array(9).fill(0));
-    rv.forEach((v, i) => {
-      rv[i] = new Array(9).fill(0);
-    });
-
     // the targetGrid holds our work in progress
     let targetGrid: Grid = Grid.fromGrid(puzzle);
 
