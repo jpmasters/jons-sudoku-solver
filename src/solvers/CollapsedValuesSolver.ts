@@ -4,6 +4,12 @@ import { Helpers } from '../Helpers';
 import { SudokuAllPossibleValues } from '../ValueTypes';
 
 export class CollapsedValueSolver {
+  /**
+   * Searches the grid for values with a single potential and if it finds any, returns an
+   * array of changes to apply to the target grid.
+   * @param targetGrid The grid to solve.
+   * @returns An array of changes to apply to the grid to solve it.
+   */
   static solve(targetGrid: Grid): CellValueChange[] {
     return [
       ...SudokuAllPossibleValues.map((row) => CollapsedValueSolver.findCollapsedValues(targetGrid.row(row))).flat(),

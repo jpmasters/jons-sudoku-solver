@@ -5,6 +5,12 @@ import { SudokuAllPossibleValues, GridLocation, SudokuPossibleValue } from '../V
 import { SolverHelpers, ReducedValues } from './SolverHelpers';
 
 export class HiddenPairsSolver {
+  /**
+   * Searches the Grid for hidden pairs and if it finds any, returns an
+   * array of changes to apply to the target grid.
+   * @param targetGrid The grid to solve.
+   * @returns An array of changes to apply to the grid to solve it.
+   */
   static solve(targetGrid: Grid): CellValueChange[] {
     return [
       ...SudokuAllPossibleValues.map((row) => HiddenPairsSolver.findHiddenPairs(targetGrid.row(row))).flat(),

@@ -4,6 +4,12 @@ import { SudokuAllPossibleValues, GridLocation, SudokuPossibleValue } from '../V
 import { ReducedValues, SolverHelpers } from './SolverHelpers';
 
 export class SingleValuesSolver {
+  /**
+   * Searches the grid for cells where the value only appears once in the row, column or block
+   * and if it finds any, returns an array of changes to apply to the target grid.
+   * @param targetGrid The grid to solve.
+   * @returns An array of changes to apply to the grid to solve it.
+   */
   static solve(targetGrid: Grid): CellValueChange[] {
     return [
       ...SudokuAllPossibleValues.map((row) => SingleValuesSolver.findSingleValues(targetGrid.row(row))).flat(),

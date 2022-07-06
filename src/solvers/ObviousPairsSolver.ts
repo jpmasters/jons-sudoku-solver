@@ -6,6 +6,12 @@ import { SudokuAllPossibleValues } from '../ValueTypes';
 import { GroupedValues } from './SolverHelpers';
 
 export class ObviousPairsSolver {
+  /**
+   * Searches the values with a single potential and if it finds any, returns an
+   * array of changes to apply to the target grid.
+   * @param targetGrid The grid to solve.
+   * @returns An array of changes to apply to the grid to solve it.
+   */
   static solve(targetGrid: Grid): CellValueChange[] {
     return [
       ...SudokuAllPossibleValues.map((row) => ObviousPairsSolver.findObviousPairs(targetGrid.row(row))).flat(),
