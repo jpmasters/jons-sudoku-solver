@@ -155,7 +155,7 @@ export class SolverStrategies {
    */
   static findObviousPairs(block: CellCollection): GridDifference[] {
     // all cells with 2 potential values only
-    let cellsWithTwoPotentials: Cell[] = block.cells
+    const cellsWithTwoPotentials: Cell[] = block.cells
       .filter((cell) => cell.value.potentialValues.length === 2)
       .filter((cell1, _, allCells) => {
         return (
@@ -164,8 +164,8 @@ export class SolverStrategies {
         );
       });
 
-    let groupedPairs: GroupedValues[] = cellsWithTwoPotentials.reduce<GroupedValues[]>((prev, curr) => {
-      let i: number = prev.findIndex((gv) => Helpers.arrayHasSameMembers(gv.value, curr.value.potentialValues));
+    const groupedPairs: GroupedValues[] = cellsWithTwoPotentials.reduce<GroupedValues[]>((prev, curr) => {
+      const i: number = prev.findIndex((gv) => Helpers.arrayHasSameMembers(gv.value, curr.value.potentialValues));
       if (i === -1) {
         prev.push({ value: curr.value.potentialValues, locations: [curr.location] });
       } else {
