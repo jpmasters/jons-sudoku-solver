@@ -1,4 +1,5 @@
 import { CellValueChange, Grid } from './Grid';
+import { BacktrackingSolver } from './solvers/BacktrackingSolver';
 import { CollapsedValueSolver } from './solvers/CollapsedValuesSolver';
 import { HiddenPairsSolver } from './solvers/HiddenPairsSolver';
 import { ObviousPairsSolver } from './solvers/ObviousPairsSolver';
@@ -31,6 +32,7 @@ export class SudokuSolver {
     // to the Grid in the iteration
     const changes: CellValueChange[] = [];
 
+    // start with optimisation strategies
     do {
       // clear out the previous changes
       changes.length = 0;
@@ -53,7 +55,12 @@ export class SudokuSolver {
 
       // apply them to the target grid
       targetGrid = SolverHelpers.applyChangeList(targetGrid, changes);
-    } while (changes.length || !targetGrid.isSolved);
+    } while (changes.length && !targetGrid.isSolved);
+
+    // if there's anything left to do, use backtracking
+    if (!targetGrid.isSolved) {
+      targetGrid = SolverHelpers.applyChangeList(targetGrid, BacktrackingSolver.solve(targetGrid));
+    }
 
     // convert it into something we can return
     return targetGrid.toPuzzleArray();
