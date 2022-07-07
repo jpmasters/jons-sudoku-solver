@@ -1,6 +1,6 @@
 {
   "name": "jons-sudoku-solver",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "This package uses a wave collapse algorithm to solve Sudoku puzzles.",
   "main": "lib/index.js",
   "files": [
