@@ -37,5 +37,21 @@ testPuzzle = [
 
 solvedPuzzle = solver.solve(testPuzzle);
 
-console.log(solvedPuzzle);
+console.table(solvedPuzzle);
+```
+
+## Build from source
+
+```bash
+# clone the repo
+git clone https://github.com/jpmasters/jons-sudoku-solver.git
+
+# cd into the new folder
+cd jons-sudoku-solver
+
+# install the dependencies
+npm install
+
+# check that the tests run correctly
+npm run test
 ```
