@@ -28,9 +28,7 @@ export class CellValue {
    * @returns A reference to a new CellValue object.
    */
   copy(): CellValue {
-    const rv = new CellValue();
-    rv._valuePotentials = [...this._valuePotentials];
-    return rv;
+    return new CellValue([...this._valuePotentials]);
   }
 
   /**
