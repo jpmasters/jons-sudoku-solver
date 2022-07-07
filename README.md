@@ -10,7 +10,7 @@ For many easy and intermediate level puzzles, it can reach a solution without ne
 
 This is just a quick spare / vacation time project but I am hoping to extend the library to include more sophisticated solvers and perhaps features that might make it a useful starting point to build a Sudoku game.
 
-If you have any feedback, ideas, comments please feel free to let me know. I can't promise I'll be able to get back to you straightaway but I'll do my best!
+If you have any feedback, ideas, comments [please feel free to let me know](https://github.com/jpmasters/jons-sudoku-solver/discussions). I can't promise I'll be able to get back to you straightaway but I'll do my best!
 
 ## Install from NPM
 
