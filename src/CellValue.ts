@@ -2,11 +2,13 @@ import { SudokuAllPossibleValues, SudokuPossibleValue, SudokuPossibleValues } fr
 
 /**
  * This class represents a cell in a Sudoku grid and holds all the potential
- * values that the cell can have. It is designed to be immutable.
+ * values that the cell can have. It is designed to be immutable. The reasoning is
+ * that humans solve Sudoku puzzles by eliminating possibilities. This library works
+ * the same way.
  */
 export class CellValue {
   /**
-   * Holds the vaue potentials as a fixed length array of booleans
+   * Holds the vaue potentials as an array of possible Sudoku values (1-9).
    */
   private _valuePotentials: SudokuPossibleValue[];
 
@@ -15,15 +17,15 @@ export class CellValue {
    * be immutable. If the cell is constructed without initial values, it will
    * create it with all potential values.
    *
-   * @param value Optional initial cell value.
+   * @param values Optional initial cell value.
    */
-  constructor(value: SudokuPossibleValues = SudokuAllPossibleValues) {
-    this._valuePotentials = [...value].sort((a, b) => a - b);
+  constructor(values: SudokuPossibleValues = SudokuAllPossibleValues) {
+    this._valuePotentials = [...values].sort((a, b) => a - b);
   }
 
   /**
    * Returns a deep copy of the CellValue.
-   * @returns A dseep copy of the CellValue.
+   * @returns A reference to a new CellValue object.
    */
   copy(): CellValue {
     const rv = new CellValue();
@@ -37,17 +39,7 @@ export class CellValue {
    * @returns A new CellValue with the updated potentials.
    */
   removePotentials(values: SudokuPossibleValue[]): CellValue {
-    const rv = this.copy();
-    values.forEach((val) => {
-      if (rv._valuePotentials.includes(val)) {
-        rv._valuePotentials.splice(
-          rv._valuePotentials.findIndex((v) => v === val),
-          1,
-        );
-      }
-    });
-
-    return rv;
+    return new CellValue(this._valuePotentials.filter((v) => !values.includes(v)));
   }
 
   /**
