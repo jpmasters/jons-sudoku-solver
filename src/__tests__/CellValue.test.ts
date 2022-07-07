@@ -78,25 +78,3 @@ test('potentialValues returns correct values', () => {
   expect(c.hasKnownValue).toBeTruthy();
   expect(c.potentialValues).toEqual([3]);
 });
-
-test('Add potentials works', () => {
-  // create an incomplete CellValue
-  let c = new CellValue([1, 2, 3, 4, 5]);
-  expect(c.potentialValues).toEqual([1, 2, 3, 4, 5]);
-  expect(c.hasKnownValue).toBeFalsy();
-
-  // add an overlapping set of values
-  let d = c.addPotentials([4, 5, 6, 7, 8, 9]);
-
-  // original CellValue should be untouched
-  expect(c.potentialValues).toEqual([1, 2, 3, 4, 5]);
-
-  // new one should have a complete set of values
-  expect(d.potentialValues).toEqual(SudokuAllPossibleValues);
-
-  // and without values being added twice
-  expect(d.potentialValues.length).toBe(9);
-
-  // and should not have a known value
-  expect(d.hasKnownValue).toBeFalsy();
-});
