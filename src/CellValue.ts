@@ -50,21 +50,6 @@ export class CellValue {
     return rv;
   }
 
-  // /**
-  //  * Returns a copy of the CellValue with the specified potential removed.
-  //  * @param values A list of potential values to add.
-  //  * @returns A new CellValue with the updated potentials.
-  //  */
-  // addPotentials(values: SudokuPossibleValue[]): CellValue {
-  //   const rv = new CellValue(
-  //     this._valuePotentials.concat([...values]).filter((val, i, arr) => {
-  //       return arr.findIndex((v) => v === val) === i;
-  //     }),
-  //   );
-
-  //   return rv;
-  // }
-
   /**
    * Returns the potential values as an array of SudokuPossibleValues.
    */
