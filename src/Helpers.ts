@@ -29,12 +29,11 @@ export class Helpers {
   }
 
   static orderCells(cells: Cell[]): Cell[] {
+    // sort by row and then by column
     return cells.sort((a, b) => {
-      if (a.location.row !== b.location.row) {
-        return a.location.row - b.location.row;
-      } else {
-        return a.location.column - b.location.column;
-      }
+      return a.location.row !== b.location.row
+        ? a.location.row - b.location.row
+        : a.location.column - b.location.column;
     });
   }
 }
