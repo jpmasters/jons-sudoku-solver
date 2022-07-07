@@ -12,7 +12,6 @@ import { SolverHelpers } from './solvers/SolverHelpers';
 export class SudokuSolver {
   /**
    * Solves the given 9x9 Sudoku grid.
-   * TODO: Needs a better way to handle puzzles it can't solve (than return incomplete solution)
    * TODO: Add a callback method of some kind to allow the user to monitor the grids and changes at each iteration.
    * @param puzzle A puzzle defined a as a 2D array of numbers with zeros representing unknown values.
    * @returns A solved puzzle defined as a 2D array of numbers.
@@ -59,7 +58,7 @@ export class SudokuSolver {
 
     // if there's anything left to do, use backtracking
     if (!targetGrid.isSolved) {
-      targetGrid = SolverHelpers.applyChangeList(targetGrid, BacktrackingSolver.solve(targetGrid));
+      targetGrid = SolverHelpers.applyChangeList(targetGrid, [...BacktrackingSolver.solve(targetGrid)]);
     }
 
     // convert it into something we can return

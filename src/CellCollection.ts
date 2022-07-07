@@ -11,9 +11,11 @@ export class CellCollection {
    * @param values A list of cells to initialise with. Cells will be deep copied.
    */
   constructor(values: Cell[]) {
-    this.cells = values.map<Cell>((c) => {
-      return new Cell({ ...c.location }, c.value.copy());
-    });
+    this.cells = Helpers.orderCells(
+      values.map<Cell>((c) => {
+        return new Cell({ ...c.location }, c.value.copy());
+      }),
+    );
   }
 
   /**

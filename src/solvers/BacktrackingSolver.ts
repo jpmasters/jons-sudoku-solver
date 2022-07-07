@@ -32,7 +32,7 @@ export class BacktrackingSolver {
     const emptyCells: Cell[] = grid.cells.filter((cell) => !cell.value.hasKnownValue);
 
     for (let cell of emptyCells) {
-      for (let valueToTry of SudokuAllPossibleValues) {
+      for (let valueToTry of [...cell.value.potentialValues] /*SudokuAllPossibleValues*/) {
         if (BacktrackingSolver.isValidPlacement(grid, valueToTry, cell.location)) {
           // we have a value to try so try it
           const newGrid = SolverHelpers.applyChangeList(grid, [
@@ -66,8 +66,14 @@ export class BacktrackingSolver {
     return false;
   }
 
+  /**
+   * Helper method to confirm that a given cell in a grid can have a value.
+   * @param grid Grid to check placemnet on.
+   * @param value Value to check.
+   * @param location Location of cell for proposed value.
+   * @returns True if the cell is allowed the specified value.
+   */
   private static isValidPlacement(grid: Grid, value: SudokuPossibleValue, location: GridLocation): boolean {
-    const intersectingCells: IntersectingCells = IntersectingCells.fromGridLocation(grid, location);
-    return !intersectingCells.hasValue(value);
+    return !IntersectingCells.fromGridLocation(grid, location).hasValue(value);
   }
 }

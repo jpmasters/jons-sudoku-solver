@@ -1,3 +1,4 @@
+import { Cell } from './Cell';
 import { GridLocation, SudokuAllPossibleValues, SudokuPossibleValue, SudokuPossibleValues } from './ValueTypes';
 
 /**
@@ -25,5 +26,15 @@ export class Helpers {
     if (loc1.length !== loc2.length) return false;
 
     return loc1.every((l1) => loc2.findIndex((l2) => Helpers.locationsMatch(l1, l2)) !== -1);
+  }
+
+  static orderCells(cells: Cell[]): Cell[] {
+    return cells.sort((a, b) => {
+      if (a.location.row !== b.location.row) {
+        return a.location.row - b.location.row;
+      } else {
+        return a.location.column - b.location.column;
+      }
+    });
   }
 }

@@ -1,3 +1,6 @@
+import { Cell } from '../Cell';
+import { CellCollection } from '../CellCollection';
+import { CellValue } from '../CellValue';
 import { Helpers } from '../Helpers';
 import { GridLocation, SudokuPossibleValues } from '../ValueTypes';
 
@@ -60,4 +63,25 @@ test('locationArraysMatch works', () => {
   expect(Helpers.locationArraysMatch(loc1, loc3)).toBeFalsy();
   expect(Helpers.locationArraysMatch(loc1, loc4)).toBeFalsy();
   expect(Helpers.locationArraysMatch(loc2, loc5)).toBeFalsy();
+});
+
+test('Order cells works', () => {
+  const cc1 = new CellCollection([
+    new Cell({ column: 5, row: 5 }, new CellValue([4])),
+    new Cell({ column: 1, row: 1 }, new CellValue([1])),
+    new Cell({ column: 6, row: 5 }, new CellValue([5])),
+    new Cell({ column: 7, row: 5 }, new CellValue([6])),
+    new Cell({ column: 8, row: 5 }, new CellValue([7])),
+    new Cell({ column: 3, row: 1 }, new CellValue([3])),
+    new Cell({ column: 9, row: 5 }, new CellValue([9])),
+    new Cell({ column: 2, row: 1 }, new CellValue([2])),
+    new Cell({ column: 8, row: 5 }, new CellValue([8])),
+  ]);
+
+  const orderedCells = Helpers.orderCells(cc1.cells);
+  expect(orderedCells.length).toBe(9);
+  orderedCells.forEach((cell, i) => {
+    expect(cell.value.hasKnownValue).toBeTruthy();
+    expect(cell.value.value).toBe(i + 1);
+  });
 });
