@@ -31,8 +31,8 @@ export class BacktrackingSolver {
     // find the first empty cell in the grid
     const emptyCells: Cell[] = grid.cells.filter((cell) => !cell.value.hasKnownValue);
 
-    for (let cell of emptyCells) {
-      for (let valueToTry of [...cell.value.potentialValues] /*SudokuAllPossibleValues*/) {
+    for (const cell of emptyCells) {
+      for (const valueToTry of [...cell.value.potentialValues]) {
         if (BacktrackingSolver.isValidPlacement(grid, valueToTry, cell.location)) {
           // we have a value to try so try it
           const newGrid = SolverHelpers.applyChangeList(grid, [
