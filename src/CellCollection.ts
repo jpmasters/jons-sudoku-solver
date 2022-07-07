@@ -26,7 +26,9 @@ export class CellCollection {
   /**
    * Returns a copy of the Cell at the given location.
    * @param location The grid location to look for.
-   * @returns A copy of the cell or null if there is no cell at the location.
+   * @throws Error if the location cannot be found in the cell collection
+   *         @see CellCollection#hasLocation hasLocation
+   * @returns A copy of the cell.
    */
   cellAtLocation(location: GridLocation): Cell {
     const rv: Cell | undefined = this.cells.find((c) => {
@@ -39,7 +41,7 @@ export class CellCollection {
   }
 
   /**
-   * Returns a new CellColection that combines the contents of two CellCollections
+   * Returns a new CellCollection that combines the contents of two CellCollections
    * replacing any of the existing items with those in the cells parameter if they
    * appear at the same grid location.
    * @param cells Cells to merge.
