@@ -16,7 +16,6 @@ export class CellValue {
    * Instantiates a new instance of a Sudoku grid cell. The cell is designed to
    * be immutable. If the cell is constructed without initial values, it will
    * create it with all potential values.
-   *
    * @param values Optional initial cell value.
    */
   constructor(values: SudokuPossibleValues = SudokuAllPossibleValues) {
