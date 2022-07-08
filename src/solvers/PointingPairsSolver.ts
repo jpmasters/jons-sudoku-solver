@@ -54,7 +54,7 @@ export class PointingPairsSolver {
       })
       .map<CellValueChange[]>((v) => {
         const locs: GridLocation[] = reducedCells[v] as GridLocation[];
-        const rv: CellValueChange[] = rowOrColumnCells.cells
+        return rowOrColumnCells.cells
           .filter((cell) => cell.location[rowOrColumn] === locs[0][rowOrColumn])
           .filter((cell) => !Helpers.locationsMatch(cell.location, locs[0]))
           .filter((cell) => !Helpers.locationsMatch(cell.location, locs[1]))
@@ -64,8 +64,6 @@ export class PointingPairsSolver {
               valuesToRemove: cell.value.potentialValues.includes(v) ? [v] : [],
             };
           });
-
-        return rv;
       })
       .flat()
       .filter((vc) => vc.valuesToRemove.length);
