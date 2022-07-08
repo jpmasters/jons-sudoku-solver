@@ -5,6 +5,7 @@ import { CellValueChange } from '../Grid';
 import { PointingPairsSolver } from '../solvers/PointingPairsSolver';
 
 // TODO: Test cases for non-pointing pairs, NPPs with columns not rows and blocks in any position.
+// TODO: Create a test for pointing pairs in a column
 test('Pointing Pairs found', () => {
   const block: CellCollection = new CellCollection([
     new Cell({ row: 7, column: 7 }, new CellValue([9])),
@@ -35,6 +36,6 @@ test('Pointing Pairs found', () => {
     { location: { row: 8, column: 6 }, valuesToRemove: [6] },
   ];
 
-  const diffs = PointingPairsSolver.solveForBlockAndRow(block, row);
+  const diffs = PointingPairsSolver.solveForBlockAndRow(block, row, 'row');
   expect(diffs).toEqual(expected);
 });
