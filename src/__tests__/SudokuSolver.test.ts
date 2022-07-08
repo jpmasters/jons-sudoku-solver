@@ -9,6 +9,8 @@ import {
   hardTestPuzzle1Solved,
   hardTestPuzzle2,
   hardTestPuzzle2Solved,
+  hardTestPuzzle3,
+  hardTestPuzzle3Solved,
 } from './puzzles.test';
 
 const invalidPuzzle1: number[][] = [];
@@ -128,3 +130,9 @@ test('Solves hardPuzzle1', () => {
   const solvedPuzzle: number[][] = SudokuSolver.solve(hardTestPuzzle1);
   expect(solvedPuzzle).toStrictEqual(hardTestPuzzle1Solved);
 });
+
+test('Solves hardPuzzle3', () => {
+  const solvedPuzzle: number[][] = SudokuSolver.solve(hardTestPuzzle3);
+  expect(solvedPuzzle).toStrictEqual(hardTestPuzzle3Solved);
+});
+

@@ -27,33 +27,41 @@ export class HiddenPairsSolver {
    */
   static solveForBlock(block: CellCollection): CellValueChange[] {
     const rv: CellValueChange[] = [];
+
+    // by definition we're only interested in cells with > 2 potentials
     const reducedCells = SolverHelpers.reduceCells(block);
 
-    // we're looking for sets of 2 cells that hold the same pair of values
-    // along with a load of other values
     const pairs = SudokuAllPossibleValues.filter((value) => {
       return value in reducedCells && (reducedCells[value] as ReducedValues[]).length === 2;
-    }).filter((value, i, arr) => {
-      return arr
-        .filter((v) => v !== value)
-        .some((v2) =>
-          Helpers.locationArraysMatch(reducedCells[v2] as GridLocation[], reducedCells[value] as GridLocation[]),
-        );
     });
 
-    if (pairs.length > 2) throw new Error('Did not expect multiple pairs to be possible.');
+    // pairs contains values that only appear twice in the cell
+    pairs.forEach((value, i, values) => {
+      // now filter to ones that have matching locations for the values as some are
+      // unrepeated pairs of values
+      const otherValueIdx = values.findIndex((val2, i2) => {
+        return Helpers.locationArraysMatch(reducedCells[value], reducedCells[val2]) && i < i2;
+      });
 
-    if (pairs.length === 2) {
-      rv.push(
-        ...block.cells
-          .filter((cell) => Helpers.arrayContainsAll(cell.value.potentialValues, pairs))
-          .map<CellValueChange>((cell) => {
-            const vr: SudokuPossibleValue[] = cell.value.potentialValues.filter((v) => !pairs.includes(v));
-            return { location: { ...cell.location }, valuesToRemove: [...vr] };
-          })
-          .filter((diff) => diff.valuesToRemove.length),
-      );
-    }
+      // if we found a matching pair...
+      if (otherValueIdx !== -1) {
+        // ...create the cell updates needed to remove other values from the pair of cells
+        rv.push(
+          ...[value, values[otherValueIdx]]
+            .map<CellValueChange>((valueChange, locationIdx, valuePair) => {
+              const location = { ...(reducedCells[valueChange] as GridLocation[])[locationIdx] };
+              return {
+                location,
+                valuesToRemove: block
+                  .cellAtLocation(location)
+                  .value.potentialValues.filter((v) => !valuePair.includes(v)),
+              };
+            })
+            // filter out empty changes (cell only had these two values)
+            .filter((change) => change.valuesToRemove.length),
+        );
+      }
+    });
 
     return rv;
   }

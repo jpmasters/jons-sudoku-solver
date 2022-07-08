@@ -71,3 +71,23 @@ test('findHiddenPairs works when there are multiple cells with 2 values', () => 
   const diffs = HiddenPairsSolver.solveForBlock(cc);
   expect(diffs).toEqual(expected);
 });
+
+test('findHiddenPairs works when there are multiple pairs in the block but noting to remove', () => {
+  const cc: CellCollection = new CellCollection([
+    new Cell({ row: 4, column: 1 }, new CellValue([2, 4])),
+    new Cell({ row: 4, column: 2 }, new CellValue([9])),
+    new Cell({ row: 4, column: 3 }, new CellValue([6])),
+    new Cell({ row: 4, column: 4 }, new CellValue([1, 7])),
+    new Cell({ row: 4, column: 5 }, new CellValue([5])),
+    new Cell({ row: 4, column: 6 }, new CellValue([1, 7])),
+    new Cell({ row: 4, column: 7 }, new CellValue([2, 4])),
+    new Cell({ row: 4, column: 8 }, new CellValue([3])),
+    new Cell({ row: 4, column: 9 }, new CellValue([8])),
+  ]);
+
+  // should return nothing as their are no hidden pairs
+  const expected: CellValueChange[] = [];
+
+  const diffs = HiddenPairsSolver.solveForBlock(cc);
+  expect(diffs).toEqual(expected);
+});

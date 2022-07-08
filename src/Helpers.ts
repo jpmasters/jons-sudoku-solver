@@ -22,7 +22,9 @@ export class Helpers {
     return SudokuAllPossibleValues.filter((v) => !exclusions.includes(v));
   }
 
-  static locationArraysMatch(loc1: GridLocation[], loc2: GridLocation[]): boolean {
+  static locationArraysMatch(loc1: GridLocation[] | undefined, loc2: GridLocation[] | undefined): boolean {
+    if (!loc1 || !loc2) return false;
+
     if (loc1.length !== loc2.length) return false;
 
     return loc1.every((l1) => loc2.findIndex((l2) => Helpers.locationsMatch(l1, l2)) !== -1);

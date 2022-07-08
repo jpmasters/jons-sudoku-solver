@@ -63,6 +63,9 @@ test('locationArraysMatch works', () => {
   expect(Helpers.locationArraysMatch(loc1, loc3)).toBeFalsy();
   expect(Helpers.locationArraysMatch(loc1, loc4)).toBeFalsy();
   expect(Helpers.locationArraysMatch(loc2, loc5)).toBeFalsy();
+  expect(Helpers.locationArraysMatch(undefined, loc2)).toBeFalsy();
+  expect(Helpers.locationArraysMatch(loc1, undefined)).toBeFalsy();
+  expect(Helpers.locationArraysMatch(undefined, undefined)).toBeFalsy();
 });
 
 test('Order cells works', () => {
