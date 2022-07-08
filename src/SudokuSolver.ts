@@ -3,6 +3,7 @@ import { BacktrackingSolver } from './solvers/BacktrackingSolver';
 import { CollapsedValueSolver } from './solvers/CollapsedValuesSolver';
 import { HiddenPairsSolver } from './solvers/HiddenPairsSolver';
 import { ObviousPairsSolver } from './solvers/ObviousPairsSolver';
+import { PointingPairsSolver } from './solvers/PointingPairsSolver';
 import { SingleValuesSolver } from './solvers/SingleValuesSolver';
 import { SolverHelpers } from './solvers/SolverHelpers';
 
@@ -50,6 +51,10 @@ export class SudokuSolver {
 
       if (!changes.length) {
         changes.push(...HiddenPairsSolver.solve(targetGrid));
+      }
+
+      if (!changes.length) {
+        changes.push(...PointingPairsSolver.solve(targetGrid));
       }
 
       // apply them to the target grid
