@@ -135,4 +135,3 @@ test('Solves hardPuzzle3', () => {
   const solvedPuzzle: number[][] = SudokuSolver.solve(hardTestPuzzle3);
   expect(solvedPuzzle).toStrictEqual(hardTestPuzzle3Solved);
 });
-
