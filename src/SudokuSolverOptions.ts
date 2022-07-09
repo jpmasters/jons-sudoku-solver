@@ -15,14 +15,14 @@ export enum SudokuSolverStrategy {
  */
 export class SudokuSolverOptions {
   /**
-   * An array of SudokuSolverStrategy values representing the solvers to include.
+   * An optional array of SudokuSolverStrategy values representing the solvers to include.
    * If an array isn't provided, it will include all solvers by default. To run
    * the backtracking algorithm on its own, specify an empty array i.e. [].
    */
   includeStrategies?: SudokuSolverStrategy[];
 
   /**
-   * Defines whether or not to complete puzzles using backtracking. If the value is
+   * An optional value whether to complete puzzles using backtracking. If the value is
    * not specified or set to true, backtracking will be used to fill in any unknown
    * cells. If it is explicitly set to false, it will not run backtracking. Note that
    * this might result in outputting incomlpete puzzles but it's useful when writing new

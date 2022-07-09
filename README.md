@@ -20,6 +20,8 @@ npm i jons-sudoku-solver
 
 ## Usage
 
+The most basic usage in Javascript is to import and use the package as follows.
+
 ```javascript
 const { SudokuSolver } = require('jons-sudoku-solver');
 
@@ -39,6 +41,66 @@ solvedPuzzle = SudokuSolver.solve(testPuzzle);
 
 console.table(solvedPuzzle);
 ```
+
+The SudokuSolver.solve() method can also take optional parameters to allow the calling application to control which solvers should be included in the solving process. You can also control whether or not you want to use the Backtracking solver to finish off the puzzle if the solvers don't get the job done.
+
+```javascript
+const { SudokuSolver, SudokuSolverStrategy } = require('jons-sudoku-solver');
+
+testPuzzle = [
+  [0, 9, 6, 0, 0, 0, 0, 3, 0],
+  [0, 0, 8, 0, 0, 0, 0, 0, 0],
+  [0, 5, 0, 2, 0, 4, 0, 9, 0],
+  [0, 0, 1, 6, 7, 2, 0, 0, 0],
+  [8, 0, 0, 0, 0, 0, 3, 0, 0],
+  [0, 0, 9, 0, 0, 0, 0, 0, 0],
+  [0, 0, 2, 0, 1, 0, 8, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 4],
+  [0, 0, 0, 0, 0, 8, 1, 6, 5],
+];
+
+var options = {
+  /**
+   * An optional array of SudokuSolverStrategy values representing the solvers to include.
+   * If an array isn't provided, it will include all solvers by default. To run
+   * the backtracking algorithm on its own, specify an empty array i.e. [].
+   */
+  includeStrategies: [SudokuSolverStrategy.CollapsedValues, SudokuSolverStrategy.SingleValues],
+
+  /**
+   * An optional value whether to complete puzzles using backtracking. If the value is
+   * not specified or set to true, backtracking will be used to fill in any unknown
+   * cells. If it is explicitly set to false, it will not run backtracking. Note that
+   * this might result in outputting incomlpete puzzles but it's useful when writing new
+   * solver classes.
+   */
+  includeBacktracking: false,
+};
+
+solvedPuzzle = SudokuSolver.solve(testPuzzle, options);
+
+console.table(solvedPuzzle);
+```
+
+If you run the above example you'll see that there aren't enough strategies enabled to solve the puzzle.
+
+```bash
+┌─────────┬───┬───┬───┬───┬───┬───┬───┬───┬───┐
+│ (index) │ 0 │ 1 │ 2 │ 3 │ 4 │ 5 │ 6 │ 7 │ 8 │
+├─────────┼───┼───┼───┼───┼───┼───┼───┼───┼───┤
+│    0    │ 0 │ 9 │ 6 │ 0 │ 5 │ 0 │ 0 │ 3 │ 8 │
+│    1    │ 0 │ 1 │ 8 │ 0 │ 0 │ 0 │ 0 │ 0 │ 0 │
+│    2    │ 0 │ 5 │ 0 │ 2 │ 8 │ 4 │ 6 │ 9 │ 1 │
+│    3    │ 0 │ 0 │ 1 │ 6 │ 7 │ 2 │ 0 │ 8 │ 9 │
+│    4    │ 8 │ 0 │ 0 │ 0 │ 0 │ 0 │ 3 │ 0 │ 0 │
+│    5    │ 0 │ 0 │ 9 │ 8 │ 0 │ 0 │ 0 │ 0 │ 0 │
+│    6    │ 0 │ 0 │ 2 │ 0 │ 1 │ 0 │ 8 │ 7 │ 3 │
+│    7    │ 1 │ 8 │ 0 │ 0 │ 0 │ 0 │ 9 │ 2 │ 4 │
+│    8    │ 0 │ 0 │ 0 │ 0 │ 2 │ 8 │ 1 │ 6 │ 5 │
+└─────────┴───┴───┴───┴───┴───┴───┴───┴───┴───┘
+```
+
+Missing values are indicated in the output with a 0. This could be useful output if you're developing or debugging solver strategies.
 
 ## Build from source
 
