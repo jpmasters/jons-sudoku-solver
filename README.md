@@ -71,7 +71,7 @@ var options = {
    * An optional value whether to complete puzzles using backtracking. If the value is
    * not specified or set to true, backtracking will be used to fill in any unknown
    * cells. If it is explicitly set to false, it will not run backtracking. Note that
-   * this might result in outputting incomlpete puzzles but it's useful when writing new
+   * this might result in outputting incomplete puzzles but it's useful when writing new
    * solver classes.
    */
   includeBacktracking: false,
