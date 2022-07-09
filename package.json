@@ -23,8 +23,16 @@
     "url": "git+https://github.com/jpmasters/jons-sudoku-solver.git"
   },
   "keywords": [
-    "Sudoku",
-    "Solver"
+    "algorithm",
+    "solver",
+    "recursion",
+    "backtracking",
+    "sudoku-solver",
+    "sudoku",
+    "recursive",
+    "recursive-algorithm",
+    "non-recursive wave-collapse",
+    "fast"
   ],
   "author": "Jon Masters",
   "license": "MIT",
