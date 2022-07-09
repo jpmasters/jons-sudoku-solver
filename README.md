@@ -21,7 +21,7 @@ npm i jons-sudoku-solver
 ## Usage
 
 ```javascript
-const solver = require('jons-sudoku-solver');
+const { SudokuSolver } = require('jons-sudoku-solver');
 
 testPuzzle = [
   [0, 0, 2, 6, 0, 4, 0, 0, 0],
@@ -35,7 +35,7 @@ testPuzzle = [
   [0, 0, 1, 0, 7, 0, 9, 0, 0],
 ];
 
-solvedPuzzle = solver.solve(testPuzzle);
+solvedPuzzle = SudokuSolver.solve(testPuzzle);
 
 console.table(solvedPuzzle);
 ```
