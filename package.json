@@ -31,7 +31,8 @@
     "sudoku",
     "recursive",
     "recursive-algorithm",
-    "non-recursive wave-collapse",
+    "non-recursive",
+    "wave-collapse",
     "fast"
   ],
   "author": "Jon Masters",
