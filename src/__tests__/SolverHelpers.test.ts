@@ -76,17 +76,24 @@ test('scanBlock works in groups of 3', () => {
     },
   ];
 
-  SolverHelpers.scanBlock(cc, 3, (cells) => {
+  const foundTriples: Cell[][] = SolverHelpers.scanBlock(cc, 3, (cells) => {
     const foundLocs: GridLocation[] = cells.map((c) => c.location);
     samplesToLookFor.forEach((sample) => {
       if (Helpers.locationArraysMatch(foundLocs, sample.locations)) {
         sample.found = true;
       }
     });
-    return true;
+
+    return (
+      Helpers.arrayHasSameMembers(cells[0].value.potentialValues, cells[1].value.potentialValues) &&
+      Helpers.arrayHasSameMembers(cells[0].value.potentialValues, cells[2].value.potentialValues)
+    );
   });
 
   expect(samplesToLookFor.every((sample) => sample.found)).toBeTruthy();
+  expect(foundTriples.length).toBe(1);
+  expect(foundTriples[0].length).toBe(3);
+  expect(foundTriples[0][0].value.potentialValues).toEqual([5, 7, 8]);
 });
 
 test('scanBlock throws when block is the wrong length', () => {

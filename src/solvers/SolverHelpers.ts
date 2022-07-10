@@ -80,20 +80,23 @@ export class SolverHelpers {
 
   /**
    * Scans a row, column or block for a unique combination of n cells. The number of cells
-   * returned (n) is provided by the caller in the groupsOf parameter. The caller can exit
-   * the scanning early by returning false from the callback method.
+   * returned (n) is provided by the caller in the groupsOf parameter. The caller provides
+   * a callback function to process the groups and if the callback function returns true,
+   * that group will be added to the Cell[][] returned value.
    * If you pass in an array of cells that is not 9 Cells long, an error is thrown.
    * @param block A CellCollection containing a row, column or block to be scanned.
    * @param groupsOf The number of cells to return in each combination.
    * @param callback A callback method to receive each cell combination.
-   * @returns Returns true if it scanned to the end or false if the caller requested to end early.
+   * @returns An array of Cell[] where the callback function returned true.
    */
   static scanBlock(
     block: CellCollection,
     groupsOf: SudokuPossibleValue,
     callback: (cells: Cell[]) => boolean,
-  ): boolean {
+  ): Cell[][] {
     if (block.cells.length !== 9) throw new Error('scanBlock requires exactly 9 Cells to process.');
+
+    const rv: Cell[][] = [];
 
     let startValue = 0;
     for (let i = 0; i < groupsOf; i++) {
@@ -104,15 +107,21 @@ export class SolverHelpers {
     for (let possibleValues = startValue; possibleValues <= 0x1ff; possibleValues++) {
       const s = possibleValues.toString(2).split('');
       if (s.filter((v) => v === '1').length === 3) {
-        // pad the array to the left
-        const padded = Array(9).fill('0').concat(s).slice(-9);
+        const cellsToProcess = Array(9)
+          .fill('0')
+          .concat(s)
+          .slice(-9)
+          .map<number>((v, i) => (v === '1' ? i : -1))
+          .filter((v) => v !== -1)
+          .map((i) => block.cells[i]);
 
-        const cellIndexes = padded.map<number>((v, i) => (v === '1' ? i : -1)).filter((v) => v !== -1);
-        const cellsToProcess = cellIndexes.map((i) => block.cells[i]);
-
-        if (!callback(cellsToProcess)) return false;
+        // if caller is interested in these...
+        if (callback(cellsToProcess)) {
+          // ...push a deep copy onto the return value
+          rv.push(new CellCollection(cellsToProcess).cells);
+        }
       }
     }
-    return true;
+    return rv;
   }
 }
