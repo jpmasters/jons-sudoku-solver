@@ -4,7 +4,7 @@ import { CollapsedValueSolver } from './CollapsedValuesSolver';
 import { HiddenPairsSolver } from './HiddenPairsSolver';
 import { ObviousPairsSolver } from './ObviousPairsSolver';
 import { PointingPairsSolver } from './PointingPairsSolver';
-import { SingleValuesSolver } from './SingleValuesSolver';
+import { HiddenSinglesSolver } from './HiddenSinglesSolver';
 
 /**
  * Implements a class that keeps all of the solvers in one place to make it easier to work with them.
@@ -16,7 +16,7 @@ export class SolverList {
   static solvers: { order: number; strategy: SudokuSolverStrategy; solve: (targetGrid: Grid) => CellValueChange[] }[] =
     [
       { order: 1, strategy: SudokuSolverStrategy.CollapsedValues, solve: CollapsedValueSolver.solve },
-      { order: 2, strategy: SudokuSolverStrategy.SingleValues, solve: SingleValuesSolver.solve },
+      { order: 2, strategy: SudokuSolverStrategy.SingleValues, solve: HiddenSinglesSolver.solve },
       { order: 3, strategy: SudokuSolverStrategy.ObviousPairs, solve: ObviousPairsSolver.solve },
       { order: 4, strategy: SudokuSolverStrategy.HiddenPairs, solve: HiddenPairsSolver.solve },
       { order: 5, strategy: SudokuSolverStrategy.PointingPairs, solve: PointingPairsSolver.solve },

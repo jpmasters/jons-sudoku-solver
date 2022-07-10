@@ -4,7 +4,7 @@ import { CollapsedValueSolver } from './solvers/CollapsedValuesSolver';
 import { HiddenPairsSolver } from './solvers/HiddenPairsSolver';
 import { ObviousPairsSolver } from './solvers/ObviousPairsSolver';
 import { PointingPairsSolver } from './solvers/PointingPairsSolver';
-import { SingleValuesSolver } from './solvers/SingleValuesSolver';
+import { HiddenSinglesSolver } from './solvers/HiddenSinglesSolver';
 import { SolverHelpers } from './solvers/SolverHelpers';
 import { SolverList } from './solvers/SolverList';
 import { deriveOptions, SudokuSolverOptions, SudokuSolverStrategy } from './SudokuSolverOptions';

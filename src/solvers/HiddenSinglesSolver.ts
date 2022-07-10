@@ -3,7 +3,7 @@ import { Grid, CellValueChange } from '../Grid';
 import { SudokuAllPossibleValues, GridLocation, SudokuPossibleValue } from '../ValueTypes';
 import { ReducedValues, SolverHelpers } from './SolverHelpers';
 
-export class SingleValuesSolver {
+export class HiddenSinglesSolver {
   /**
    * Searches the grid for cells where the value only appears once in the row, column or block
    * and if it finds any, returns an array of changes to apply to the target grid.
@@ -12,9 +12,9 @@ export class SingleValuesSolver {
    */
   static solve(targetGrid: Grid): CellValueChange[] {
     return [
-      ...SudokuAllPossibleValues.map((row) => SingleValuesSolver.solveForBlock(targetGrid.row(row))).flat(),
-      ...SudokuAllPossibleValues.map((column) => SingleValuesSolver.solveForBlock(targetGrid.column(column))).flat(),
-      ...SudokuAllPossibleValues.map((block) => SingleValuesSolver.solveForBlock(targetGrid.block(block))).flat(),
+      ...SudokuAllPossibleValues.map((row) => HiddenSinglesSolver.solveForBlock(targetGrid.row(row))).flat(),
+      ...SudokuAllPossibleValues.map((column) => HiddenSinglesSolver.solveForBlock(targetGrid.column(column))).flat(),
+      ...SudokuAllPossibleValues.map((block) => HiddenSinglesSolver.solveForBlock(targetGrid.block(block))).flat(),
     ];
   }
 
