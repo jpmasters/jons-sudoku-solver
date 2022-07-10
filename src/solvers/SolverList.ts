@@ -2,7 +2,7 @@ import { Grid, CellValueChange } from '../Grid';
 import { SudokuSolverStrategy } from '../SudokuSolverOptions';
 import { NakedSinglesSolver } from './NakedSinglesSolver';
 import { HiddenPairsSolver } from './HiddenPairsSolver';
-import { ObviousPairsSolver } from './ObviousPairsSolver';
+import { NakedPairsSolver } from './NakedPairsSolver';
 import { PointingPairsSolver } from './PointingPairsSolver';
 import { HiddenSinglesSolver } from './HiddenSinglesSolver';
 
@@ -17,7 +17,7 @@ export class SolverList {
     [
       { order: 1, strategy: SudokuSolverStrategy.CollapsedValues, solve: NakedSinglesSolver.solve },
       { order: 2, strategy: SudokuSolverStrategy.SingleValues, solve: HiddenSinglesSolver.solve },
-      { order: 3, strategy: SudokuSolverStrategy.ObviousPairs, solve: ObviousPairsSolver.solve },
+      { order: 3, strategy: SudokuSolverStrategy.ObviousPairs, solve: NakedPairsSolver.solve },
       { order: 4, strategy: SudokuSolverStrategy.HiddenPairs, solve: HiddenPairsSolver.solve },
       { order: 5, strategy: SudokuSolverStrategy.PointingPairs, solve: PointingPairsSolver.solve },
     ];

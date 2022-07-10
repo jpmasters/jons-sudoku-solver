@@ -2,7 +2,7 @@ import { CellValueChange, Grid } from './Grid';
 import { BacktrackingSolver } from './solvers/BacktrackingSolver';
 import { NakedSinglesSolver } from './solvers/NakedSinglesSolver';
 import { HiddenPairsSolver } from './solvers/HiddenPairsSolver';
-import { ObviousPairsSolver } from './solvers/ObviousPairsSolver';
+import { NakedPairsSolver } from './solvers/NakedPairsSolver';
 import { PointingPairsSolver } from './solvers/PointingPairsSolver';
 import { HiddenSinglesSolver } from './solvers/HiddenSinglesSolver';
 import { SolverHelpers } from './solvers/SolverHelpers';

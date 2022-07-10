@@ -2,7 +2,7 @@ import { Cell } from '../Cell';
 import { CellCollection } from '../CellCollection';
 import { CellValue } from '../CellValue';
 import { CellValueChange } from '../Grid';
-import { ObviousPairsSolver } from '../solvers/ObviousPairsSolver';
+import { NakedPairsSolver } from '../solvers/NakedPairsSolver';
 
 test('findObviousPairs works', () => {
   const cc: CellCollection = new CellCollection([
@@ -28,7 +28,7 @@ test('findObviousPairs works', () => {
     },
   ];
 
-  const diffs = ObviousPairsSolver.solveForBlock(cc);
+  const diffs = NakedPairsSolver.solveForBlock(cc);
   expect(diffs).toEqual(expected);
 });
 
@@ -47,7 +47,7 @@ test('findObviousPairs pairs must match values', () => {
 
   const expected: CellValueChange[] = [];
 
-  const diffs = ObviousPairsSolver.solveForBlock(cc);
+  const diffs = NakedPairsSolver.solveForBlock(cc);
   expect(diffs).toEqual(expected);
 });
 
@@ -79,6 +79,6 @@ test('findObviousPairs find multiple pairs', () => {
     },
   ];
 
-  const diffs = ObviousPairsSolver.solveForBlock(cc);
+  const diffs = NakedPairsSolver.solveForBlock(cc);
   expect(diffs).toEqual(expected);
 });

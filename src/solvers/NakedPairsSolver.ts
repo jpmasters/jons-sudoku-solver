@@ -5,7 +5,7 @@ import { Helpers } from '../Helpers';
 import { SudokuAllPossibleValues } from '../ValueTypes';
 import { GroupedValues } from './SolverHelpers';
 
-export class ObviousPairsSolver {
+export class NakedPairsSolver {
   /**
    * Searches the values with a single potential and if it finds any, returns an
    * array of changes to apply to the target grid.
@@ -14,9 +14,9 @@ export class ObviousPairsSolver {
    */
   static solve(targetGrid: Grid): CellValueChange[] {
     return [
-      ...SudokuAllPossibleValues.map((row) => ObviousPairsSolver.solveForBlock(targetGrid.row(row))).flat(),
-      ...SudokuAllPossibleValues.map((column) => ObviousPairsSolver.solveForBlock(targetGrid.column(column))).flat(),
-      ...SudokuAllPossibleValues.map((block) => ObviousPairsSolver.solveForBlock(targetGrid.block(block))).flat(),
+      ...SudokuAllPossibleValues.map((row) => NakedPairsSolver.solveForBlock(targetGrid.row(row))).flat(),
+      ...SudokuAllPossibleValues.map((column) => NakedPairsSolver.solveForBlock(targetGrid.column(column))).flat(),
+      ...SudokuAllPossibleValues.map((block) => NakedPairsSolver.solveForBlock(targetGrid.block(block))).flat(),
     ];
   }
 
