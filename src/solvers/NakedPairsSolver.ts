@@ -1,9 +1,8 @@
-import { Cell } from '../Cell';
 import { CellCollection } from '../CellCollection';
 import { Grid, CellValueChange } from '../Grid';
 import { Helpers } from '../Helpers';
 import { SudokuAllPossibleValues } from '../ValueTypes';
-import { GroupedValues } from './SolverHelpers';
+import { SolverHelpers } from './SolverHelpers';
 
 export class NakedPairsSolver {
   /**
@@ -27,48 +26,35 @@ export class NakedPairsSolver {
    * @returns An array of GridDifference objects to apply back to the Grid.
    */
   static solveForBlock(block: CellCollection): CellValueChange[] {
-    // all cells with 2 potential values only
-    const cellsWithTwoPotentials: Cell[] = block.cells
-      .filter((cell) => cell.value.potentialValues.length === 2)
-      .filter((cell1, _, allCells) => {
-        return (
-          allCells.filter((c) => Helpers.arrayHasSameMembers(cell1.value.potentialValues, c.value.potentialValues))
-            .length === 2
+    const rv: CellValueChange[] = [];
+
+    // search the block for triples
+    SolverHelpers.scanBlock(block, 2, (cells) => {
+      return new Set(cells.map((c) => c.value.potentialValues).flat()).size === 2;
+    })
+      // for each of the triples we found
+      .forEach((nakedGroup) => {
+        rv.push(
+          ...block.cells
+            .filter((blockCell) => {
+              // filter out cells that are part of the triple group as we're mot changing them
+              return nakedGroup.every((nakedCell) => !Helpers.locationsMatch(nakedCell.location, blockCell.location));
+            })
+            .map<CellValueChange>((cell) => {
+              // for the remainnig cells, create a change obect that removes potentials that are part of
+              // the triple
+              const nakedCellPotentials = Array.from(new Set(nakedGroup.map((c) => c.value.potentialValues).flat()));
+              return {
+                location: { ...cell.location },
+                valuesToRemove: nakedCellPotentials
+                  .filter((p) => cell.value.potentialValues.includes(p))
+                  .sort((a, b) => a - b),
+              };
+            })
+            // finally filter out empty changes
+            .filter((cvc) => cvc.valuesToRemove.length),
         );
       });
-
-    const groupedPairs: GroupedValues[] = cellsWithTwoPotentials.reduce<GroupedValues[]>((prev, curr) => {
-      const i: number = prev.findIndex((gv) => Helpers.arrayHasSameMembers(gv.value, curr.value.potentialValues));
-      if (i === -1) {
-        prev.push({ value: curr.value.potentialValues, locations: [curr.location] });
-      } else {
-        prev[i].locations.push(curr.location);
-      }
-      return prev;
-    }, []);
-
-    // convert the pairs into changes
-    const rv: CellValueChange[] = groupedPairs.reduce<CellValueChange[]>((prev, curr) => {
-      const cellsToChange: Cell[] = block.cells
-        .filter((c) => {
-          return !(
-            Helpers.locationsMatch(c.location, curr.locations[0]) ||
-            Helpers.locationsMatch(c.location, curr.locations[1])
-          );
-        })
-        .filter((cell) => cell.value.potentialValues.some((v) => curr.value.includes(v)));
-
-      const newdiffs = cellsToChange.map<CellValueChange>((cell) => {
-        return {
-          location: { ...cell.location },
-          valuesToRemove: cell.value.potentialValues.filter((v) => curr.value.includes(v)),
-        };
-      });
-
-      prev.push(...newdiffs);
-
-      return prev;
-    }, []);
 
     return rv;
   }

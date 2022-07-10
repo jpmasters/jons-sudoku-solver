@@ -106,14 +106,16 @@ export class SolverHelpers {
 
     for (let possibleValues = startValue; possibleValues <= 0x1ff; possibleValues++) {
       const s = possibleValues.toString(2).split('');
-      if (s.filter((v) => v === '1').length === 3) {
+      if (s.filter((v) => v === '1').length === groupsOf) {
         const cellsToProcess = Array(9)
           .fill('0')
           .concat(s)
           .slice(-9)
           .map<number>((v, i) => (v === '1' ? i : -1))
           .filter((v) => v !== -1)
-          .map((i) => block.cells[i]);
+          .map((i) => block.cells[i])
+          .sort((a, b) => a.location.row - b.location.row)
+          .sort((a, b) => a.location.column - b.location.column);
 
         // if caller is interested in these...
         if (callback(cellsToProcess)) {

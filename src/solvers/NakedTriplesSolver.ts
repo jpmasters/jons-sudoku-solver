@@ -1,4 +1,3 @@
-import { Cell } from '../Cell';
 import { CellCollection } from '../CellCollection';
 import { CellValueChange, Grid } from '../Grid';
 import { Helpers } from '../Helpers';
