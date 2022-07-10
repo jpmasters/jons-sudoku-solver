@@ -2,7 +2,8 @@ import { Cell } from '../Cell';
 import { CellCollection } from '../CellCollection';
 import { CellValue } from '../CellValue';
 import { CellValueChange } from '../Grid';
-import { NakedPairsSolver } from '../solvers/NakedPairsSolver';
+import { ValueComboType } from '../ValueTypes';
+import { SolverHelpers } from '../solvers/SolverHelpers';
 
 test('findObviousPairs works', () => {
   const cc: CellCollection = new CellCollection([
@@ -28,7 +29,7 @@ test('findObviousPairs works', () => {
     },
   ];
 
-  const diffs = NakedPairsSolver.solveForBlock(cc);
+  const diffs = SolverHelpers.processNakedCellsInBlock(cc, ValueComboType.Pair);
   expect(diffs).toEqual(expected);
 });
 
@@ -47,7 +48,7 @@ test('findObviousPairs pairs must match values', () => {
 
   const expected: CellValueChange[] = [];
 
-  const diffs = NakedPairsSolver.solveForBlock(cc);
+  const diffs = SolverHelpers.processNakedCellsInBlock(cc, ValueComboType.Pair);
   expect(diffs).toEqual(expected);
 });
 
@@ -79,7 +80,7 @@ test('findObviousPairs find multiple pairs', () => {
     },
   ];
 
-  const diffs = NakedPairsSolver.solveForBlock(cc);
+  const diffs = SolverHelpers.processNakedCellsInBlock(cc, ValueComboType.Pair);
   expect(diffs).toEqual(expected);
 });
 
@@ -138,6 +139,6 @@ test('solve naked pairs works for sudoku.org.uk examples', () => {
     },
   ];
 
-  expect(NakedPairsSolver.solveForBlock(row_8)).toEqual(expected_row_8);
-  expect(NakedPairsSolver.solveForBlock(block_7)).toEqual(expected_block_7);
+  expect(SolverHelpers.processNakedCellsInBlock(row_8, ValueComboType.Pair)).toEqual(expected_row_8);
+  expect(SolverHelpers.processNakedCellsInBlock(block_7, ValueComboType.Pair)).toEqual(expected_block_7);
 });

@@ -1,7 +1,5 @@
-import { CellCollection } from '../CellCollection';
 import { CellValueChange, Grid } from '../Grid';
-import { Helpers } from '../Helpers';
-import { SudokuAllPossibleValues } from '../ValueTypes';
+import { SudokuAllPossibleValues, ValueComboType } from '../ValueTypes';
 import { SolverHelpers } from './SolverHelpers';
 
 /**
@@ -17,51 +15,15 @@ export class NakedTriplesSolver {
    */
   static solve(targetGrid: Grid): CellValueChange[] {
     return [
-      ...SudokuAllPossibleValues.map((row) => NakedTriplesSolver.solveForBlock(targetGrid.row(row))).flat(),
-      ...SudokuAllPossibleValues.map((column) => NakedTriplesSolver.solveForBlock(targetGrid.column(column))).flat(),
-      ...SudokuAllPossibleValues.map((block) => NakedTriplesSolver.solveForBlock(targetGrid.block(block))).flat(),
+      ...SudokuAllPossibleValues.map((row) =>
+        SolverHelpers.processNakedCellsInBlock(targetGrid.row(row), ValueComboType.Triple),
+      ).flat(),
+      ...SudokuAllPossibleValues.map((column) =>
+        SolverHelpers.processNakedCellsInBlock(targetGrid.column(column), ValueComboType.Triple),
+      ).flat(),
+      ...SudokuAllPossibleValues.map((block) =>
+        SolverHelpers.processNakedCellsInBlock(targetGrid.block(block), ValueComboType.Triple),
+      ).flat(),
     ];
-  }
-
-  /**
-   * Runs the NakedTriple solver for a row, column or block.
-   * @param block A reference to a row, column or block to process.
-   * @returns A set of changes to apply to the target grid or an empty array if
-   * no naked triples are found.
-   */
-  static solveForBlock(block: CellCollection): CellValueChange[] {
-    const rv: CellValueChange[] = [];
-
-    // search the block for triples
-    SolverHelpers.scanBlock(block, 3, (cells) => {
-      return new Set(cells.map((c) => c.value.potentialValues).flat()).size === 3;
-    })
-      // for each of the triples we found
-      .forEach((nakedTriple) => {
-        rv.push(
-          ...block.cells
-            .filter((blockCell) => {
-              // filter out cells that are part of the triple group as we're mot changing them
-              return nakedTriple.every(
-                (tripleCell) => !Helpers.locationsMatch(tripleCell.location, blockCell.location),
-              );
-            })
-            .map<CellValueChange>((cell) => {
-              // for the remainnig cells, create a change obect that removes potentials that are part of
-              // the triple
-              const triplePotentials = Array.from(new Set(nakedTriple.map((c) => c.value.potentialValues).flat()));
-              return {
-                location: { ...cell.location },
-                valuesToRemove: triplePotentials
-                  .filter((p) => cell.value.potentialValues.includes(p))
-                  .sort((a, b) => a - b),
-              };
-            })
-            // finally filter out empty changes
-            .filter((cvc) => cvc.valuesToRemove.length),
-        );
-      });
-
-    return rv;
   }
 }

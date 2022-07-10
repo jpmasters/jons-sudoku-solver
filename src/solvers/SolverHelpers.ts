@@ -1,7 +1,8 @@
 import { Grid, CellValueChange } from '../Grid';
 import { Cell } from '../Cell';
 import { CellCollection } from '../CellCollection';
-import { GridLocation, SudokuPossibleValue } from '../ValueTypes';
+import { GridLocation, SudokuPossibleValue, ValueComboType } from '../ValueTypes';
+import { Helpers } from '../Helpers';
 
 /**
  * Defines the result of applying changes to a Grid.
@@ -124,6 +125,47 @@ export class SolverHelpers {
         }
       }
     }
+    return rv;
+  }
+
+  /**
+   * Runs a naked cell solver for a row, column or block.
+   * @param block A reference to a row, column or block to process.
+   * @param comboType The type of combo to process.
+   * @returns A set of changes to apply to the target grid or an empty array if
+   * no naked cells are found.
+   */
+  static processNakedCellsInBlock(block: CellCollection, comboType: ValueComboType): CellValueChange[] {
+    const rv: CellValueChange[] = [];
+
+    // search the block for triples
+    SolverHelpers.scanBlock(block, comboType, (cells) => {
+      return new Set(cells.map((c) => c.value.potentialValues).flat()).size === comboType;
+    })
+      // for each of the triples we found
+      .forEach((nakedGroup) => {
+        rv.push(
+          ...block.cells
+            .filter((blockCell) => {
+              // filter out cells that are part of the triple group as we're mot changing them
+              return nakedGroup.every((nakedCell) => !Helpers.locationsMatch(nakedCell.location, blockCell.location));
+            })
+            .map<CellValueChange>((cell) => {
+              // for the remainnig cells, create a change obect that removes potentials that are part of
+              // the triple
+              const nakedPotentials = Array.from(new Set(nakedGroup.map((c) => c.value.potentialValues).flat()));
+              return {
+                location: { ...cell.location },
+                valuesToRemove: nakedPotentials
+                  .filter((p) => cell.value.potentialValues.includes(p))
+                  .sort((a, b) => a - b),
+              };
+            })
+            // finally filter out empty changes
+            .filter((cvc) => cvc.valuesToRemove.length),
+        );
+      });
+
     return rv;
   }
 }
