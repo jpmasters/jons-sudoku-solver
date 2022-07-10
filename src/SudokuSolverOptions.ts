@@ -3,11 +3,11 @@
  * is handled separately in the options.
  */
 export enum SudokuSolverStrategy {
-  CollapsedValues,
+  NakedSingles,
   HiddenPairs,
-  ObviousPairs,
+  NakedPairs,
   PointingPairs,
-  SingleValues,
+  HiddenSingles,
 }
 
 /**

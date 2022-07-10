@@ -15,9 +15,9 @@ export class SolverList {
    */
   static solvers: { order: number; strategy: SudokuSolverStrategy; solve: (targetGrid: Grid) => CellValueChange[] }[] =
     [
-      { order: 1, strategy: SudokuSolverStrategy.CollapsedValues, solve: NakedSinglesSolver.solve },
-      { order: 2, strategy: SudokuSolverStrategy.SingleValues, solve: HiddenSinglesSolver.solve },
-      { order: 3, strategy: SudokuSolverStrategy.ObviousPairs, solve: NakedPairsSolver.solve },
+      { order: 1, strategy: SudokuSolverStrategy.NakedSingles, solve: NakedSinglesSolver.solve },
+      { order: 2, strategy: SudokuSolverStrategy.HiddenSingles, solve: HiddenSinglesSolver.solve },
+      { order: 3, strategy: SudokuSolverStrategy.NakedPairs, solve: NakedPairsSolver.solve },
       { order: 4, strategy: SudokuSolverStrategy.HiddenPairs, solve: HiddenPairsSolver.solve },
       { order: 5, strategy: SudokuSolverStrategy.PointingPairs, solve: PointingPairsSolver.solve },
     ];

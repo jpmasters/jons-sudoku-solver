@@ -6,11 +6,11 @@ test('SudokuSolverOptions provides the correct defaults if not provided', () => 
   const expected: SudokuSolverOptions = {
     includeBacktracking: true,
     includeStrategies: [
-      SudokuSolverStrategy.CollapsedValues,
+      SudokuSolverStrategy.NakedSingles,
       SudokuSolverStrategy.HiddenPairs,
-      SudokuSolverStrategy.ObviousPairs,
+      SudokuSolverStrategy.NakedPairs,
       SudokuSolverStrategy.PointingPairs,
-      SudokuSolverStrategy.SingleValues,
+      SudokuSolverStrategy.HiddenSingles,
     ],
   };
 
@@ -23,11 +23,11 @@ test('SudokuSolverOptions includeBacktracking overridden to false', () => {
   const expected: SudokuSolverOptions = {
     includeBacktracking: false,
     includeStrategies: [
-      SudokuSolverStrategy.CollapsedValues,
+      SudokuSolverStrategy.NakedSingles,
       SudokuSolverStrategy.HiddenPairs,
-      SudokuSolverStrategy.ObviousPairs,
+      SudokuSolverStrategy.NakedPairs,
       SudokuSolverStrategy.PointingPairs,
-      SudokuSolverStrategy.SingleValues,
+      SudokuSolverStrategy.HiddenSingles,
     ],
   };
 
@@ -40,11 +40,11 @@ test('SudokuSolverOptions includeBacktracking overridden to true', () => {
   const expected: SudokuSolverOptions = {
     includeBacktracking: true,
     includeStrategies: [
-      SudokuSolverStrategy.CollapsedValues,
+      SudokuSolverStrategy.NakedSingles,
       SudokuSolverStrategy.HiddenPairs,
-      SudokuSolverStrategy.ObviousPairs,
+      SudokuSolverStrategy.NakedPairs,
       SudokuSolverStrategy.PointingPairs,
-      SudokuSolverStrategy.SingleValues,
+      SudokuSolverStrategy.HiddenSingles,
     ],
   };
 

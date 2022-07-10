@@ -65,7 +65,7 @@ var options = {
    * If an array isn't provided, it will include all solvers by default. To run
    * the backtracking algorithm on its own, specify an empty array i.e. [].
    */
-  includeStrategies: [SudokuSolverStrategy.CollapsedValues, SudokuSolverStrategy.SingleValues],
+  includeStrategies: [SudokuSolverStrategy.NakedSingles, SudokuSolverStrategy.HiddenSingles],
 
   /**
    * An optional value whether to complete puzzles using backtracking. If the value is
