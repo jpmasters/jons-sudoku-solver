@@ -2,7 +2,7 @@ import { Cell } from '../Cell';
 import { CellCollection } from '../CellCollection';
 import { CellValue } from '../CellValue';
 import { CellValueChange } from '../Grid';
-import { SingleValuesSolver } from '../solvers/SingleValuesSolver';
+import { HiddenSinglesSolver } from '../solvers/HiddenSinglesSolver';
 
 test('findSingleValues works', () => {
   const cc: CellCollection = new CellCollection([
@@ -24,7 +24,7 @@ test('findSingleValues works', () => {
     },
   ];
 
-  const diffs = SingleValuesSolver.solveForBlock(cc);
+  const diffs = HiddenSinglesSolver.solveForBlock(cc);
   expect(diffs.length).toBe(1);
   expect(diffs).toEqual(expected);
 });
