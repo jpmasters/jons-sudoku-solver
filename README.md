@@ -42,6 +42,24 @@ solvedPuzzle = SudokuSolver.solve(testPuzzle);
 console.table(solvedPuzzle);
 ```
 
+This code generates the output:
+
+```bash
+┌─────────┬───┬───┬───┬───┬───┬───┬───┬───┬───┐
+│ (index) │ 0 │ 1 │ 2 │ 3 │ 4 │ 5 │ 6 │ 7 │ 8 │
+├─────────┼───┼───┼───┼───┼───┼───┼───┼───┼───┤
+│    0    │ 4 │ 9 │ 6 │ 1 │ 5 │ 7 │ 2 │ 3 │ 8 │
+│    1    │ 2 │ 1 │ 8 │ 3 │ 9 │ 6 │ 5 │ 4 │ 7 │
+│    2    │ 7 │ 5 │ 3 │ 2 │ 8 │ 4 │ 6 │ 9 │ 1 │
+│    3    │ 5 │ 3 │ 1 │ 6 │ 7 │ 2 │ 4 │ 8 │ 9 │
+│    4    │ 8 │ 2 │ 7 │ 5 │ 4 │ 9 │ 3 │ 1 │ 6 │
+│    5    │ 6 │ 4 │ 9 │ 8 │ 3 │ 1 │ 7 │ 5 │ 2 │
+│    6    │ 9 │ 6 │ 2 │ 4 │ 1 │ 5 │ 8 │ 7 │ 3 │
+│    7    │ 1 │ 8 │ 5 │ 7 │ 6 │ 3 │ 9 │ 2 │ 4 │
+│    8    │ 3 │ 7 │ 4 │ 9 │ 2 │ 8 │ 1 │ 6 │ 5 │
+└─────────┴───┴───┴───┴───┴───┴───┴───┴───┴───┘
+```
+
 The SudokuSolver.solve() method can also take optional parameters to allow the calling application to control which solvers should be included in the solving process. You can also control whether or not you want to use the Backtracking solver to finish off the puzzle if the solvers don't get the job done.
 
 ```javascript
