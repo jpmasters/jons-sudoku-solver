@@ -3,7 +3,7 @@ import { Grid, CellValueChange } from '../Grid';
 import { Helpers } from '../Helpers';
 import { SudokuAllPossibleValues } from '../ValueTypes';
 
-export class CollapsedValueSolver {
+export class NakedSinglesSolver {
   /**
    * Searches the grid for values with a single potential and if it finds any, returns an
    * array of changes to apply to the target grid.
@@ -12,9 +12,9 @@ export class CollapsedValueSolver {
    */
   static solve(targetGrid: Grid): CellValueChange[] {
     return [
-      ...SudokuAllPossibleValues.map((row) => CollapsedValueSolver.solveForBlock(targetGrid.row(row))).flat(),
-      ...SudokuAllPossibleValues.map((column) => CollapsedValueSolver.solveForBlock(targetGrid.column(column))).flat(),
-      ...SudokuAllPossibleValues.map((block) => CollapsedValueSolver.solveForBlock(targetGrid.block(block))).flat(),
+      ...SudokuAllPossibleValues.map((row) => NakedSinglesSolver.solveForBlock(targetGrid.row(row))).flat(),
+      ...SudokuAllPossibleValues.map((column) => NakedSinglesSolver.solveForBlock(targetGrid.column(column))).flat(),
+      ...SudokuAllPossibleValues.map((block) => NakedSinglesSolver.solveForBlock(targetGrid.block(block))).flat(),
     ];
   }
 

@@ -1,6 +1,6 @@
 import { CellValueChange, Grid } from './Grid';
 import { BacktrackingSolver } from './solvers/BacktrackingSolver';
-import { CollapsedValueSolver } from './solvers/CollapsedValuesSolver';
+import { NakedSinglesSolver } from './solvers/NakedSinglesSolver';
 import { HiddenPairsSolver } from './solvers/HiddenPairsSolver';
 import { ObviousPairsSolver } from './solvers/ObviousPairsSolver';
 import { PointingPairsSolver } from './solvers/PointingPairsSolver';
