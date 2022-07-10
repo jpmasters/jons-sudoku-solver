@@ -7,12 +7,13 @@ test('SudokuSolverOptions provides the correct defaults if not provided', () => 
     includeBacktracking: true,
     includeStrategies: [
       SudokuSolverStrategy.NakedSingles,
-      SudokuSolverStrategy.HiddenPairs,
+      SudokuSolverStrategy.HiddenSingles,
       SudokuSolverStrategy.NakedPairs,
+      SudokuSolverStrategy.HiddenPairs,
       SudokuSolverStrategy.NakedTriples,
+      SudokuSolverStrategy.HiddenTriples,
       SudokuSolverStrategy.NakedQuads,
       SudokuSolverStrategy.PointingPairs,
-      SudokuSolverStrategy.HiddenSingles,
     ],
   };
 
@@ -26,12 +27,13 @@ test('SudokuSolverOptions includeBacktracking overridden to false', () => {
     includeBacktracking: false,
     includeStrategies: [
       SudokuSolverStrategy.NakedSingles,
-      SudokuSolverStrategy.HiddenPairs,
+      SudokuSolverStrategy.HiddenSingles,
       SudokuSolverStrategy.NakedPairs,
+      SudokuSolverStrategy.HiddenPairs,
       SudokuSolverStrategy.NakedTriples,
+      SudokuSolverStrategy.HiddenTriples,
       SudokuSolverStrategy.NakedQuads,
       SudokuSolverStrategy.PointingPairs,
-      SudokuSolverStrategy.HiddenSingles,
     ],
   };
 
@@ -45,12 +47,13 @@ test('SudokuSolverOptions includeBacktracking overridden to true', () => {
     includeBacktracking: true,
     includeStrategies: [
       SudokuSolverStrategy.NakedSingles,
-      SudokuSolverStrategy.HiddenPairs,
+      SudokuSolverStrategy.HiddenSingles,
       SudokuSolverStrategy.NakedPairs,
+      SudokuSolverStrategy.HiddenPairs,
       SudokuSolverStrategy.NakedTriples,
+      SudokuSolverStrategy.HiddenTriples,
       SudokuSolverStrategy.NakedQuads,
       SudokuSolverStrategy.PointingPairs,
-      SudokuSolverStrategy.HiddenSingles,
     ],
   };
 

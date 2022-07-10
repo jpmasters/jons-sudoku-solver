@@ -4,12 +4,13 @@
  */
 export enum SudokuSolverStrategy {
   NakedSingles,
-  HiddenPairs,
+  HiddenSingles,
   NakedPairs,
+  HiddenPairs,
   NakedTriples,
+  HiddenTriples,
   NakedQuads,
   PointingPairs,
-  HiddenSingles,
 }
 
 /**

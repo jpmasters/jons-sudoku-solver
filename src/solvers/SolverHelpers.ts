@@ -93,7 +93,7 @@ export class SolverHelpers {
   static scanBlock(
     block: CellCollection,
     groupsOf: SudokuPossibleValue,
-    callback: (cells: Cell[]) => boolean,
+    callback: (cells: Cell[], block: Cell[]) => boolean,
   ): Cell[][] {
     if (block.cells.length !== 9) throw new Error('scanBlock requires exactly 9 Cells to process.');
 
@@ -119,7 +119,7 @@ export class SolverHelpers {
           .sort((a, b) => a.location.column - b.location.column);
 
         // if caller is interested in these...
-        if (callback(cellsToProcess)) {
+        if (callback(cellsToProcess, block.cells)) {
           // ...push a deep copy onto the return value
           rv.push(new CellCollection(cellsToProcess).cells);
         }
@@ -165,6 +165,54 @@ export class SolverHelpers {
             .filter((cvc) => cvc.valuesToRemove.length),
         );
       });
+
+    return rv;
+  }
+
+  /**
+   * Searches a given row, column or block for hidden values and returns an
+   * array of objects to remove unneeded potentials in those cells.
+   * @param block A reference to a row, column or block to process.
+   * @returns An array of GridDifference objects to apply back to the Grid.
+   */
+  static processHiddenCellsInBlock(block: CellCollection, groupsOf: SudokuPossibleValue): CellValueChange[] {
+    let rv: CellValueChange[] = [];
+
+    SolverHelpers.scanBlock(block, groupsOf, (cellsToConsider, blockCells) => {
+      let valuesToConsider = cellsToConsider
+        .map<SudokuPossibleValue[]>((c) => c.value.potentialValues)
+        .flat()
+        .filter((v, i, a) => a.indexOf(v) === i);
+
+      const otherCells: Cell[] = blockCells.filter((blockCell) => {
+        return cellsToConsider.every((c) => !Helpers.locationsMatch(blockCell.location, c.location));
+      });
+
+      // now use the potentials from otherCells to filter values to consider
+      const valuesToRemove = otherCells
+        .map<SudokuPossibleValue[]>((c) => c.value.potentialValues)
+        .flat()
+        .filter((v, i, a) => a.indexOf(v) === i);
+
+      valuesToConsider = valuesToConsider.filter((v) => !valuesToRemove.includes(v));
+
+      // do we have 'groupsOf' values left in valuesToConsider? if so, we have a hidden triple
+      // so return true
+      if (valuesToConsider.length === groupsOf) {
+        rv.push(
+          ...cellsToConsider
+            .map<CellValueChange>((c) => {
+              return {
+                location: { ...c.location },
+                valuesToRemove: c.value.potentialValues.filter((v) => !valuesToConsider.includes(v)),
+              };
+            })
+            .filter((v) => v.valuesToRemove.length),
+        );
+      }
+
+      return false;
+    });
 
     return rv;
   }

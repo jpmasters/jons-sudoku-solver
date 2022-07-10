@@ -1,13 +1,14 @@
 import { CellCollection } from '../CellCollection';
 import { Grid, CellValueChange } from '../Grid';
 import { Helpers } from '../Helpers';
-import { SudokuAllPossibleValues, GridLocation, SudokuPossibleValue } from '../ValueTypes';
+import { SudokuAllPossibleValues, GridLocation } from '../ValueTypes';
 import { SolverHelpers, ReducedValues } from './SolverHelpers';
 
 export class HiddenPairsSolver {
   /**
    * Searches the Grid for hidden pairs and if it finds any, returns an
    * array of changes to apply to the target grid.
+   * TODO: Change this to use the same mechanims as HiddenTriples
    * @param targetGrid The grid to solve.
    * @returns An array of changes to apply to the grid to solve it.
    */
