@@ -77,4 +77,42 @@ export class SolverHelpers {
         return prev;
       }, {});
   }
+
+  /**
+   * Scans a row, column or block for a unique combination of n cells. The number of cells
+   * returned (n) is provided by the caller in the groupsOf parameter. The caller can exit
+   * the scanning early by returning false from the callback method.
+   * If you pass in an array of cells that is not 9 Cells long, an error is thrown.
+   * @param block A CellCollection containing a row, column or block to be scanned.
+   * @param groupsOf The number of cells to return in each combination.
+   * @param callback A callback method to receive each cell combination.
+   * @returns Returns true if it scanned to the end or false if the caller requested to end early.
+   */
+  static scanBlock(
+    block: CellCollection,
+    groupsOf: SudokuPossibleValue,
+    callback: (cells: Cell[]) => boolean,
+  ): boolean {
+    if (block.cells.length !== 9) throw new Error('scanBlock requires exactly 9 Cells to process.');
+
+    let startValue = 0;
+    for (let i = 0; i < groupsOf; i++) {
+      // tslint:disable-next-line:no-bitwise
+      startValue = startValue | (1 << i);
+    }
+
+    for (let possibleValues = startValue; possibleValues <= 0x1ff; possibleValues++) {
+      const s = possibleValues.toString(2).split('');
+      if (s.filter((v) => v === '1').length === 3) {
+        // pad the array to the left
+        const padded = Array(9).fill('0').concat(s).slice(-9);
+
+        const cellIndexes = padded.map<number>((v, i) => (v === '1' ? i : -1)).filter((v) => v !== -1);
+        const cellsToProcess = cellIndexes.map((i) => block.cells[i]);
+
+        if (!callback(cellsToProcess)) return false;
+      }
+    }
+    return true;
+  }
 }

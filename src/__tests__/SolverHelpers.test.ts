@@ -1,6 +1,11 @@
+import { Cell } from '../Cell';
+import { CellCollection } from '../CellCollection';
+import { CellValue } from '../CellValue';
 import { emptyPuzzle } from '../EmptyPuzzle';
 import { Grid, CellValueChange } from '../Grid';
+import { Helpers } from '../Helpers';
 import { SolverHelpers } from '../solvers/SolverHelpers';
+import { GridLocation } from '../ValueTypes';
 
 test('Apply changes works', () => {
   const sourceGrid = Grid.fromGrid([
@@ -21,4 +26,79 @@ test('Apply changes works', () => {
 
   const updatedGrid = SolverHelpers.applyChangeList(targetGrid, cl);
   expect(updatedGrid.toPuzzleArray()).toEqual(sourceGrid.toPuzzleArray());
+});
+
+test('scanBlock works in groups of 3', () => {
+  const cc: CellCollection = new CellCollection([
+    new Cell({ row: 5, column: 1 }, new CellValue([5, 7, 8])),
+    new Cell({ row: 5, column: 2 }, new CellValue([1, 5])),
+    new Cell({ row: 5, column: 3 }, new CellValue([1, 2, 3, 5])),
+    new Cell({ row: 5, column: 4 }, new CellValue([2, 5, 6, 8])),
+    new Cell({ row: 5, column: 5 }, new CellValue([4])),
+    new Cell({ row: 5, column: 6 }, new CellValue([1, 2, 3, 8, 9])),
+    new Cell({ row: 5, column: 7 }, new CellValue([6, 9])),
+    new Cell({ row: 5, column: 8 }, new CellValue([5, 7, 8])),
+    new Cell({ row: 5, column: 9 }, new CellValue([5, 7, 8])),
+  ]);
+
+  const samplesToLookFor: { locations: GridLocation[]; found: boolean }[] = [
+    {
+      locations: [
+        { row: 5, column: 1 },
+        { row: 5, column: 2 },
+        { row: 5, column: 3 },
+      ],
+      found: false,
+    },
+    {
+      locations: [
+        { row: 5, column: 4 },
+        { row: 5, column: 5 },
+        { row: 5, column: 6 },
+      ],
+      found: false,
+    },
+    {
+      locations: [
+        { row: 5, column: 7 },
+        { row: 5, column: 8 },
+        { row: 5, column: 9 },
+      ],
+      found: false,
+    },
+    {
+      locations: [
+        { row: 5, column: 1 },
+        { row: 5, column: 6 },
+        { row: 5, column: 9 },
+      ],
+      found: false,
+    },
+  ];
+
+  SolverHelpers.scanBlock(cc, 3, (cells) => {
+    const foundLocs: GridLocation[] = cells.map((c) => c.location);
+    samplesToLookFor.forEach((sample) => {
+      if (Helpers.locationArraysMatch(foundLocs, sample.locations)) {
+        sample.found = true;
+      }
+    });
+    return true;
+  });
+
+  expect(samplesToLookFor.every((sample) => sample.found)).toBeTruthy();
+});
+
+test('scanBlock throws when block is the wrong length', () => {
+  const cc: CellCollection = new CellCollection([
+    new Cell({ row: 5, column: 1 }, new CellValue([5, 7, 8])),
+    new Cell({ row: 5, column: 2 }, new CellValue([1, 5])),
+    new Cell({ row: 5, column: 3 }, new CellValue([1, 2, 3, 5])),
+  ]);
+
+  expect(() => {
+    SolverHelpers.scanBlock(cc, 2, () => {
+      return true;
+    });
+  }).toThrowError();
 });
