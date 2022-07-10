@@ -5,7 +5,17 @@ import { Helpers } from '../Helpers';
 import { SudokuAllPossibleValues } from '../ValueTypes';
 import { SolverHelpers } from './SolverHelpers';
 
+/**
+ * Implements a Naked Triple solver strategy.
+ * @see <a href="https://sudoku.org.uk/SolvingTechniques/NakedTriples.asp">Sudoku.org.uk</a>
+ */
 export class NakedTriplesSolver {
+  /**
+   * Searches the grid for Naked Triples and if it finds any, returns an
+   * array of changes to apply to the target grid.
+   * @param targetGrid The grid to solve.
+   * @returns An array of changes to apply to the grid to solve it.
+   */
   static solve(targetGrid: Grid): CellValueChange[] {
     return [
       ...SudokuAllPossibleValues.map((row) => NakedTriplesSolver.solveForBlock(targetGrid.row(row))).flat(),
