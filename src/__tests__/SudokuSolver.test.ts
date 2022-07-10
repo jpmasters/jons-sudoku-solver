@@ -131,7 +131,7 @@ test('Solves hardPuzzle1', () => {
   expect(solvedPuzzle).toStrictEqual(hardTestPuzzle1Solved);
 });
 
-// test('Solves hardPuzzle3', () => {
-//   const solvedPuzzle: number[][] = SudokuSolver.solve(hardTestPuzzle3);
-//   expect(solvedPuzzle).toStrictEqual(hardTestPuzzle3Solved);
-// });
+test('Solves hardPuzzle3', () => {
+  const solvedPuzzle: number[][] = SudokuSolver.solve(hardTestPuzzle3);
+  expect(solvedPuzzle).toStrictEqual(hardTestPuzzle3Solved);
+});
