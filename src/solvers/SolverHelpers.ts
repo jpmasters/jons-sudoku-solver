@@ -176,7 +176,7 @@ export class SolverHelpers {
    * @returns An array of GridDifference objects to apply back to the Grid.
    */
   static processHiddenCellsInBlock(block: CellCollection, groupsOf: SudokuPossibleValue): CellValueChange[] {
-    let rv: CellValueChange[] = [];
+    const rv: CellValueChange[] = [];
 
     SolverHelpers.scanBlock(block, groupsOf, (cellsToConsider, blockCells) => {
       let valuesToConsider = cellsToConsider
