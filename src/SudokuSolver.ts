@@ -1,13 +1,8 @@
 import { CellValueChange, Grid } from './Grid';
 import { BacktrackingSolver } from './solvers/BacktrackingSolver';
-import { NakedSinglesSolver } from './solvers/NakedSinglesSolver';
-import { HiddenPairsSolver } from './solvers/HiddenPairsSolver';
-import { NakedPairsSolver } from './solvers/NakedPairsSolver';
-import { PointingPairsSolver } from './solvers/PointingPairsSolver';
-import { HiddenSinglesSolver } from './solvers/HiddenSinglesSolver';
 import { SolverHelpers } from './solvers/SolverHelpers';
 import { SolverList } from './solvers/SolverList';
-import { deriveOptions, SudokuSolverOptions, SudokuSolverStrategy } from './SudokuSolverOptions';
+import { deriveOptions, SudokuSolverOptions } from './SudokuSolverOptions';
 
 /**
  * Implements a class that can solve a 9x9 Sudoku provided as a number[9][9].
