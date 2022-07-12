@@ -27,14 +27,6 @@ export interface ReducedValues {
   9?: GridLocation[];
 }
 
-/***
- * Useful structure for grouping values by location.
- */
-export interface GroupedValues {
-  value: SudokuPossibleValue[];
-  locations: GridLocation[];
-}
-
 /**
  * Implements a class that provides helper methods for solving puzzles.
  */
@@ -59,6 +51,7 @@ export class SolverHelpers {
   /**
    * Pivots the cell values into an object that provides the frequency and locations
    * of values in the specified row, column or block.
+   * TODO: See if there is a simpler way to do this which could removed code complexity.
    * @param block A reference to a Grid Row, Column or Block.
    * @returns A reference to a ReducedValues object that shows value frequency.
    */
