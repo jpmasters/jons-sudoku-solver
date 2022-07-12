@@ -46,10 +46,10 @@ test('Grid is created in the correct state', () => {
 
   g.cells.forEach((c) => {
     if (easyTestPuzzle1[c.location.row - 1][c.location.column - 1]) {
-      expect(c.value.hasKnownValue).toBeTruthy();
-      expect(c.value.value).toBe(easyTestPuzzle1[c.location.row - 1][c.location.column - 1]);
+      expect(c.hasKnownValue).toBeTruthy();
+      expect(c.value).toBe(easyTestPuzzle1[c.location.row - 1][c.location.column - 1]);
     } else {
-      expect(c.value.hasKnownValue).not.toBeTruthy();
+      expect(c.hasKnownValue).not.toBeTruthy();
     }
   });
 });
@@ -94,16 +94,16 @@ test('Grid returns correct cell collection for a column', () => {
   expect(g.column(1).cells.length).toBe(9);
 
   g.column(2).cells.forEach((c, i) => {
-    if (c.value.hasKnownValue) {
-      expect(c.value.value).toBe(col2[i]);
+    if (c.hasKnownValue) {
+      expect(c.value).toBe(col2[i]);
     } else {
       expect(col2[i]).toBe(0);
     }
   });
 
   g.column(7).cells.forEach((c, i) => {
-    if (c.value.hasKnownValue) {
-      expect(c.value.value).toBe(col7[i]);
+    if (c.hasKnownValue) {
+      expect(c.value).toBe(col7[i]);
     } else {
       expect(col7[i]).toBe(0);
     }
@@ -120,16 +120,16 @@ test('Grid returns correct cell collection for a column', () => {
   expect(g.row(1).cells.length).toBe(9);
 
   g.row(3).cells.forEach((c, i) => {
-    if (c.value.hasKnownValue) {
-      expect(c.value.value).toBe(row3[i]);
+    if (c.hasKnownValue) {
+      expect(c.value).toBe(row3[i]);
     } else {
       expect(row3[i]).toBe(0);
     }
   });
 
   g.row(7).cells.forEach((c, i) => {
-    if (c.value.hasKnownValue) {
-      expect(c.value.value).toBe(row7[i]);
+    if (c.hasKnownValue) {
+      expect(c.value).toBe(row7[i]);
     } else {
       expect(row7[i]).toBe(0);
     }
@@ -146,16 +146,16 @@ test('Grid returns correct cell collection for a block', () => {
   expect(g.block(4).cells.length).toBe(9);
 
   g.block(3).cells.forEach((c, i) => {
-    if (c.value.hasKnownValue) {
-      expect(c.value.value).toBe(block3[i]);
+    if (c.hasKnownValue) {
+      expect(c.value).toBe(block3[i]);
     } else {
       expect(block3[i]).toBe(0);
     }
   });
 
   g.block(9).cells.forEach((c, i) => {
-    if (c.value.hasKnownValue) {
-      expect(c.value.value).toBe(block9[i]);
+    if (c.hasKnownValue) {
+      expect(c.value).toBe(block9[i]);
     } else {
       expect(block9[i]).toBe(0);
     }

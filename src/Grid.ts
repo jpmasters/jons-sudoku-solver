@@ -1,8 +1,7 @@
 import { Helpers } from './Helpers';
 import { Cell } from './Cell';
 import { CellCollection } from './CellCollection';
-import { CellValue } from './CellValue';
-import { GridBlocks, GridColumns, GridLocation, GridRows, SudokuPossibleValue } from './ValueTypes';
+import { GridBlocks, GridColumns, GridLocation, GridRows, SudokuAllPossibleValues, SudokuPossibleValue } from './ValueTypes';
 
 /**
  * Describes a change to a grid.
@@ -51,7 +50,7 @@ export class Grid extends CellCollection {
           return new Cell(
             // remember locations are from 1 - 9 (not 0 - 8)
             { column: (x + 1) as GridColumns, row: (y + 1) as GridRows },
-            v ? new CellValue([v as unknown as SudokuPossibleValue]) : new CellValue(),
+            v ? [v as unknown as SudokuPossibleValue] : SudokuAllPossibleValues,
           );
         });
       })
@@ -123,7 +122,7 @@ export class Grid extends CellCollection {
    * @returns True if the puzzle is solved or false if it isn't.
    */
   get isSolved(): boolean {
-    return this.cells.filter((cell) => !cell.value.hasKnownValue).length === 0;
+    return this.cells.filter((cell) => !cell.hasKnownValue).length === 0;
   }
 
   /**
@@ -144,8 +143,8 @@ export class Grid extends CellCollection {
         const targetCell: Cell = targetGrid.cells[targetCellIndex];
 
         // values in the target cell that do not appear in this cell need to be removed
-        const valuesRemoved: SudokuPossibleValue[] = targetCell.value.potentialValues.filter(
-          (v) => !thisCell.value.potentialValues.includes(v),
+        const valuesRemoved: SudokuPossibleValue[] = targetCell.potentialValues.filter(
+          (v) => !thisCell.potentialValues.includes(v),
         );
 
         if (valuesRemoved.length) {
@@ -165,7 +164,7 @@ export class Grid extends CellCollection {
     const rv: number[][] = new Array<number[]>(9).fill([]).map<number[]>((v) => new Array(9).fill(0));
 
     this.cells.forEach((cell) => {
-      rv[cell.location.row - 1].splice(cell.location.column - 1, 1, cell.value.hasKnownValue ? cell.value.value : 0);
+      rv[cell.location.row - 1].splice(cell.location.column - 1, 1, cell.hasKnownValue ? cell.value : 0);
     });
 
     return rv;

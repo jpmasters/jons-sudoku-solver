@@ -13,7 +13,7 @@ export class CellCollection {
   constructor(values: Cell[]) {
     this.cells = Helpers.orderCells(
       values.map<Cell>((c) => {
-        return new Cell({ ...c.location }, c.value.copy());
+        return c.copy();
       }),
     );
   }
@@ -75,7 +75,7 @@ export class CellCollection {
    * @returns True if the CellCollection contains a value. False if not.
    */
   hasValue(value: SudokuPossibleValue): boolean {
-    return !!this.cells.filter((cell) => cell.value.hasKnownValue && cell.value.value === value).length;
+    return !!this.cells.filter((cell) => cell.hasKnownValue && cell.value === value).length;
   }
 
   /**
@@ -83,6 +83,6 @@ export class CellCollection {
    * @returns True if the grid has no values set (i.e. every Cell has all potential values)
    */
   hasNoValues(): boolean {
-    return this.cells.every((c) => Helpers.arrayContainsAll(c.value.potentialValues, SudokuAllPossibleValues));
+    return this.cells.every((c) => Helpers.arrayContainsAll(c.potentialValues, SudokuAllPossibleValues));
   }
 }

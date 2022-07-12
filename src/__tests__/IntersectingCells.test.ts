@@ -1,10 +1,7 @@
-import { SudokuAllPossibleValues } from '../ValueTypes';
 import { Grid } from '../Grid';
 import { easyTestPuzzle2 } from './puzzles.test';
 import { IntersectingCells } from '../IntersectingCells';
-import { emptyPuzzle } from '../EmptyPuzzle';
 import { Cell } from '../Cell';
-import { CellValue } from '../CellValue';
 import { CellCollection } from '../CellCollection';
 
 test('Can create an IntersectingCells object from a Grid', () => {
@@ -18,21 +15,21 @@ test('Can create an IntersectingCells object from a Grid', () => {
 test('removePotentials works', () => {
   const cc = IntersectingCells.fromCellCollection(
     new CellCollection([
-      new Cell({ column: 5, row: 5 }, new CellValue([4, 5, 6])),
-      new Cell({ column: 6, row: 5 }, new CellValue([7, 8, 9])),
-      new Cell({ column: 7, row: 5 }, new CellValue([1, 2, 3])),
-      new Cell({ column: 8, row: 5 }, new CellValue([1, 4, 8])),
-      new Cell({ column: 9, row: 5 }, new CellValue([2, 3, 4])),
+      new Cell({ column: 5, row: 5 }, [4, 5, 6]),
+      new Cell({ column: 6, row: 5 }, [7, 8, 9]),
+      new Cell({ column: 7, row: 5 }, [1, 2, 3]),
+      new Cell({ column: 8, row: 5 }, [1, 4, 8]),
+      new Cell({ column: 9, row: 5 }, [2, 3, 4]),
     ]),
   );
 
   const dd = cc.removePotentials({ column: 7, row: 5 }, [2, 3]);
 
   // check the one we want to alter has changed
-  expect(dd.cellAtLocation({ column: 7, row: 5 }).value.potentialValues).toEqual([1]);
+  expect(dd.cellAtLocation({ column: 7, row: 5 }).potentialValues).toEqual([1]);
 
   // check the one we don't want to alter hasn't changed
-  expect(dd.cellAtLocation({ column: 9, row: 5 }).value.potentialValues).toEqual([2, 3, 4]);
+  expect(dd.cellAtLocation({ column: 9, row: 5 }).potentialValues).toEqual([2, 3, 4]);
 
   // check location validation works
   expect(() => {

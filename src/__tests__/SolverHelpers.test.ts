@@ -1,6 +1,5 @@
 import { Cell } from '../Cell';
 import { CellCollection } from '../CellCollection';
-import { CellValue } from '../CellValue';
 import { emptyPuzzle } from '../EmptyPuzzle';
 import { Grid, CellValueChange } from '../Grid';
 import { Helpers } from '../Helpers';
@@ -30,15 +29,15 @@ test('Apply changes works', () => {
 
 test('scanBlock works in groups of 3', () => {
   const cc: CellCollection = new CellCollection([
-    new Cell({ row: 5, column: 1 }, new CellValue([5, 7, 8])),
-    new Cell({ row: 5, column: 2 }, new CellValue([1, 5])),
-    new Cell({ row: 5, column: 3 }, new CellValue([1, 2, 3, 5])),
-    new Cell({ row: 5, column: 4 }, new CellValue([2, 5, 6, 8])),
-    new Cell({ row: 5, column: 5 }, new CellValue([4])),
-    new Cell({ row: 5, column: 6 }, new CellValue([1, 2, 3, 8, 9])),
-    new Cell({ row: 5, column: 7 }, new CellValue([6, 9])),
-    new Cell({ row: 5, column: 8 }, new CellValue([5, 7, 8])),
-    new Cell({ row: 5, column: 9 }, new CellValue([5, 7, 8])),
+    new Cell({ row: 5, column: 1 }, [5, 7, 8]),
+    new Cell({ row: 5, column: 2 }, [1, 5]),
+    new Cell({ row: 5, column: 3 }, [1, 2, 3, 5]),
+    new Cell({ row: 5, column: 4 }, [2, 5, 6, 8]),
+    new Cell({ row: 5, column: 5 }, [4]),
+    new Cell({ row: 5, column: 6 }, [1, 2, 3, 8, 9]),
+    new Cell({ row: 5, column: 7 }, [6, 9]),
+    new Cell({ row: 5, column: 8 }, [5, 7, 8]),
+    new Cell({ row: 5, column: 9 }, [5, 7, 8]),
   ]);
 
   const samplesToLookFor: { locations: GridLocation[]; found: boolean }[] = [
@@ -85,22 +84,22 @@ test('scanBlock works in groups of 3', () => {
     });
 
     return (
-      Helpers.arrayHasSameMembers(cells[0].value.potentialValues, cells[1].value.potentialValues) &&
-      Helpers.arrayHasSameMembers(cells[0].value.potentialValues, cells[2].value.potentialValues)
+      Helpers.arrayHasSameMembers(cells[0].potentialValues, cells[1].potentialValues) &&
+      Helpers.arrayHasSameMembers(cells[0].potentialValues, cells[2].potentialValues)
     );
   });
 
   expect(samplesToLookFor.every((sample) => sample.found)).toBeTruthy();
   expect(foundTriples.length).toBe(1);
   expect(foundTriples[0].length).toBe(3);
-  expect(foundTriples[0][0].value.potentialValues).toEqual([5, 7, 8]);
+  expect(foundTriples[0][0].potentialValues).toEqual([5, 7, 8]);
 });
 
 test('scanBlock throws when block is the wrong length', () => {
   const cc: CellCollection = new CellCollection([
-    new Cell({ row: 5, column: 1 }, new CellValue([5, 7, 8])),
-    new Cell({ row: 5, column: 2 }, new CellValue([1, 5])),
-    new Cell({ row: 5, column: 3 }, new CellValue([1, 2, 3, 5])),
+    new Cell({ row: 5, column: 1 }, [5, 7, 8]),
+    new Cell({ row: 5, column: 2 }, [1, 5]),
+    new Cell({ row: 5, column: 3 }, [1, 2, 3, 5]),
   ]);
 
   expect(() => {

@@ -1,7 +1,7 @@
 import { Cell } from '../Cell';
 import { Grid, CellValueChange } from '../Grid';
 import { IntersectingCells } from '../IntersectingCells';
-import { GridLocation, SudokuAllPossibleValues, SudokuPossibleValue } from '../ValueTypes';
+import { GridLocation, SudokuPossibleValue } from '../ValueTypes';
 import { SolverHelpers } from './SolverHelpers';
 
 export class BacktrackingSolver {
@@ -29,16 +29,16 @@ export class BacktrackingSolver {
    */
   static doBackTracking(grid: Grid, completed: (grid: Grid) => void, depth: number = 0): boolean {
     // find the first empty cell in the grid
-    const emptyCells: Cell[] = grid.cells.filter((cell) => !cell.value.hasKnownValue);
+    const emptyCells: Cell[] = grid.cells.filter((cell) => !cell.hasKnownValue);
 
     for (const cell of emptyCells) {
-      for (const valueToTry of [...cell.value.potentialValues]) {
+      for (const valueToTry of [...cell.potentialValues]) {
         if (BacktrackingSolver.isValidPlacement(grid, valueToTry, cell.location)) {
           // we have a value to try so try it
           const newGrid = SolverHelpers.applyChangeList(grid, [
             {
               location: { ...cell.location },
-              valuesToRemove: cell.value.potentialValues.filter((v) => v !== valueToTry),
+              valuesToRemove: cell.potentialValues.filter((v) => v !== valueToTry),
             },
           ]);
 

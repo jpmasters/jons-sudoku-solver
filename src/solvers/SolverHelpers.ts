@@ -39,8 +39,8 @@ export class SolverHelpers {
    */
   static applyChangeList(grid: Grid, changes: CellValueChange[]): Grid {
     changes.forEach((change) => {
-      const newCellValue = grid.cellAtLocation(change.location).value.removePotentials(change.valuesToRemove);
-      const newCell = new Cell({ ...change.location }, newCellValue);
+      const newCellValue = grid.cellAtLocation(change.location).removePotentials(change.valuesToRemove);
+      const newCell = new Cell({ ...change.location }, newCellValue.potentialValues);
 
       grid = Grid.fromCellCollection(grid.mergedWith(new CellCollection([newCell])));
     });
@@ -57,9 +57,9 @@ export class SolverHelpers {
    */
   static reduceCells(block: CellCollection): ReducedValues {
     return block.cells
-      .filter((cell) => !cell.value.hasKnownValue)
+      .filter((cell) => !cell.hasKnownValue)
       .map((cell) => {
-        return { location: { ...cell.location }, values: cell.value.potentialValues };
+        return { location: { ...cell.location }, values: cell.potentialValues };
       })
       .reduce<ReducedValues>((prev, curr) => {
         curr.values.forEach((val) => {
@@ -133,7 +133,7 @@ export class SolverHelpers {
 
     // search the block for triples
     SolverHelpers.scanBlock(block, comboType, (cells) => {
-      return new Set(cells.map((c) => c.value.potentialValues).flat()).size === comboType;
+      return new Set(cells.map((c) => c.potentialValues).flat()).size === comboType;
     })
       // for each of the triples we found
       .forEach((nakedGroup) => {
@@ -146,11 +146,11 @@ export class SolverHelpers {
             .map<CellValueChange>((cell) => {
               // for the remainnig cells, create a change obect that removes potentials that are part of
               // the triple
-              const nakedPotentials = Array.from(new Set(nakedGroup.map((c) => c.value.potentialValues).flat()));
+              const nakedPotentials = Array.from(new Set(nakedGroup.map((c) => c.potentialValues).flat()));
               return {
                 location: { ...cell.location },
                 valuesToRemove: nakedPotentials
-                  .filter((p) => cell.value.potentialValues.includes(p))
+                  .filter((p) => cell.potentialValues.includes(p))
                   .sort((a, b) => a - b),
               };
             })
@@ -173,7 +173,7 @@ export class SolverHelpers {
 
     SolverHelpers.scanBlock(block, groupsOf, (cellsToConsider, blockCells) => {
       let valuesToConsider = cellsToConsider
-        .map<SudokuPossibleValue[]>((c) => c.value.potentialValues)
+        .map<SudokuPossibleValue[]>((c) => c.potentialValues)
         .flat()
         .filter((v, i, a) => a.indexOf(v) === i);
 
@@ -183,7 +183,7 @@ export class SolverHelpers {
 
       // now use the potentials from otherCells to filter values to consider
       const valuesToRemove = otherCells
-        .map<SudokuPossibleValue[]>((c) => c.value.potentialValues)
+        .map<SudokuPossibleValue[]>((c) => c.potentialValues)
         .flat()
         .filter((v, i, a) => a.indexOf(v) === i);
 
@@ -197,7 +197,7 @@ export class SolverHelpers {
             .map<CellValueChange>((c) => {
               return {
                 location: { ...c.location },
-                valuesToRemove: c.value.potentialValues.filter((v) => !valuesToConsider.includes(v)),
+                valuesToRemove: c.potentialValues.filter((v) => !valuesToConsider.includes(v)),
               };
             })
             .filter((v) => v.valuesToRemove.length),

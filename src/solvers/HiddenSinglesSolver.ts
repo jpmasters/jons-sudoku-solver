@@ -34,7 +34,7 @@ export class HiddenSinglesSolver {
           const location: GridLocation = (reducedCells[value] as ReducedValues[]).at(0) as GridLocation;
           const newVals: SudokuPossibleValue[] = block
             .cellAtLocation({ column: location.column, row: location.row })
-            .value.potentialValues.filter((cv) => cv !== value);
+            .potentialValues.filter((cv) => cv !== value);
           rv.push({ location, valuesToRemove: newVals });
         }
       }

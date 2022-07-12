@@ -54,7 +54,7 @@ export class IntersectingCells extends CellCollection {
       throw new Error(`A value at location {${location.column}, ${location.row}} could not be found.`);
 
     const thisCell = this.cellAtLocation(location);
-    const newCell: Cell = new Cell(location, thisCell.value.removePotentials(values));
+    const newCell: Cell = new Cell(location, thisCell.removePotentials(values).potentialValues);
     return IntersectingCells.fromCellCollection(this.mergedWith(new CellCollection([newCell])));
   }
 }

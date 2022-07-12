@@ -61,7 +61,7 @@ export class PointingPairsSolver {
           .map<CellValueChange>((cell) => {
             return {
               location: { ...cell.location },
-              valuesToRemove: cell.value.potentialValues.includes(v) ? [v] : [],
+              valuesToRemove: cell.potentialValues.includes(v) ? [v] : [],
             };
           });
       })

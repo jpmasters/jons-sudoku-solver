@@ -26,7 +26,7 @@ export class NakedSinglesSolver {
    * @returns An array of changes that can be applied back to the grid.
    */
   static solveForBlock(block: CellCollection): CellValueChange[] {
-    const cellsWithKnownValues = block.cells.filter((cell) => cell.value.hasKnownValue);
+    const cellsWithKnownValues = block.cells.filter((cell) => cell.hasKnownValue);
     const rv: CellValueChange[] = [];
     cellsWithKnownValues.forEach((cell) => {
       rv.push(
@@ -34,12 +34,12 @@ export class NakedSinglesSolver {
           .filter(
             (bc) =>
               !Helpers.locationsMatch(bc.location, cell.location) &&
-              bc.value.potentialValues.includes(cell.value.value),
+              bc.potentialValues.includes(cell.value),
           )
           .map<CellValueChange>((bc) => {
             return {
               location: { ...bc.location },
-              valuesToRemove: [cell.value.value],
+              valuesToRemove: [cell.value],
             };
           }),
       );
