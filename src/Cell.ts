@@ -35,9 +35,9 @@ export class Cell {
   }
 
   /**
-   * Returns a copy of the CellValue with the specified potential removed.
+   * Returns a copy of the Cell with the specified potential removed.
    * @param values The potential values to remove from the value.
-   * @returns A new CellValue with the updated potentials.
+   * @returns A new Cell with the updated potentials.
    */
   removePotentials(values: SudokuPossibleValue[]): Cell {
     return new Cell(
