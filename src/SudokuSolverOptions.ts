@@ -10,6 +10,7 @@ export enum SudokuSolverStrategy {
   NakedTriples,
   HiddenTriples,
   NakedQuads,
+  HiddenQuads,
   PointingPairs,
 }
 

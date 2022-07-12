@@ -13,6 +13,7 @@ test('SudokuSolverOptions provides the correct defaults if not provided', () => 
       SudokuSolverStrategy.NakedTriples,
       SudokuSolverStrategy.HiddenTriples,
       SudokuSolverStrategy.NakedQuads,
+      SudokuSolverStrategy.HiddenQuads,
       SudokuSolverStrategy.PointingPairs,
     ],
   };
@@ -33,6 +34,7 @@ test('SudokuSolverOptions includeBacktracking overridden to false', () => {
       SudokuSolverStrategy.NakedTriples,
       SudokuSolverStrategy.HiddenTriples,
       SudokuSolverStrategy.NakedQuads,
+      SudokuSolverStrategy.HiddenQuads,
       SudokuSolverStrategy.PointingPairs,
     ],
   };
@@ -53,6 +55,7 @@ test('SudokuSolverOptions includeBacktracking overridden to true', () => {
       SudokuSolverStrategy.NakedTriples,
       SudokuSolverStrategy.HiddenTriples,
       SudokuSolverStrategy.NakedQuads,
+      SudokuSolverStrategy.HiddenQuads,
       SudokuSolverStrategy.PointingPairs,
     ],
   };

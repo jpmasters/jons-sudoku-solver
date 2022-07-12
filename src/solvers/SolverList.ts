@@ -8,6 +8,7 @@ import { HiddenSinglesSolver } from './HiddenSinglesSolver';
 import { NakedTriplesSolver } from './NakedTriplesSolver';
 import { NakedQuadsSolver } from './NakedQuadsSolver';
 import { HiddenTriplesSolver } from './HiddenTriplesSolver';
+import { HiddenQuadsSolver } from './HiddenQuadsSolver';
 
 /**
  * Implements a class that keeps all of the solvers in one place to make it easier to work with them.
@@ -25,6 +26,7 @@ export class SolverList {
       { order: 5, strategy: SudokuSolverStrategy.NakedTriples, solve: NakedTriplesSolver.solve },
       { order: 6, strategy: SudokuSolverStrategy.HiddenTriples, solve: HiddenTriplesSolver.solve },
       { order: 7, strategy: SudokuSolverStrategy.NakedQuads, solve: NakedQuadsSolver.solve },
-      { order: 8, strategy: SudokuSolverStrategy.PointingPairs, solve: PointingPairsSolver.solve },
+      { order: 8, strategy: SudokuSolverStrategy.HiddenQuads, solve: HiddenQuadsSolver.solve },
+      { order: 9, strategy: SudokuSolverStrategy.PointingPairs, solve: PointingPairsSolver.solve },
     ];
 }
