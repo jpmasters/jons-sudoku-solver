@@ -149,9 +149,7 @@ export class SolverHelpers {
               const nakedPotentials = Array.from(new Set(nakedGroup.map((c) => c.potentialValues).flat()));
               return {
                 location: { ...cell.location },
-                valuesToRemove: nakedPotentials
-                  .filter((p) => cell.potentialValues.includes(p))
-                  .sort((a, b) => a - b),
+                valuesToRemove: nakedPotentials.filter((p) => cell.potentialValues.includes(p)).sort((a, b) => a - b),
               };
             })
             // finally filter out empty changes

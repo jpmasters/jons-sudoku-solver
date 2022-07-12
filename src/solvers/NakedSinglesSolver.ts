@@ -32,9 +32,7 @@ export class NakedSinglesSolver {
       rv.push(
         ...block.cells
           .filter(
-            (bc) =>
-              !Helpers.locationsMatch(bc.location, cell.location) &&
-              bc.potentialValues.includes(cell.value),
+            (bc) => !Helpers.locationsMatch(bc.location, cell.location) && bc.potentialValues.includes(cell.value),
           )
           .map<CellValueChange>((bc) => {
             return {
