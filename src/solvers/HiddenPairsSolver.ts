@@ -2,6 +2,10 @@ import { Grid, CellValueChange } from '../Grid';
 import { SudokuAllPossibleValues, ValueComboType } from '../ValueTypes';
 import { SolverHelpers } from './SolverHelpers';
 
+/**
+ * Implements a Hidden Triple solver strategy.
+ * @see <a href="https://sudoku.org.uk/SolvingTechniques/HiddenPairs.asp">Sudoku.org.uk</a>
+ */
 export class HiddenPairsSolver {
   /**
    * Searches the Grid for hidden pairs and if it finds any, returns an
