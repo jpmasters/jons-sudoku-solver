@@ -2,7 +2,8 @@ import { CellValueChange } from '../Grid';
 import { CellCollection } from '../CellCollection';
 import { Cell } from '../Cell';
 import { CellValue } from '../CellValue';
-import { HiddenPairsSolver } from '../solvers/HiddenPairsSolver';
+import { SolverHelpers } from '../solvers/SolverHelpers';
+import { ValueComboType } from '../ValueTypes';
 
 test('findHiddenPairs works', () => {
   const cc: CellCollection = new CellCollection([
@@ -28,7 +29,7 @@ test('findHiddenPairs works', () => {
     },
   ];
 
-  const diffs = HiddenPairsSolver.solveForBlock(cc);
+  const diffs = SolverHelpers.processHiddenCellsInBlock(cc, ValueComboType.Pair);
   expect(diffs).toEqual(expected);
 });
 
@@ -48,7 +49,7 @@ test('findHiddenPairs only selects pairs in the same cell!', () => {
   // should return nothing as their are no hidden pairs
   const expected: CellValueChange[] = [];
 
-  const diffs = HiddenPairsSolver.solveForBlock(cc);
+  const diffs = SolverHelpers.processHiddenCellsInBlock(cc, ValueComboType.Pair);
   expect(diffs).toEqual(expected);
 });
 
@@ -68,7 +69,7 @@ test('findHiddenPairs works when there are multiple cells with 2 values', () => 
   // should return nothing as their are no hidden pairs
   const expected: CellValueChange[] = [];
 
-  const diffs = HiddenPairsSolver.solveForBlock(cc);
+  const diffs = SolverHelpers.processHiddenCellsInBlock(cc, ValueComboType.Pair);
   expect(diffs).toEqual(expected);
 });
 
@@ -88,6 +89,6 @@ test('findHiddenPairs works when there are multiple pairs in the block but notin
   // should return nothing as their are no hidden pairs
   const expected: CellValueChange[] = [];
 
-  const diffs = HiddenPairsSolver.solveForBlock(cc);
+  const diffs = SolverHelpers.processHiddenCellsInBlock(cc, ValueComboType.Pair);
   expect(diffs).toEqual(expected);
 });
