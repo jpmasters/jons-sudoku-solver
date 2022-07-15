@@ -2,6 +2,7 @@ import { Cell } from '../Cell';
 import { CellCollection } from '../CellCollection';
 import { CellValueChange, ValueComboType } from '../ValueTypes';
 import { SolverHelpers } from '../solvers/SolverHelpers';
+import { NakedPairsSolver } from '../solvers/NakedPairsSolver';
 
 test('findObviousPairs works', () => {
   const cc: CellCollection = new CellCollection([
@@ -18,16 +19,18 @@ test('findObviousPairs works', () => {
 
   const expected: CellValueChange[] = [
     {
+      source: 'NakedPairsSolver',
       location: { row: 2, column: 2 },
       valuesToRemove: [6],
     },
     {
+      source: 'NakedPairsSolver',
       location: { row: 3, column: 2 },
       valuesToRemove: [6],
     },
   ];
 
-  const diffs = SolverHelpers.processNakedCellsInBlock(cc, ValueComboType.Pair);
+  const diffs = SolverHelpers.processNakedCellsInBlock(cc, ValueComboType.Pair, NakedPairsSolver.source);
   expect(diffs).toEqual(expected);
 });
 
@@ -46,7 +49,7 @@ test('findObviousPairs pairs must match values', () => {
 
   const expected: CellValueChange[] = [];
 
-  const diffs = SolverHelpers.processNakedCellsInBlock(cc, ValueComboType.Pair);
+  const diffs = SolverHelpers.processNakedCellsInBlock(cc, ValueComboType.Pair, NakedPairsSolver.source);
   expect(diffs).toEqual(expected);
 });
 
@@ -65,20 +68,23 @@ test('findObviousPairs find multiple pairs', () => {
 
   const expected: CellValueChange[] = [
     {
+      source: 'NakedPairsSolver',
       location: { row: 4, column: 3 },
       valuesToRemove: [4],
     },
     {
+      source: 'NakedPairsSolver',
       location: { row: 4, column: 4 },
       valuesToRemove: [8],
     },
     {
+      source: 'NakedPairsSolver',
       location: { row: 4, column: 7 },
       valuesToRemove: [1],
     },
   ];
 
-  const diffs = SolverHelpers.processNakedCellsInBlock(cc, ValueComboType.Pair);
+  const diffs = SolverHelpers.processNakedCellsInBlock(cc, ValueComboType.Pair, NakedPairsSolver.source);
   expect(diffs).toEqual(expected);
 });
 
@@ -109,10 +115,12 @@ test('solve naked pairs works for sudoku.org.uk examples', () => {
 
   const expected_row_8: CellValueChange[] = [
     {
+      source: 'NakedPairsSolver',
       location: { row: 8, column: 7 },
       valuesToRemove: [1, 4],
     },
     {
+      source: 'NakedPairsSolver',
       location: { row: 8, column: 9 },
       valuesToRemove: [4],
     },
@@ -120,23 +128,27 @@ test('solve naked pairs works for sudoku.org.uk examples', () => {
 
   const expected_block_7: CellValueChange[] = [
     {
+      source: 'NakedPairsSolver',
       location: { row: 7, column: 3 },
       valuesToRemove: [1],
     },
     {
+      source: 'NakedPairsSolver',
       location: { row: 9, column: 1 },
       valuesToRemove: [1, 4],
     },
     {
+      source: 'NakedPairsSolver',
       location: { row: 9, column: 2 },
       valuesToRemove: [1],
     },
     {
+      source: 'NakedPairsSolver',
       location: { row: 9, column: 3 },
       valuesToRemove: [1, 4],
     },
   ];
 
-  expect(SolverHelpers.processNakedCellsInBlock(row_8, ValueComboType.Pair)).toEqual(expected_row_8);
-  expect(SolverHelpers.processNakedCellsInBlock(block_7, ValueComboType.Pair)).toEqual(expected_block_7);
+  expect(SolverHelpers.processNakedCellsInBlock(row_8, ValueComboType.Pair, NakedPairsSolver.source)).toEqual(expected_row_8);
+  expect(SolverHelpers.processNakedCellsInBlock(block_7, ValueComboType.Pair, NakedPairsSolver.source)).toEqual(expected_block_7);
 });

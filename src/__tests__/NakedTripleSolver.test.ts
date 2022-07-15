@@ -2,6 +2,7 @@ import { Cell } from '../Cell';
 import { CellCollection } from '../CellCollection';
 import { CellValueChange, ValueComboType } from '../ValueTypes';
 import { SolverHelpers } from '../solvers/SolverHelpers';
+import { NakedTriplesSolver } from '../solvers/NakedTriplesSolver';
 
 test('Naked Triple Solver - solve for a (123) (123) (123) row', () => {
   const cc: CellCollection = new CellCollection([
@@ -17,13 +18,15 @@ test('Naked Triple Solver - solve for a (123) (123) (123) row', () => {
   ]);
 
   const expected: CellValueChange[] = [
-    { location: { row: 5, column: 2 }, valuesToRemove: [5] },
-    { location: { row: 5, column: 3 }, valuesToRemove: [5] },
-    { location: { row: 5, column: 4 }, valuesToRemove: [5, 8] },
-    { location: { row: 5, column: 6 }, valuesToRemove: [8] },
+    { source: 'NakedTriplesSolver', location: { row: 5, column: 2 }, valuesToRemove: [5] },
+    { source: 'NakedTriplesSolver', location: { row: 5, column: 3 }, valuesToRemove: [5] },
+    { source: 'NakedTriplesSolver', location: { row: 5, column: 4 }, valuesToRemove: [5, 8] },
+    { source: 'NakedTriplesSolver', location: { row: 5, column: 6 }, valuesToRemove: [8] },
   ];
 
-  expect(SolverHelpers.processNakedCellsInBlock(cc, ValueComboType.Triple)).toEqual(expected);
+  expect(SolverHelpers.processNakedCellsInBlock(cc, ValueComboType.Triple, NakedTriplesSolver.source)).toEqual(
+    expected,
+  );
 });
 
 /**
@@ -43,13 +46,15 @@ test('Naked Triple Solver - solve for a (123) (123) (12) row', () => {
   ]);
 
   const expected: CellValueChange[] = [
-    { location: { row: 5, column: 2 }, valuesToRemove: [5] },
-    { location: { row: 5, column: 3 }, valuesToRemove: [5] },
-    { location: { row: 5, column: 4 }, valuesToRemove: [5, 8] },
-    { location: { row: 5, column: 6 }, valuesToRemove: [8] },
+    { source: 'NakedTriplesSolver', location: { row: 5, column: 2 }, valuesToRemove: [5] },
+    { source: 'NakedTriplesSolver', location: { row: 5, column: 3 }, valuesToRemove: [5] },
+    { source: 'NakedTriplesSolver', location: { row: 5, column: 4 }, valuesToRemove: [5, 8] },
+    { source: 'NakedTriplesSolver', location: { row: 5, column: 6 }, valuesToRemove: [8] },
   ];
 
-  expect(SolverHelpers.processNakedCellsInBlock(cc, ValueComboType.Triple)).toEqual(expected);
+  expect(SolverHelpers.processNakedCellsInBlock(cc, ValueComboType.Triple, NakedTriplesSolver.source)).toEqual(
+    expected,
+  );
 });
 
 /**
@@ -69,13 +74,15 @@ test('Naked Triple Solver - solve for a (123) (123) (12) block', () => {
   ]);
 
   const expected: CellValueChange[] = [
-    { location: { row: 4, column: 7 }, valuesToRemove: [8] },
-    { location: { row: 4, column: 8 }, valuesToRemove: [2, 8] },
-    { location: { row: 6, column: 7 }, valuesToRemove: [8] },
-    { location: { row: 6, column: 8 }, valuesToRemove: [2, 8] },
+    { source: 'NakedTriplesSolver', location: { row: 4, column: 7 }, valuesToRemove: [8] },
+    { source: 'NakedTriplesSolver', location: { row: 4, column: 8 }, valuesToRemove: [2, 8] },
+    { source: 'NakedTriplesSolver', location: { row: 6, column: 7 }, valuesToRemove: [8] },
+    { source: 'NakedTriplesSolver', location: { row: 6, column: 8 }, valuesToRemove: [2, 8] },
   ];
 
-  expect(SolverHelpers.processNakedCellsInBlock(cc, ValueComboType.Triple)).toEqual(expected);
+  expect(SolverHelpers.processNakedCellsInBlock(cc, ValueComboType.Triple, NakedTriplesSolver.source)).toEqual(
+    expected,
+  );
 });
 
 /**
@@ -95,13 +102,15 @@ test('Naked Triple Solver - solve for a (123) (12) (23) row', () => {
   ]);
 
   const expected: CellValueChange[] = [
-    { location: { row: 5, column: 1 }, valuesToRemove: [5, 9] },
-    { location: { row: 5, column: 3 }, valuesToRemove: [5, 9] },
-    { location: { row: 5, column: 7 }, valuesToRemove: [5, 8, 9] },
-    { location: { row: 5, column: 8 }, valuesToRemove: [5, 8, 9] },
+    { source: 'NakedTriplesSolver', location: { row: 5, column: 1 }, valuesToRemove: [5, 9] },
+    { source: 'NakedTriplesSolver', location: { row: 5, column: 3 }, valuesToRemove: [5, 9] },
+    { source: 'NakedTriplesSolver', location: { row: 5, column: 7 }, valuesToRemove: [5, 8, 9] },
+    { source: 'NakedTriplesSolver', location: { row: 5, column: 8 }, valuesToRemove: [5, 8, 9] },
   ];
 
-  expect(SolverHelpers.processNakedCellsInBlock(cc, ValueComboType.Triple)).toEqual(expected);
+  expect(SolverHelpers.processNakedCellsInBlock(cc, ValueComboType.Triple, NakedTriplesSolver.source)).toEqual(
+    expected,
+  );
 });
 
 test('Naked Triple Solver - solve for a (12) (23) (13) row', () => {
@@ -118,13 +127,15 @@ test('Naked Triple Solver - solve for a (12) (23) (13) row', () => {
   ]);
 
   const expected: CellValueChange[] = [
-    { location: { row: 5, column: 1 }, valuesToRemove: [5, 9] },
-    { location: { row: 5, column: 3 }, valuesToRemove: [5, 9] },
-    { location: { row: 5, column: 7 }, valuesToRemove: [5, 8, 9] },
-    { location: { row: 5, column: 8 }, valuesToRemove: [5, 8, 9] },
+    { source: 'NakedTriplesSolver', location: { row: 5, column: 1 }, valuesToRemove: [5, 9] },
+    { source: 'NakedTriplesSolver', location: { row: 5, column: 3 }, valuesToRemove: [5, 9] },
+    { source: 'NakedTriplesSolver', location: { row: 5, column: 7 }, valuesToRemove: [5, 8, 9] },
+    { source: 'NakedTriplesSolver', location: { row: 5, column: 8 }, valuesToRemove: [5, 8, 9] },
   ];
 
-  expect(SolverHelpers.processNakedCellsInBlock(cc, ValueComboType.Triple)).toEqual(expected);
+  expect(SolverHelpers.processNakedCellsInBlock(cc, ValueComboType.Triple, NakedTriplesSolver.source)).toEqual(
+    expected,
+  );
 });
 
 test('Naked Triple Solver - fail for non-triple row 1', () => {
@@ -142,5 +153,7 @@ test('Naked Triple Solver - fail for non-triple row 1', () => {
 
   const expected: CellValueChange[] = [];
 
-  expect(SolverHelpers.processNakedCellsInBlock(cc, ValueComboType.Triple)).toEqual(expected);
+  expect(SolverHelpers.processNakedCellsInBlock(cc, ValueComboType.Triple, NakedTriplesSolver.source)).toEqual(
+    expected,
+  );
 });

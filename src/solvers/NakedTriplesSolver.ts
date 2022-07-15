@@ -8,22 +8,46 @@ import { SolverHelpers } from './SolverHelpers';
  */
 export class NakedTriplesSolver {
   /**
+   * The name of the solver to insert into change information.
+   */
+  static source: string = 'NakedTriplesSolver';
+
+  /**
    * Searches the grid for Naked Triples and if it finds any, returns an
    * array of changes to apply to the target grid.
    * @param targetGrid The grid to solve.
    * @returns An array of changes to apply to the grid to solve it.
    */
   static solve(targetGrid: Grid): CellValueChange[] {
-    return [
-      ...SudokuAllPossibleValues.map((row) =>
-        SolverHelpers.processNakedCellsInBlock(targetGrid.row(row), ValueComboType.Triple),
-      ).flat(),
-      ...SudokuAllPossibleValues.map((column) =>
-        SolverHelpers.processNakedCellsInBlock(targetGrid.column(column), ValueComboType.Triple),
-      ).flat(),
-      ...SudokuAllPossibleValues.map((block) =>
-        SolverHelpers.processNakedCellsInBlock(targetGrid.block(block), ValueComboType.Triple),
-      ).flat(),
-    ];
+    const rv: CellValueChange[] = [];
+
+    for (const rcb of SudokuAllPossibleValues) {
+      rv.push(
+        ...SolverHelpers.processNakedCellsInBlock(
+          targetGrid.row(rcb),
+          ValueComboType.Triple,
+          NakedTriplesSolver.source,
+        ),
+      );
+      if (rv.length) break;
+      rv.push(
+        ...SolverHelpers.processNakedCellsInBlock(
+          targetGrid.column(rcb),
+          ValueComboType.Triple,
+          NakedTriplesSolver.source,
+        ),
+      );
+      if (rv.length) break;
+      rv.push(
+        ...SolverHelpers.processNakedCellsInBlock(
+          targetGrid.block(rcb),
+          ValueComboType.Triple,
+          NakedTriplesSolver.source,
+        ),
+      );
+      if (rv.length) break;
+    }
+
+    return rv;
   }
 }

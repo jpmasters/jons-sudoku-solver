@@ -125,10 +125,11 @@ export class SolverHelpers {
    * Runs a naked cell solver for a row, column or block.
    * @param block A reference to a row, column or block to process.
    * @param comboType The type of combo to process.
+   * @param source string to say where the changes have come from.
    * @returns A set of changes to apply to the target grid or an empty array if
    * no naked cells are found.
    */
-  static processNakedCellsInBlock(block: CellCollection, comboType: ValueComboType): CellValueChange[] {
+  static processNakedCellsInBlock(block: CellCollection, comboType: ValueComboType, source: string): CellValueChange[] {
     const rv: CellValueChange[] = [];
 
     // search the block for triples
@@ -148,6 +149,7 @@ export class SolverHelpers {
               // the triple
               const nakedPotentials = Array.from(new Set(nakedGroup.map((c) => c.potentialValues).flat()));
               return {
+                source,
                 location: { ...cell.location },
                 valuesToRemove: nakedPotentials.filter((p) => cell.potentialValues.includes(p)).sort((a, b) => a - b),
               };

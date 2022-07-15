@@ -2,6 +2,7 @@ import { Cell } from '../Cell';
 import { CellCollection } from '../CellCollection';
 import { CellValueChange, ValueComboType } from '../ValueTypes';
 import { SolverHelpers } from '../solvers/SolverHelpers';
+import { NakedQuadsSolver } from '../solvers/NakedQuadsSolver';
 
 /**
  * see https://sudoku.org.uk/SolvingTechniques/NakedQuads.asp
@@ -20,11 +21,11 @@ test('Naked Quads Solver - solve for a (1234) (1234) (123) (134) row', () => {
   ]);
 
   const expected: CellValueChange[] = [
-    { location: { row: 8, column: 1 }, valuesToRemove: [1, 8] },
-    { location: { row: 8, column: 2 }, valuesToRemove: [8] },
-    { location: { row: 8, column: 3 }, valuesToRemove: [1] },
-    { location: { row: 8, column: 8 }, valuesToRemove: [4, 8] },
+    { location: { row: 8, column: 1 }, source: 'NakedQuadsSolver', valuesToRemove: [1, 8] },
+    { location: { row: 8, column: 2 }, source: 'NakedQuadsSolver', valuesToRemove: [8] },
+    { location: { row: 8, column: 3 }, source: 'NakedQuadsSolver', valuesToRemove: [1] },
+    { location: { row: 8, column: 8 }, source: 'NakedQuadsSolver', valuesToRemove: [4, 8] },
   ];
 
-  expect(SolverHelpers.processNakedCellsInBlock(cc, ValueComboType.Quad)).toEqual(expected);
+  expect(SolverHelpers.processNakedCellsInBlock(cc, ValueComboType.Quad, NakedQuadsSolver.source)).toEqual(expected);
 });
