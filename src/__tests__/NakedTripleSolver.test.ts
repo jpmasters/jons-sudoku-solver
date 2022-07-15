@@ -1,7 +1,6 @@
 import { Cell } from '../Cell';
 import { CellCollection } from '../CellCollection';
-import { CellValueChange } from '../Grid';
-import { ValueComboType } from '../ValueTypes';
+import { CellValueChange, ValueComboType } from '../ValueTypes';
 import { SolverHelpers } from '../solvers/SolverHelpers';
 
 test('Naked Triple Solver - solve for a (123) (123) (123) row', () => {

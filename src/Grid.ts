@@ -2,6 +2,7 @@ import { Helpers } from './Helpers';
 import { Cell } from './Cell';
 import { CellCollection } from './CellCollection';
 import {
+  CellValueChange,
   GridBlocks,
   GridColumns,
   GridLocation,
@@ -9,14 +10,6 @@ import {
   SudokuAllPossibleValues,
   SudokuPossibleValue,
 } from './ValueTypes';
-
-/**
- * Describes a change to a grid.
- */
-export type CellValueChange = {
-  location: GridLocation;
-  valuesToRemove: SudokuPossibleValue[];
-};
 
 /**
  * Defines an immutable grid structure of Sudoku cells.

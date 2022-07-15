@@ -1,8 +1,7 @@
-import { CellValueChange } from '../Grid';
 import { CellCollection } from '../CellCollection';
 import { Cell } from '../Cell';
 import { SolverHelpers } from '../solvers/SolverHelpers';
-import { ValueComboType } from '../ValueTypes';
+import { CellValueChange, ValueComboType } from '../ValueTypes';
 
 test('findHiddenPairs works', () => {
   const cc: CellCollection = new CellCollection([

@@ -1,8 +1,9 @@
-import { CellValueChange, Grid } from './Grid';
+import { Grid } from './Grid';
 import { BacktrackingSolver } from './solvers/BacktrackingSolver';
 import { SolverHelpers } from './solvers/SolverHelpers';
 import { SolverList } from './solvers/SolverList';
 import { deriveOptions, SudokuSolverOptions } from './SudokuSolverOptions';
+import { CellValueChange } from './ValueTypes';
 
 /**
  * Implements a class that can solve a 9x9 Sudoku provided as a number[9][9].
@@ -42,6 +43,7 @@ export class SudokuSolver {
       SolverList.solvers
         .filter((solverEntry) => options.includeStrategies?.includes(solverEntry.strategy))
         .sort((a, b) => a.order - b.order)
+        // TODO: Can this be a reduce instead?
         .forEach((solverEntry) => {
           if (!changes.length) {
             changes.push(...solverEntry.solve(targetGrid));

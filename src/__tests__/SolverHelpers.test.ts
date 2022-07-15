@@ -1,10 +1,10 @@
 import { Cell } from '../Cell';
 import { CellCollection } from '../CellCollection';
 import { emptyPuzzle } from '../EmptyPuzzle';
-import { Grid, CellValueChange } from '../Grid';
+import { Grid } from '../Grid';
 import { Helpers } from '../Helpers';
 import { SolverHelpers } from '../solvers/SolverHelpers';
-import { GridLocation } from '../ValueTypes';
+import { CellValueChange, GridLocation } from '../ValueTypes';
 
 test('Apply changes works', () => {
   const sourceGrid = Grid.fromGrid([

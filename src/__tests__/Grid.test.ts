@@ -1,6 +1,6 @@
 import { Cell } from '../Cell';
-import { Grid, CellValueChange } from '../Grid';
-import { GridColumns, GridRows } from '../ValueTypes';
+import { Grid } from '../Grid';
+import { CellValueChange, GridColumns, GridRows } from '../ValueTypes';
 import { easyTestPuzzle1, easyTestPuzzle3, easyTestPuzzle3Solved } from './puzzles.test';
 
 test('Can create a grid from a 2D puzzle array', () => {

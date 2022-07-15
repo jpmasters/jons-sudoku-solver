@@ -1,7 +1,7 @@
-import { Grid, CellValueChange } from '../Grid';
+import { Grid } from '../Grid';
 import { Cell } from '../Cell';
 import { CellCollection } from '../CellCollection';
-import { GridLocation, SudokuPossibleValue, ValueComboType } from '../ValueTypes';
+import { CellValueChange, GridLocation, SudokuPossibleValue, ValueComboType } from '../ValueTypes';
 import { Helpers } from '../Helpers';
 
 /**

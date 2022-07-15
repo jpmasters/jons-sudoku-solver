@@ -1,7 +1,6 @@
 import { Cell } from '../Cell';
 import { CellCollection } from '../CellCollection';
-import { CellValueChange } from '../Grid';
-import { ValueComboType } from '../ValueTypes';
+import { CellValueChange, ValueComboType } from '../ValueTypes';
 import { SolverHelpers } from '../solvers/SolverHelpers';
 
 test('findObviousPairs works', () => {

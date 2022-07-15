@@ -1,6 +1,6 @@
 import { CellCollection } from '../CellCollection';
-import { Grid, CellValueChange } from '../Grid';
-import { SudokuAllPossibleValues, GridLocation, SudokuPossibleValue } from '../ValueTypes';
+import { Grid } from '../Grid';
+import { SudokuAllPossibleValues, GridLocation, SudokuPossibleValue, CellValueChange } from '../ValueTypes';
 import { ReducedValues, SolverHelpers } from './SolverHelpers';
 
 export class HiddenSinglesSolver {

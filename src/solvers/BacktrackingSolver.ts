@@ -1,7 +1,7 @@
 import { Cell } from '../Cell';
-import { Grid, CellValueChange } from '../Grid';
+import { Grid } from '../Grid';
 import { IntersectingCells } from '../IntersectingCells';
-import { GridLocation, SudokuPossibleValue } from '../ValueTypes';
+import { CellValueChange, GridLocation, SudokuPossibleValue } from '../ValueTypes';
 import { SolverHelpers } from './SolverHelpers';
 
 export class BacktrackingSolver {

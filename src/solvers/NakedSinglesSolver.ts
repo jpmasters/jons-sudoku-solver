@@ -1,7 +1,8 @@
-import { CellCollection } from '../CellCollection';
-import { Grid, CellValueChange } from '../Grid';
+import { Cell } from '../Cell';
+import { Grid } from '../Grid';
 import { Helpers } from '../Helpers';
-import { SudokuAllPossibleValues } from '../ValueTypes';
+import { IntersectingCells } from '../IntersectingCells';
+import { CellValueChange } from '../ValueTypes';
 
 export class NakedSinglesSolver {
   /**
@@ -11,37 +12,41 @@ export class NakedSinglesSolver {
    * @returns An array of changes to apply to the grid to solve it.
    */
   static solve(targetGrid: Grid): CellValueChange[] {
-    return [
-      ...SudokuAllPossibleValues.map((row) => NakedSinglesSolver.solveForBlock(targetGrid.row(row))).flat(),
-      ...SudokuAllPossibleValues.map((column) => NakedSinglesSolver.solveForBlock(targetGrid.column(column))).flat(),
-      ...SudokuAllPossibleValues.map((block) => NakedSinglesSolver.solveForBlock(targetGrid.block(block))).flat(),
-    ];
+    let rv: CellValueChange[] = [];
+    const cellsWithKnownValues = targetGrid.cells.filter((cell) => cell.hasKnownValue);
+
+    for (let nextKnownCell of cellsWithKnownValues) {
+      rv.push(...NakedSinglesSolver.solveForCell(targetGrid, nextKnownCell));
+      if (rv.length) break;
+    }
+
+    return rv;
   }
 
   /**
-   * Searches a given Row, Column or Block for cells where its potentials have collapsed into a
-   * single value. It then returns an array of objects to remove the potential to other
-   * cells in the block.
-   * @param block A reference to a row, column or block that holds 9 unique values.
-   * @returns An array of changes that can be applied back to the grid.
+   * Given a known cell, it finds all other cells intersecting it that need the potential value
+   * removed. It then returns an array of objects to remove the potential to other cells in the
+   * block.
+   * @param targetGrid The grid holding the puzzle to work with.
+   * @param cell The known cell to use for potential removal.
+   * @returns An array of changes to other cells in the grid.
    */
-  static solveForBlock(block: CellCollection): CellValueChange[] {
-    const cellsWithKnownValues = block.cells.filter((cell) => cell.hasKnownValue);
+  static solveForCell(targetGrid: Grid, cell: Cell): CellValueChange[] {
     const rv: CellValueChange[] = [];
-    cellsWithKnownValues.forEach((cell) => {
-      rv.push(
-        ...block.cells
-          .filter(
-            (bc) => !Helpers.locationsMatch(bc.location, cell.location) && bc.potentialValues.includes(cell.value),
-          )
-          .map<CellValueChange>((bc) => {
-            return {
-              location: { ...bc.location },
-              valuesToRemove: [cell.value],
-            };
-          }),
-      );
-    });
+    const intersectingBlocks = IntersectingCells.fromGridLocation(targetGrid, cell.location);
+
+    rv.push(
+      ...intersectingBlocks.cells
+        .filter((bc) => !Helpers.locationsMatch(bc.location, cell.location) && bc.potentialValues.includes(cell.value))
+        .map<CellValueChange>((bc) => {
+          return {
+            source: 'NakedSinglesSolver',
+            location: { ...bc.location },
+            valuesToRemove: [cell.value],
+          };
+        }),
+    );
+
     return rv;
   }
 }

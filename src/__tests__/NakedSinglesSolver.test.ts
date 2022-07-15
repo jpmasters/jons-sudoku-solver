@@ -1,26 +1,54 @@
-import { Cell } from '../Cell';
-import { CellCollection } from '../CellCollection';
-import { CellValueChange } from '../Grid';
+import { Grid } from '../Grid';
 import { NakedSinglesSolver } from '../solvers/NakedSinglesSolver';
+import { CellValueChange } from '../ValueTypes';
+import { easyTestPuzzle1 } from './puzzles.test';
 
-test('findCollapsedValues works', () => {
-  const cc: CellCollection = new CellCollection([
-    new Cell({ row: 1, column: 3 }, [1, 3]),
-    new Cell({ row: 2, column: 3 }, [3, 6, 8, 9]),
-    new Cell({ row: 3, column: 3 }, [1, 3, 6, 8, 9]),
-    new Cell({ row: 4, column: 3 }, [7]),
-    new Cell({ row: 5, column: 3 }, [4, 7, 9]),
-    new Cell({ row: 6, column: 3 }, [5, 7, 9]),
-    new Cell({ row: 7, column: 3 }, [2, 3, 8]),
-    new Cell({ row: 8, column: 3 }, [1, 2, 8]),
-    new Cell({ row: 9, column: 3 }, [2, 3, 8]),
-  ]);
+test('solveForCell() works', () => {
+  const targetGrid = Grid.fromGrid(easyTestPuzzle1);
 
   const expected: CellValueChange[] = [
-    { location: { row: 5, column: 3 }, valuesToRemove: [7] },
-    { location: { row: 6, column: 3 }, valuesToRemove: [7] },
+    // row
+    { source: "NakedSinglesSolver", location: { row: 1, column: 1 }, valuesToRemove: [2] },
+    { source: "NakedSinglesSolver", location: { row: 1, column: 2 }, valuesToRemove: [2] },
+    { source: "NakedSinglesSolver", location: { row: 1, column: 3 }, valuesToRemove: [2] },
+    { source: "NakedSinglesSolver", location: { row: 1, column: 6 }, valuesToRemove: [2] },
+    { source: "NakedSinglesSolver", location: { row: 1, column: 8 }, valuesToRemove: [2] },
+    // block
+    { source: "NakedSinglesSolver", location: { row: 2, column: 4 }, valuesToRemove: [2] },
+    { source: "NakedSinglesSolver", location: { row: 2, column: 6 }, valuesToRemove: [2] },
+    { source: "NakedSinglesSolver", location: { row: 3, column: 4 }, valuesToRemove: [2] },
+    { source: "NakedSinglesSolver", location: { row: 3, column: 5 }, valuesToRemove: [2] },
+    // column
+    { source: "NakedSinglesSolver", location: { row: 6, column: 4 }, valuesToRemove: [2] },
+    { source: "NakedSinglesSolver", location: { row: 8, column: 4 }, valuesToRemove: [2] },
+    { source: "NakedSinglesSolver", location: { row: 9, column: 4 }, valuesToRemove: [2] },
   ];
 
-  const diffs = NakedSinglesSolver.solveForBlock(cc);
+  const diffs = NakedSinglesSolver.solveForCell(targetGrid, targetGrid.cellAtLocation({ row: 1, column: 4 }));
+  expect(diffs).toEqual(expected);
+});
+
+test('solve() solves only the first cell it encounters', () => {
+  const targetGrid = Grid.fromGrid(easyTestPuzzle1);
+
+  const expected: CellValueChange[] = [
+    // row
+    { source: "NakedSinglesSolver", location: { row: 1, column: 1 }, valuesToRemove: [2] },
+    { source: "NakedSinglesSolver", location: { row: 1, column: 2 }, valuesToRemove: [2] },
+    { source: "NakedSinglesSolver", location: { row: 1, column: 3 }, valuesToRemove: [2] },
+    { source: "NakedSinglesSolver", location: { row: 1, column: 6 }, valuesToRemove: [2] },
+    { source: "NakedSinglesSolver", location: { row: 1, column: 8 }, valuesToRemove: [2] },
+    // block
+    { source: "NakedSinglesSolver", location: { row: 2, column: 4 }, valuesToRemove: [2] },
+    { source: "NakedSinglesSolver", location: { row: 2, column: 6 }, valuesToRemove: [2] },
+    { source: "NakedSinglesSolver", location: { row: 3, column: 4 }, valuesToRemove: [2] },
+    { source: "NakedSinglesSolver", location: { row: 3, column: 5 }, valuesToRemove: [2] },
+    // column
+    { source: "NakedSinglesSolver", location: { row: 6, column: 4 }, valuesToRemove: [2] },
+    { source: "NakedSinglesSolver", location: { row: 8, column: 4 }, valuesToRemove: [2] },
+    { source: "NakedSinglesSolver", location: { row: 9, column: 4 }, valuesToRemove: [2] },
+  ];
+
+  const diffs = NakedSinglesSolver.solve(targetGrid);
   expect(diffs).toEqual(expected);
 });

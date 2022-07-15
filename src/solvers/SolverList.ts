@@ -1,4 +1,4 @@
-import { Grid, CellValueChange } from '../Grid';
+import { Grid } from '../Grid';
 import { SudokuSolverStrategy } from '../SudokuSolverOptions';
 import { NakedSinglesSolver } from './NakedSinglesSolver';
 import { HiddenPairsSolver } from './HiddenPairsSolver';
@@ -9,6 +9,7 @@ import { NakedTriplesSolver } from './NakedTriplesSolver';
 import { NakedQuadsSolver } from './NakedQuadsSolver';
 import { HiddenTriplesSolver } from './HiddenTriplesSolver';
 import { HiddenQuadsSolver } from './HiddenQuadsSolver';
+import { CellValueChange } from '../ValueTypes';
 
 /**
  * Implements a class that keeps all of the solvers in one place to make it easier to work with them.

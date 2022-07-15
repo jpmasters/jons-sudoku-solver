@@ -1,7 +1,7 @@
 import { Cell } from '../Cell';
 import { CellCollection } from '../CellCollection';
-import { CellValueChange } from '../Grid';
 import { HiddenSinglesSolver } from '../solvers/HiddenSinglesSolver';
+import { CellValueChange } from '../ValueTypes';
 
 test('findSingleValues works', () => {
   const cc: CellCollection = new CellCollection([

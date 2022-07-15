@@ -1,7 +1,7 @@
 import { Cell } from '../Cell';
 import { CellCollection } from '../CellCollection';
-import { CellValueChange } from '../Grid';
 import { PointingPairsSolver } from '../solvers/PointingPairsSolver';
+import { CellValueChange } from '../ValueTypes';
 
 test('Pointing Pairs found in a row', () => {
   const block: CellCollection = new CellCollection([

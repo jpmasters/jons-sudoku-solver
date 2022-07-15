@@ -1,7 +1,7 @@
 import { CellCollection } from '../CellCollection';
-import { Grid, CellValueChange } from '../Grid';
+import { Grid } from '../Grid';
 import { Helpers } from '../Helpers';
-import { GridLocation, SudokuAllPossibleValues } from '../ValueTypes';
+import { CellValueChange, GridLocation, SudokuAllPossibleValues } from '../ValueTypes';
 import { ReducedValues, SolverHelpers } from './SolverHelpers';
 
 export class PointingPairsSolver {

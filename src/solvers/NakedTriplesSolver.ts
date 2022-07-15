@@ -1,5 +1,5 @@
-import { CellValueChange, Grid } from '../Grid';
-import { SudokuAllPossibleValues, ValueComboType } from '../ValueTypes';
+import { Grid } from '../Grid';
+import { CellValueChange, SudokuAllPossibleValues, ValueComboType } from '../ValueTypes';
 import { SolverHelpers } from './SolverHelpers';
 
 /**
