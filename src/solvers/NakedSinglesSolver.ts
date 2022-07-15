@@ -12,10 +12,10 @@ export class NakedSinglesSolver {
    * @returns An array of changes to apply to the grid to solve it.
    */
   static solve(targetGrid: Grid): CellValueChange[] {
-    let rv: CellValueChange[] = [];
+    const rv: CellValueChange[] = [];
     const cellsWithKnownValues = targetGrid.cells.filter((cell) => cell.hasKnownValue);
 
-    for (let nextKnownCell of cellsWithKnownValues) {
+    for (const nextKnownCell of cellsWithKnownValues) {
       rv.push(...NakedSinglesSolver.solveForCell(targetGrid, nextKnownCell));
       if (rv.length) break;
     }
