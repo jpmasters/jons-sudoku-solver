@@ -2,8 +2,15 @@ import { CellCollection } from '../CellCollection';
 import { Grid } from '../Grid';
 import { SudokuAllPossibleValues, GridLocation, SudokuPossibleValue, CellValueChange } from '../ValueTypes';
 import { ReducedValues, SolverHelpers } from './SolverHelpers';
-
+/**
+ * Implements a class that deals with the case where only one cell in a row, column or block holds a value
+ * but that cell also holds additional potential values. The solver will create changes that remove all the
+ * other potentials from that cell.
+ */
 export class HiddenSinglesSolver {
+  /**
+   * The source of changes provided to callers.
+   */
   static source: string = 'HiddenSinglesSolver';
 
   /**
@@ -31,6 +38,7 @@ export class HiddenSinglesSolver {
   /**
    * Searches a given Row, Column or Block for cells where its value doesn't appear
    * in any of the other cells implying that it should have that value.
+   * TODO: does this code return changes with empty valuesToRemove?
    * @param block A reference to a row, column or block that holds 9 unique values.
    * @returns An array of changes that can be applied back to the grid.
    */
