@@ -371,7 +371,7 @@ export class SolverHelpers {
       });
 
     // find row / column cells outside the block / row intersection
-    const changes: CellValueChange[] = (outside == 'line' ? blockCells.cells : rowOrColumnCells.cells)
+    const changes: CellValueChange[] = (outside === 'line' ? blockCells.cells : rowOrColumnCells.cells)
       .filter((rcCell) => {
         return !intersectingBlockCells.some((c) => Helpers.locationsMatch(c.location, rcCell.location));
       })
