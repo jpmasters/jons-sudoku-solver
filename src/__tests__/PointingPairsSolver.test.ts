@@ -33,7 +33,7 @@ test('Pointing Pairs found in a row', () => {
     { source: 'PointingPairsSolver', location: { row: 8, column: 6 }, valuesToRemove: [6] },
   ];
 
-  const diffs = PointingPairsSolver.solveForBlockAndRow(block, row, 'row');
+  const diffs = PointingPairsSolver.solveForBlockAndRow(block, row);
   expect(diffs).toEqual(expected);
 });
 
@@ -67,6 +67,42 @@ test('Pointing Pairs found in a column', () => {
     { source: 'PointingPairsSolver', location: { row: 8, column: 4 }, valuesToRemove: [6] },
   ];
 
-  const diffs = PointingPairsSolver.solveForBlockAndRow(block, column, 'column');
+  const diffs = PointingPairsSolver.solveForBlockAndRow(block, column);
+  expect(diffs).toEqual(expected);
+});
+
+test('Pointing Pairs works in sudoku.org.uk example', () => {
+  const block: CellCollection = new CellCollection([
+    new Cell({ row: 7, column: 4 }, [3, 4, 8, 9]),
+    new Cell({ row: 7, column: 5 }, [4, 8, 9]),
+    new Cell({ row: 7, column: 6 }, [3, 9]),
+    new Cell({ row: 8, column: 4 }, [6]),
+    new Cell({ row: 8, column: 5 }, [1]),
+    new Cell({ row: 8, column: 6 }, [2]),
+    new Cell({ row: 9, column: 4 }, [7]),
+    new Cell({ row: 9, column: 5 }, [4, 9]),
+    new Cell({ row: 9, column: 6 }, [5]),
+  ]);
+
+  const row: CellCollection = new CellCollection([
+    new Cell({ row: 7, column: 1 }, [2, 3, 4, 5, 6]),
+    new Cell({ row: 7, column: 2 }, [1]),
+    new Cell({ row: 7, column: 3 }, [2, 4, 6]),
+    new Cell({ row: 7, column: 4 }, [3, 4, 8, 9]),
+    new Cell({ row: 7, column: 5 }, [4, 8, 9]),
+    new Cell({ row: 7, column: 6 }, [3, 9]),
+    new Cell({ row: 7, column: 7 }, [3, 7, 9]),
+    new Cell({ row: 7, column: 8 }, [3, 5, 7, 9]),
+    new Cell({ row: 7, column: 9 }, [2, 3, 5, 7]),
+  ]);
+
+  const expected: CellValueChange[] = [
+    { source: 'PointingPairsSolver', location: { row: 7, column: 1 }, valuesToRemove: [3] },
+    { source: 'PointingPairsSolver', location: { row: 7, column: 7 }, valuesToRemove: [3] },
+    { source: 'PointingPairsSolver', location: { row: 7, column: 8 }, valuesToRemove: [3] },
+    { source: 'PointingPairsSolver', location: { row: 7, column: 9 }, valuesToRemove: [3] },
+  ];
+
+  const diffs = PointingPairsSolver.solveForBlockAndRow(block, row);
   expect(diffs).toEqual(expected);
 });

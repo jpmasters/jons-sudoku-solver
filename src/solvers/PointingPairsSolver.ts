@@ -1,7 +1,8 @@
+import { Cell } from '../Cell';
 import { CellCollection } from '../CellCollection';
 import { Grid } from '../Grid';
 import { Helpers } from '../Helpers';
-import { CellValueChange, GridLocation, SudokuAllPossibleValues } from '../ValueTypes';
+import { CellValueChange, GridLocation, SudokuAllPossibleValues, SudokuPossibleValue } from '../ValueTypes';
 import { ReducedValues, SolverHelpers } from './SolverHelpers';
 
 export class PointingPairsSolver {
@@ -18,22 +19,32 @@ export class PointingPairsSolver {
    */
   static solve(targetGrid: Grid): CellValueChange[] {
     const rv: CellValueChange[] = [];
-    SudokuAllPossibleValues.map((b) => targetGrid.block(b)).forEach((block) => {
-      ['row', 'column'].forEach((rc) => {
-        const rowOrColumn: 'row' | 'column' = rc as 'row' | 'column';
+
+    // iterate through each block in the puzzle
+    SudokuAllPossibleValues.map((b) => targetGrid.block(b)).some((block) => {
+      // search both rows and columns in the block...
+      ['row', 'column'].some((rc) => {
+        const rowOrColumn = rc as 'row' | 'column';
+
         block.cells
+          // ...looking for rows and cells that intersect the block
           .filter((cell, i, arr) => {
             return arr.findIndex((c) => cell.location[rowOrColumn] === c.location[rowOrColumn]) === i;
           })
-          .forEach((cell) => {
-            const changes = PointingPairsSolver.solveForBlockAndRow(
-              block,
-              targetGrid.row(cell.location[rowOrColumn]),
-              rowOrColumn,
-            );
-            rv.push(...changes);
+          .some((cell) => {
+            // call the solver for the block row / column combo
+            rv.push(...PointingPairsSolver.solveForBlockAndRow(block, targetGrid.row(cell.location[rowOrColumn])));
+
+            // exit early if we have something to return
+            return rv.length;
           });
+
+        // exit early if we have something to return
+        return rv.length;
       });
+
+      // exit early if we have something to return
+      return rv.length;
     });
 
     return rv;
@@ -43,36 +54,61 @@ export class PointingPairsSolver {
    * Solves for pointing pairs in the provided block and row.
    * @param blockCells The cells in the nonet block to check for candidates.
    * @param rowOrColumnCells The cells in the row or column to check for candidates.
-   * @param rowOrColumn If 'row' it will check for rows and if 'column' it will check for columns.
    * @returns An array of CellValueChanges to apply to the grid.
    */
-  static solveForBlockAndRow(
-    blockCells: CellCollection,
-    rowOrColumnCells: CellCollection,
-    rowOrColumn: 'row' | 'column',
-  ): CellValueChange[] {
-    const reducedCells: ReducedValues = SolverHelpers.reduceCells(blockCells);
-    const rv: CellValueChange[] = SudokuAllPossibleValues.filter((v) => reducedCells[v]?.length === 2)
-      .filter((v) => {
-        const locs: GridLocation[] = reducedCells[v] as GridLocation[];
-        return locs[0][rowOrColumn] === locs[1][rowOrColumn];
-      })
-      .map<CellValueChange[]>((v) => {
-        const locs: GridLocation[] = reducedCells[v] as GridLocation[];
-        return rowOrColumnCells.cells
-          .filter((cell) => cell.location[rowOrColumn] === locs[0][rowOrColumn])
-          .filter((cell) => !Helpers.locationsMatch(cell.location, locs[0]))
-          .filter((cell) => !Helpers.locationsMatch(cell.location, locs[1]))
-          .map<CellValueChange>((cell) => {
-            return {
-              source: PointingPairsSolver.source,
-              location: { ...cell.location },
-              valuesToRemove: cell.potentialValues.includes(v) ? [v] : [],
-            };
-          });
-      })
+  static solveForBlockAndRow(blockCells: CellCollection, rowOrColumnCells: CellCollection): CellValueChange[] {
+    const isRow: boolean = rowOrColumnCells.cells.every((c, _, a) => c.location.row === a[0].location.row);
+    const rowOrColumnNumber = isRow
+      ? rowOrColumnCells.cells[0].location.row
+      : rowOrColumnCells.cells[0].location.column;
+
+    // find the relevant block cells
+    const intersectingBlockCells: Cell[] = blockCells.cells.filter((c) =>
+      isRow ? c.location.row === rowOrColumnNumber : c.location.column === rowOrColumnNumber,
+    );
+
+    // find block cells outside the block / row intersection
+    const outsideBlockCells: Cell[] = blockCells.cells.filter((rcCell) => {
+      return !intersectingBlockCells.some((c) => Helpers.locationsMatch(c.location, rcCell.location));
+    });
+
+    const valuesToRemove = intersectingBlockCells
+      .map<SudokuPossibleValue[]>((c) => c.potentialValues)
       .flat()
-      .filter((vc) => vc.valuesToRemove.length);
-    return rv;
+      // we're looking for >1 instance of a value
+      .filter((v, i, a) => a.findIndex((v2) => v === v2) !== i)
+      // now de-duplicate the result
+      .filter((v, i, a) => a.indexOf(v) === i)
+      .sort((a, b) => a - b)
+
+      // if the valuesToRemove appear in the row or column but outside of the
+      // block and only appear in the part of the block that intersects the
+      // row or column then they can be removed from the row or column
+
+      // not interested in any valuesToRemove that appear in outsideRowCells
+      .filter((v) => {
+        return !outsideBlockCells
+          .map((c) => c.potentialValues)
+          .flat()
+          .includes(v);
+      });
+
+    // find row / column cells outside the block / row intersection
+    const changes: CellValueChange[] = rowOrColumnCells.cells
+      .filter((rcCell) => {
+        return !intersectingBlockCells.some((c) => Helpers.locationsMatch(c.location, rcCell.location));
+      })
+      // create a corresponding change record
+      .map<CellValueChange>((cell) => {
+        return {
+          source: PointingPairsSolver.source,
+          location: { ...cell.location },
+          valuesToRemove: valuesToRemove.filter((v) => cell.potentialValues.includes(v)),
+        };
+      })
+      // filter out anything where there is no change to make
+      .filter((cvc) => cvc.valuesToRemove.length);
+
+    return changes;
   }
 }
