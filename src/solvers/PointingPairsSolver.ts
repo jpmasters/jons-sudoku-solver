@@ -2,9 +2,12 @@ import { Cell } from '../Cell';
 import { CellCollection } from '../CellCollection';
 import { Grid } from '../Grid';
 import { Helpers } from '../Helpers';
-import { CellValueChange, GridLocation, SudokuAllPossibleValues, SudokuPossibleValue } from '../ValueTypes';
-import { ReducedValues, SolverHelpers } from './SolverHelpers';
+import { CellValueChange, SudokuAllPossibleValues, SudokuPossibleValue } from '../ValueTypes';
 
+/**
+ * Implements an pointing pairs solver strategy.
+ * @see <a href="https://sudoku.org.uk/SolvingTechniques/IntersectionRemoval.asp">Sudoku.org.uk</a>
+ */
 export class PointingPairsSolver {
   /**
    * The name of the solver to insert into change information.
