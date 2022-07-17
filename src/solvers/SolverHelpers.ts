@@ -1,7 +1,13 @@
 import { Grid } from '../Grid';
 import { Cell } from '../Cell';
 import { CellCollection } from '../CellCollection';
-import { CellValueChange, GridLocation, SudokuPossibleValue, ValueComboType } from '../ValueTypes';
+import {
+  CellValueChange,
+  GridLocation,
+  SudokuAllPossibleValues,
+  SudokuPossibleValue,
+  ValueComboType,
+} from '../ValueTypes';
 import { Helpers } from '../Helpers';
 
 /**
@@ -206,6 +212,30 @@ export class SolverHelpers {
 
       return false;
     });
+
+    return rv;
+  }
+
+  /**
+   * Searches the targetGrid for naked pairs, truples or quads and returns a list of potentials that
+   * need to be updated to the caller.
+   * @param targetGrid The grid to solve.
+   * @param comboType A ValueComboType describing whether we're looking for Pairs, Triples or Quads.
+   * @param source The name of the solver that will be passed as partof the changes array.
+   * @returns An array of CellValueChange objects describing the changes to make.
+   */
+  static solveNakedMultiples(targetGrid: Grid, comboType: ValueComboType, source: string): CellValueChange[] {
+    const rv: CellValueChange[] = [];
+
+    [targetGrid.row.bind(targetGrid), targetGrid.column.bind(targetGrid), targetGrid.block.bind(targetGrid)].some(
+      (fn) => {
+        return SudokuAllPossibleValues.some((rcb) => {
+          const cvc = SolverHelpers.processNakedCellsInBlock(fn(rcb), comboType, source);
+          rv.push(...cvc);
+          return cvc.length;
+        });
+      },
+    );
 
     return rv;
   }

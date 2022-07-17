@@ -19,35 +19,6 @@ export class NakedTriplesSolver {
    * @returns An array of changes to apply to the grid to solve it.
    */
   static solve(targetGrid: Grid): CellValueChange[] {
-    const rv: CellValueChange[] = [];
-
-    for (const rcb of SudokuAllPossibleValues) {
-      rv.push(
-        ...SolverHelpers.processNakedCellsInBlock(
-          targetGrid.row(rcb),
-          ValueComboType.Triple,
-          NakedTriplesSolver.source,
-        ),
-      );
-      if (rv.length) break;
-      rv.push(
-        ...SolverHelpers.processNakedCellsInBlock(
-          targetGrid.column(rcb),
-          ValueComboType.Triple,
-          NakedTriplesSolver.source,
-        ),
-      );
-      if (rv.length) break;
-      rv.push(
-        ...SolverHelpers.processNakedCellsInBlock(
-          targetGrid.block(rcb),
-          ValueComboType.Triple,
-          NakedTriplesSolver.source,
-        ),
-      );
-      if (rv.length) break;
-    }
-
-    return rv;
+    return SolverHelpers.solveNakedMultiples(targetGrid, ValueComboType.Triple, NakedTriplesSolver.source);
   }
 }
