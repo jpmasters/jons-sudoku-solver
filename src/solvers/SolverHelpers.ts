@@ -228,18 +228,24 @@ export class SolverHelpers {
   /**
    * Searches the targetGrid for naked pairs, truples or quads and returns a list of potentials that
    * need to be updated to the caller.
+   * @param helperFn A function to call that will find the changes needed to solve a basic cell combination.
    * @param targetGrid The grid to solve.
    * @param comboType A ValueComboType describing whether we're looking for Pairs, Triples or Quads.
    * @param source The name of the solver that will be passed as part of the changes array.
    * @returns An array of CellValueChange objects describing the changes to make.
    */
-  static solveNakedMultiples(targetGrid: Grid, comboType: ValueComboType, source: string): CellValueChange[] {
+  static solveSimpleMultiples(
+    helperFn: (targetGrid: CellCollection, comboType: ValueComboType, source: string) => CellValueChange[],
+    targetGrid: Grid,
+    comboType: ValueComboType,
+    source: string,
+  ): CellValueChange[] {
     const rv: CellValueChange[] = [];
 
     [targetGrid.row.bind(targetGrid), targetGrid.column.bind(targetGrid), targetGrid.block.bind(targetGrid)].some(
       (fn) => {
         return SudokuAllPossibleValues.some((rcb) => {
-          const cvc = SolverHelpers.processNakedCellsInBlock(fn(rcb), comboType, source);
+          const cvc = helperFn(fn(rcb), comboType, source);
           rv.push(...cvc);
           return cvc.length;
         });
@@ -247,6 +253,18 @@ export class SolverHelpers {
     );
 
     return rv;
+  }
+
+  /**
+   * Searches the targetGrid for naked pairs, truples or quads and returns a list of potentials that
+   * need to be updated to the caller.
+   * @param targetGrid The grid to solve.
+   * @param comboType A ValueComboType describing whether we're looking for Pairs, Triples or Quads.
+   * @param source The name of the solver that will be passed as part of the changes array.
+   * @returns An array of CellValueChange objects describing the changes to make.
+   */
+  static solveNakedMultiples(targetGrid: Grid, comboType: ValueComboType, source: string): CellValueChange[] {
+    return SolverHelpers.solveSimpleMultiples(SolverHelpers.processNakedCellsInBlock, targetGrid, comboType, source);
   }
 
   /**
@@ -258,18 +276,6 @@ export class SolverHelpers {
    * @returns An array of CellValueChange objects describing the changes to make.
    */
   static solveHiddenMultiples(targetGrid: Grid, comboType: ValueComboType, source: string): CellValueChange[] {
-    const rv: CellValueChange[] = [];
-
-    [targetGrid.row.bind(targetGrid), targetGrid.column.bind(targetGrid), targetGrid.block.bind(targetGrid)].some(
-      (fn) => {
-        return SudokuAllPossibleValues.some((rcb) => {
-          const cvc = SolverHelpers.processHiddenCellsInBlock(fn(rcb), comboType, source);
-          rv.push(...cvc);
-          return cvc.length;
-        });
-      },
-    );
-
-    return rv;
+    return SolverHelpers.solveSimpleMultiples(SolverHelpers.processHiddenCellsInBlock, targetGrid, comboType, source);
   }
 }
