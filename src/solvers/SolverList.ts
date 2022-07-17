@@ -10,6 +10,7 @@ import { NakedQuadsSolver } from './NakedQuadsSolver';
 import { HiddenTriplesSolver } from './HiddenTriplesSolver';
 import { HiddenQuadsSolver } from './HiddenQuadsSolver';
 import { CellValueChange } from '../ValueTypes';
+import { IntersectionRemovalSolver } from './IntersectionRemovalSolver';
 
 /**
  * Implements a class that keeps all of the solvers in one place to make it easier to work with them.
@@ -29,5 +30,6 @@ export class SolverList {
       { order: 7, strategy: SudokuSolverStrategy.NakedQuads, solve: NakedQuadsSolver.solve },
       { order: 8, strategy: SudokuSolverStrategy.HiddenQuads, solve: HiddenQuadsSolver.solve },
       { order: 9, strategy: SudokuSolverStrategy.PointingPairs, solve: PointingPairsSolver.solve },
+      { order: 10, strategy: SudokuSolverStrategy.IntersectionRemoval, solve: IntersectionRemovalSolver.solve },
     ];
 }

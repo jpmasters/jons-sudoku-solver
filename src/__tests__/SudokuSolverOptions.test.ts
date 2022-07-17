@@ -15,6 +15,7 @@ test('SudokuSolverOptions provides the correct defaults if not provided', () => 
       SudokuSolverStrategy.NakedQuads,
       SudokuSolverStrategy.HiddenQuads,
       SudokuSolverStrategy.PointingPairs,
+      SudokuSolverStrategy.IntersectionRemoval,
     ],
   };
 
@@ -36,6 +37,7 @@ test('SudokuSolverOptions includeBacktracking overridden to false', () => {
       SudokuSolverStrategy.NakedQuads,
       SudokuSolverStrategy.HiddenQuads,
       SudokuSolverStrategy.PointingPairs,
+      SudokuSolverStrategy.IntersectionRemoval,
     ],
   };
 
@@ -57,6 +59,7 @@ test('SudokuSolverOptions includeBacktracking overridden to true', () => {
       SudokuSolverStrategy.NakedQuads,
       SudokuSolverStrategy.HiddenQuads,
       SudokuSolverStrategy.PointingPairs,
+      SudokuSolverStrategy.IntersectionRemoval,
     ],
   };
 

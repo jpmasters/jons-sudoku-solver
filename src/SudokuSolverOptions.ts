@@ -12,6 +12,7 @@ export enum SudokuSolverStrategy {
   NakedQuads,
   HiddenQuads,
   PointingPairs,
+  IntersectionRemoval,
 }
 
 /**
