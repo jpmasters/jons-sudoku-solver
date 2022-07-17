@@ -323,4 +323,69 @@ export class SolverHelpers {
 
     return rv;
   }
+
+  /**
+   * Implements the Intersection Removal solver for a given block and row / column.
+   * @param blockCells The block of cells we're checking for intersections.
+   * @param rowOrColumnCells The row or column we're checking for intersections.
+   * @param outside 'line' or 'box'. If 'line' values will be removed from the intersecting line.
+   * if 'block' they will be removed from the block.
+   * @param source The name of the source solver.
+   * @returns An array of CellValueChange objects describing the changes to apply to targetGrid.
+   */
+  static solveBoxLineReductionForBlockAndRow(
+    blockCells: CellCollection,
+    rowOrColumnCells: CellCollection,
+    outside: 'line' | 'box',
+    source: string,
+  ): CellValueChange[] {
+    const isRow: boolean = rowOrColumnCells.cells.every((c, _, a) => c.location.row === a[0].location.row);
+    const rowOrColumnNumber = isRow
+      ? rowOrColumnCells.cells[0].location.row
+      : rowOrColumnCells.cells[0].location.column;
+
+    // find the relevant block cells
+    const intersectingBlockCells: Cell[] = blockCells.cells.filter((c) =>
+      isRow ? c.location.row === rowOrColumnNumber : c.location.column === rowOrColumnNumber,
+    );
+
+    // find row / column cells outside the block / row intersection
+    const outsideCells: Cell[] = (outside === 'line' ? rowOrColumnCells : blockCells).cells.filter((rcCell) => {
+      return !intersectingBlockCells.some((c) => Helpers.locationsMatch(c.location, rcCell.location));
+    });
+
+    const valuesToRemove = intersectingBlockCells
+      .map<SudokuPossibleValue[]>((c) => c.potentialValues)
+      .flat()
+      // we're looking for >1 instance of a value
+      .filter((v, i, a) => a.findIndex((v2) => v === v2) !== i)
+      // now de-duplicate the result
+      .filter((v, i, a) => a.indexOf(v) === i)
+      .sort((a, b) => a - b)
+      // not interested in any valuesToRemove that appear in outsideCells
+      .filter((v) => {
+        return !outsideCells
+          .map((c) => c.potentialValues)
+          .flat()
+          .includes(v);
+      });
+
+    // find row / column cells outside the block / row intersection
+    const changes: CellValueChange[] = (outside == 'line' ? blockCells.cells : rowOrColumnCells.cells)
+      .filter((rcCell) => {
+        return !intersectingBlockCells.some((c) => Helpers.locationsMatch(c.location, rcCell.location));
+      })
+      // create a corresponding change record
+      .map<CellValueChange>((cell) => {
+        return {
+          source,
+          location: { ...cell.location },
+          valuesToRemove: valuesToRemove.filter((v) => cell.potentialValues.includes(v)),
+        };
+      })
+      // filter out anything where there is no change to make
+      .filter((cvc) => cvc.valuesToRemove.length);
+
+    return changes;
+  }
 }
