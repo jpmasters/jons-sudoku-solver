@@ -143,7 +143,7 @@ export class SolverHelpers {
       return new Set(cells.map((c) => c.potentialValues).flat()).size === comboType;
     })
       // for each of the triples we found
-      .forEach((nakedGroup) => {
+      .some((nakedGroup) => {
         rv.push(
           ...block.cells
             .filter((blockCell) => {
@@ -163,6 +163,8 @@ export class SolverHelpers {
             // finally filter out empty changes
             .filter((cvc) => cvc.valuesToRemove.length),
         );
+
+        return rv.length;
       });
 
     return rv;

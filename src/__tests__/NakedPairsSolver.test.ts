@@ -4,6 +4,28 @@ import { CellValueChange, ValueComboType } from '../ValueTypes';
 import { SolverHelpers } from '../solvers/SolverHelpers';
 import { NakedPairsSolver } from '../solvers/NakedPairsSolver';
 
+interface CustomMatchers<R = unknown> {
+  toEqualEitherOr(option1: object, option2: object): R;
+}
+
+declare global {
+  namespace jest {
+    interface Expect extends CustomMatchers {}
+    interface Matchers<R> extends CustomMatchers<R> {}
+    interface InverseAsymmetricMatchers extends CustomMatchers {}
+  }
+}
+
+expect.extend({
+  toEqualEitherOr(received, option1, option2) {
+    const pass: boolean = this.equals(received, option1) || this.equals(received, option2);
+    return {
+      pass,
+      message: () => (pass ? '' : 'Neither object matches the received object.'),
+    };
+  },
+});
+
 test('findObviousPairs works', () => {
   const cc: CellCollection = new CellCollection([
     new Cell({ row: 1, column: 1 }, [1, 3, 4]),
@@ -53,7 +75,7 @@ test('findObviousPairs pairs must match values', () => {
   expect(diffs).toEqual(expected);
 });
 
-test('findObviousPairs find multiple pairs', () => {
+test('findObviousPairs find multiple pairs, but return changes for only one', () => {
   const cc: CellCollection = new CellCollection([
     new Cell({ row: 4, column: 1 }, [1, 8]),
     new Cell({ row: 4, column: 2 }, [2, 4]),
@@ -66,12 +88,7 @@ test('findObviousPairs find multiple pairs', () => {
     new Cell({ row: 4, column: 9 }, [5]),
   ]);
 
-  const expected: CellValueChange[] = [
-    {
-      source: 'NakedPairsSolver',
-      location: { row: 4, column: 3 },
-      valuesToRemove: [4],
-    },
+  const expected_1: CellValueChange[] = [
     {
       source: 'NakedPairsSolver',
       location: { row: 4, column: 4 },
@@ -84,8 +101,16 @@ test('findObviousPairs find multiple pairs', () => {
     },
   ];
 
+  const expected_2: CellValueChange[] = [
+    {
+      source: 'NakedPairsSolver',
+      location: { row: 4, column: 3 },
+      valuesToRemove: [4],
+    },
+  ];
+
   const diffs = SolverHelpers.processNakedCellsInBlock(cc, ValueComboType.Pair, NakedPairsSolver.source);
-  expect(diffs).toEqual(expected);
+  expect(diffs).toEqualEitherOr(expected_1, expected_2);
 });
 
 test('solve naked pairs works for sudoku.org.uk examples', () => {
@@ -149,6 +174,10 @@ test('solve naked pairs works for sudoku.org.uk examples', () => {
     },
   ];
 
-  expect(SolverHelpers.processNakedCellsInBlock(row_8, ValueComboType.Pair, NakedPairsSolver.source)).toEqual(expected_row_8);
-  expect(SolverHelpers.processNakedCellsInBlock(block_7, ValueComboType.Pair, NakedPairsSolver.source)).toEqual(expected_block_7);
+  expect(SolverHelpers.processNakedCellsInBlock(row_8, ValueComboType.Pair, NakedPairsSolver.source)).toEqual(
+    expected_row_8,
+  );
+  expect(SolverHelpers.processNakedCellsInBlock(block_7, ValueComboType.Pair, NakedPairsSolver.source)).toEqual(
+    expected_block_7,
+  );
 });
