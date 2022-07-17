@@ -2,6 +2,7 @@ import { Cell } from '../Cell';
 import { CellCollection } from '../CellCollection';
 import { CellValueChange, ValueComboType } from '../ValueTypes';
 import { SolverHelpers } from '../solvers/SolverHelpers';
+import { HiddenTriplesSolver } from '../solvers/HiddenTriplesSolver';
 
 /**
  * Test data from https://sudoku.org.uk/SolvingTechniques/HiddenTriples.asp
@@ -20,10 +21,12 @@ test('Hidden Triple Solver - solve for a (123) (123) (12) column', () => {
   ]);
 
   const expected: CellValueChange[] = [
-    { location: { row: 4, column: 9 }, valuesToRemove: [2, 5, 7, 8] },
-    { location: { row: 5, column: 9 }, valuesToRemove: [2, 3, 5, 7, 8] },
-    { location: { row: 6, column: 9 }, valuesToRemove: [3, 5, 7] },
+    { source: 'HiddenTriplesSolver', location: { row: 4, column: 9 }, valuesToRemove: [2, 5, 7, 8] },
+    { source: 'HiddenTriplesSolver', location: { row: 5, column: 9 }, valuesToRemove: [2, 3, 5, 7, 8] },
+    { source: 'HiddenTriplesSolver', location: { row: 6, column: 9 }, valuesToRemove: [3, 5, 7] },
   ];
 
-  expect(SolverHelpers.processHiddenCellsInBlock(cc, ValueComboType.Triple)).toEqual(expected);
+  expect(SolverHelpers.processHiddenCellsInBlock(cc, ValueComboType.Triple, HiddenTriplesSolver.source)).toEqual(
+    expected,
+  );
 });

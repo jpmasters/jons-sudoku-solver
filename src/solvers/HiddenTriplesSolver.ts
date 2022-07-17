@@ -8,6 +8,11 @@ import { SolverHelpers } from './SolverHelpers';
  */
 export class HiddenTriplesSolver {
   /**
+   * The source of changes provided to callers.
+   */
+  static source: string = 'HiddenTriplesSolver';
+
+  /**
    * Searches the Grid for hidden triples and if it finds any, returns an
    * array of changes to apply to the target grid.
    * @param targetGrid The grid to solve.
@@ -16,13 +21,21 @@ export class HiddenTriplesSolver {
   static solve(targetGrid: Grid): CellValueChange[] {
     return [
       ...SudokuAllPossibleValues.map((row) =>
-        SolverHelpers.processHiddenCellsInBlock(targetGrid.row(row), ValueComboType.Triple),
+        SolverHelpers.processHiddenCellsInBlock(targetGrid.row(row), ValueComboType.Triple, HiddenTriplesSolver.source),
       ).flat(),
       ...SudokuAllPossibleValues.map((column) =>
-        SolverHelpers.processHiddenCellsInBlock(targetGrid.column(column), ValueComboType.Triple),
+        SolverHelpers.processHiddenCellsInBlock(
+          targetGrid.column(column),
+          ValueComboType.Triple,
+          HiddenTriplesSolver.source,
+        ),
       ).flat(),
       ...SudokuAllPossibleValues.map((block) =>
-        SolverHelpers.processHiddenCellsInBlock(targetGrid.block(block), ValueComboType.Triple),
+        SolverHelpers.processHiddenCellsInBlock(
+          targetGrid.block(block),
+          ValueComboType.Triple,
+          HiddenTriplesSolver.source,
+        ),
       ).flat(),
     ];
   }

@@ -8,6 +8,11 @@ import { SolverHelpers } from './SolverHelpers';
  */
 export class HiddenQuadsSolver {
   /**
+   * The source of changes provided to callers.
+   */
+  static source: string = 'HiddenQuadsSolver';
+
+  /**
    * Searches the Grid for hidden quads and if it finds any, returns an
    * array of changes to apply to the target grid.
    * @param targetGrid The grid to solve.
@@ -16,13 +21,17 @@ export class HiddenQuadsSolver {
   static solve(targetGrid: Grid): CellValueChange[] {
     return [
       ...SudokuAllPossibleValues.map((row) =>
-        SolverHelpers.processHiddenCellsInBlock(targetGrid.row(row), ValueComboType.Quad),
+        SolverHelpers.processHiddenCellsInBlock(targetGrid.row(row), ValueComboType.Quad, HiddenQuadsSolver.source),
       ).flat(),
       ...SudokuAllPossibleValues.map((column) =>
-        SolverHelpers.processHiddenCellsInBlock(targetGrid.column(column), ValueComboType.Quad),
+        SolverHelpers.processHiddenCellsInBlock(
+          targetGrid.column(column),
+          ValueComboType.Quad,
+          HiddenQuadsSolver.source,
+        ),
       ).flat(),
       ...SudokuAllPossibleValues.map((block) =>
-        SolverHelpers.processHiddenCellsInBlock(targetGrid.block(block), ValueComboType.Quad),
+        SolverHelpers.processHiddenCellsInBlock(targetGrid.block(block), ValueComboType.Quad, HiddenQuadsSolver.source),
       ).flat(),
     ];
   }

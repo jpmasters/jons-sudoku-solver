@@ -174,9 +174,15 @@ export class SolverHelpers {
    * Searches a given row, column or block for hidden values and returns an
    * array of objects to remove unneeded potentials in those cells.
    * @param block A reference to a row, column or block to process.
+   * @param groupsOf Whether to serch for pairs, triples, or quads.
+   * @param source The source solver to add to the change messages.
    * @returns An array of GridDifference objects to apply back to the Grid.
    */
-  static processHiddenCellsInBlock(block: CellCollection, groupsOf: SudokuPossibleValue): CellValueChange[] {
+  static processHiddenCellsInBlock(
+    block: CellCollection,
+    groupsOf: SudokuPossibleValue,
+    source: string,
+  ): CellValueChange[] {
     const rv: CellValueChange[] = [];
 
     SolverHelpers.scanBlock(block, groupsOf, (cellsToConsider, blockCells) => {
@@ -204,6 +210,7 @@ export class SolverHelpers {
           ...cellsToConsider
             .map<CellValueChange>((c) => {
               return {
+                source,
                 location: { ...c.location },
                 valuesToRemove: c.potentialValues.filter((v) => !valuesToConsider.includes(v)),
               };
@@ -223,7 +230,7 @@ export class SolverHelpers {
    * need to be updated to the caller.
    * @param targetGrid The grid to solve.
    * @param comboType A ValueComboType describing whether we're looking for Pairs, Triples or Quads.
-   * @param source The name of the solver that will be passed as partof the changes array.
+   * @param source The name of the solver that will be passed as part of the changes array.
    * @returns An array of CellValueChange objects describing the changes to make.
    */
   static solveNakedMultiples(targetGrid: Grid, comboType: ValueComboType, source: string): CellValueChange[] {
@@ -233,6 +240,30 @@ export class SolverHelpers {
       (fn) => {
         return SudokuAllPossibleValues.some((rcb) => {
           const cvc = SolverHelpers.processNakedCellsInBlock(fn(rcb), comboType, source);
+          rv.push(...cvc);
+          return cvc.length;
+        });
+      },
+    );
+
+    return rv;
+  }
+
+  /**
+   * Searches the targetGrid for hidden pairs, truples or quads and returns a list of potentials that
+   * need to be updated to the caller.
+   * @param targetGrid The grid to solve.
+   * @param comboType A ValueComboType describing whether we're looking for Pairs, Triples or Quads.
+   * @param source The name of the solver that will be passed as part of the changes array.
+   * @returns An array of CellValueChange objects describing the changes to make.
+   */
+  static solveHiddenMultiples(targetGrid: Grid, comboType: ValueComboType, source: string): CellValueChange[] {
+    const rv: CellValueChange[] = [];
+
+    [targetGrid.row.bind(targetGrid), targetGrid.column.bind(targetGrid), targetGrid.block.bind(targetGrid)].some(
+      (fn) => {
+        return SudokuAllPossibleValues.some((rcb) => {
+          const cvc = SolverHelpers.processHiddenCellsInBlock(fn(rcb), comboType, source);
           rv.push(...cvc);
           return cvc.length;
         });

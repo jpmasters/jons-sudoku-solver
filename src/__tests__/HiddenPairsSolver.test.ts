@@ -2,6 +2,7 @@ import { CellCollection } from '../CellCollection';
 import { Cell } from '../Cell';
 import { SolverHelpers } from '../solvers/SolverHelpers';
 import { CellValueChange, ValueComboType } from '../ValueTypes';
+import { HiddenPairsSolver } from '../solvers/HiddenPairsSolver';
 
 test('findHiddenPairs works', () => {
   const cc: CellCollection = new CellCollection([
@@ -18,16 +19,18 @@ test('findHiddenPairs works', () => {
 
   const expected: CellValueChange[] = [
     {
+      source: 'HiddenPairsSolver',
       location: { row: 2, column: 3 },
       valuesToRemove: [3, 8],
     },
     {
+      source: 'HiddenPairsSolver',
       location: { row: 3, column: 3 },
       valuesToRemove: [1, 3, 8],
     },
   ];
 
-  const diffs = SolverHelpers.processHiddenCellsInBlock(cc, ValueComboType.Pair);
+  const diffs = SolverHelpers.processHiddenCellsInBlock(cc, ValueComboType.Pair, HiddenPairsSolver.source);
   expect(diffs).toEqual(expected);
 });
 
@@ -47,7 +50,7 @@ test('findHiddenPairs only selects pairs in the same cell!', () => {
   // should return nothing as their are no hidden pairs
   const expected: CellValueChange[] = [];
 
-  const diffs = SolverHelpers.processHiddenCellsInBlock(cc, ValueComboType.Pair);
+  const diffs = SolverHelpers.processHiddenCellsInBlock(cc, ValueComboType.Pair, HiddenPairsSolver.source);
   expect(diffs).toEqual(expected);
 });
 
@@ -67,7 +70,7 @@ test('findHiddenPairs works when there are multiple cells with 2 values', () => 
   // should return nothing as their are no hidden pairs
   const expected: CellValueChange[] = [];
 
-  const diffs = SolverHelpers.processHiddenCellsInBlock(cc, ValueComboType.Pair);
+  const diffs = SolverHelpers.processHiddenCellsInBlock(cc, ValueComboType.Pair, HiddenPairsSolver.source);
   expect(diffs).toEqual(expected);
 });
 
@@ -87,6 +90,6 @@ test('findHiddenPairs works when there are multiple pairs in the block but notin
   // should return nothing as their are no hidden pairs
   const expected: CellValueChange[] = [];
 
-  const diffs = SolverHelpers.processHiddenCellsInBlock(cc, ValueComboType.Pair);
+  const diffs = SolverHelpers.processHiddenCellsInBlock(cc, ValueComboType.Pair, HiddenPairsSolver.source);
   expect(diffs).toEqual(expected);
 });
