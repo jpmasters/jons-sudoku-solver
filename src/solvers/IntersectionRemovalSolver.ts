@@ -2,7 +2,7 @@ import { Cell } from '../Cell';
 import { CellCollection } from '../CellCollection';
 import { Grid } from '../Grid';
 import { Helpers } from '../Helpers';
-import { CellValueChange, SudokuPossibleValue } from '../ValueTypes';
+import { CellValueChange, SudokuAllPossibleValues, SudokuPossibleValue } from '../ValueTypes';
 
 /**
  * Implements an intersection removal solver strategy.
@@ -23,9 +23,42 @@ export class IntersectionRemovalSolver {
    * @returns An array of changes to apply to the grid to solve it.
    */
   static solve(targetGrid: Grid): CellValueChange[] {
-    return [];
+    const rv: CellValueChange[] = [];
+    SudokuAllPossibleValues.map((b) => targetGrid.block(b)).some((block) => {
+      ['row', 'column'].some((rc) => {
+        const rowOrColumn: 'row' | 'column' = rc as 'row' | 'column';
+        block.cells
+          .filter((cell, i, arr) => {
+            return arr.findIndex((c) => cell.location[rowOrColumn] === c.location[rowOrColumn]) === i;
+          })
+          .some((cell) => {
+            const changes = IntersectionRemovalSolver.solveForBlockAndRow(
+              block,
+              targetGrid.row(cell.location[rowOrColumn]),
+            );
+            rv.push(...changes);
+
+            // exit early if we have something to return
+            return rv.length;
+          });
+
+        // exit early if we have something to return
+        return rv.length;
+      });
+
+      // exit early if we have something to return
+      return rv.length;
+    });
+
+    return rv;
   }
 
+  /**
+   * Implements the Intersection Removal solver for a given block and row / column.
+   * @param blockCells The block of cells we're checking for intersections.
+   * @param rowOrColumnCells The row or column we're checking for intersections.
+   * @returns An array of CellValueChange objects describing the changes to apply to targetGrid.
+   */
   static solveForBlockAndRow(blockCells: CellCollection, rowOrColumnCells: CellCollection): CellValueChange[] {
     const isRow: boolean = rowOrColumnCells.cells.every((c, _, a) => c.location.row === a[0].location.row);
     const rowOrColumnNumber = isRow
