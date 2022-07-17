@@ -18,6 +18,7 @@ test('findSingleValues works', () => {
 
   const expected: CellValueChange[] = [
     {
+      source: 'HiddenSinglesSolver',
       location: { row: 8, column: 3 },
       valuesToRemove: [1, 8],
     },
