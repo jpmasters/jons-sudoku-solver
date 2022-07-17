@@ -29,8 +29,8 @@ test('Pointing Pairs found in a row', () => {
   ]);
 
   const expected: CellValueChange[] = [
-    { location: { row: 8, column: 5 }, valuesToRemove: [6] },
-    { location: { row: 8, column: 6 }, valuesToRemove: [6] },
+    { source: 'PointingPairsSolver', location: { row: 8, column: 5 }, valuesToRemove: [6] },
+    { source: 'PointingPairsSolver', location: { row: 8, column: 6 }, valuesToRemove: [6] },
   ];
 
   const diffs = PointingPairsSolver.solveForBlockAndRow(block, row, 'row');
@@ -63,8 +63,8 @@ test('Pointing Pairs found in a column', () => {
   ]);
 
   const expected: CellValueChange[] = [
-    { location: { row: 2, column: 4 }, valuesToRemove: [6] },
-    { location: { row: 8, column: 4 }, valuesToRemove: [6] },
+    { source: 'PointingPairsSolver', location: { row: 2, column: 4 }, valuesToRemove: [6] },
+    { source: 'PointingPairsSolver', location: { row: 8, column: 4 }, valuesToRemove: [6] },
   ];
 
   const diffs = PointingPairsSolver.solveForBlockAndRow(block, column, 'column');

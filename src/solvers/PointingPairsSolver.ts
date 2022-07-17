@@ -6,6 +6,11 @@ import { ReducedValues, SolverHelpers } from './SolverHelpers';
 
 export class PointingPairsSolver {
   /**
+   * The name of the solver to insert into change information.
+   */
+  static source: string = 'PointingPairsSolver';
+
+  /**
    * Searches the grid for instances of Pointing Pairs and if it finds any, returns an
    * array of changes to apply to the target grid.
    * @param targetGrid The grid to solve.
@@ -60,6 +65,7 @@ export class PointingPairsSolver {
           .filter((cell) => !Helpers.locationsMatch(cell.location, locs[1]))
           .map<CellValueChange>((cell) => {
             return {
+              source: PointingPairsSolver.source,
               location: { ...cell.location },
               valuesToRemove: cell.potentialValues.includes(v) ? [v] : [],
             };
