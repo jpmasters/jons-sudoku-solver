@@ -19,24 +19,6 @@ export class HiddenTriplesSolver {
    * @returns An array of changes to apply to the grid to solve it.
    */
   static solve(targetGrid: Grid): CellValueChange[] {
-    return [
-      ...SudokuAllPossibleValues.map((row) =>
-        SolverHelpers.processHiddenCellsInBlock(targetGrid.row(row), ValueComboType.Triple, HiddenTriplesSolver.source),
-      ).flat(),
-      ...SudokuAllPossibleValues.map((column) =>
-        SolverHelpers.processHiddenCellsInBlock(
-          targetGrid.column(column),
-          ValueComboType.Triple,
-          HiddenTriplesSolver.source,
-        ),
-      ).flat(),
-      ...SudokuAllPossibleValues.map((block) =>
-        SolverHelpers.processHiddenCellsInBlock(
-          targetGrid.block(block),
-          ValueComboType.Triple,
-          HiddenTriplesSolver.source,
-        ),
-      ).flat(),
-    ];
+    return SolverHelpers.solveHiddenMultiples(targetGrid, ValueComboType.Triple, HiddenTriplesSolver.source);
   }
 }

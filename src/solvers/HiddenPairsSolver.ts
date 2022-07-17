@@ -20,17 +20,5 @@ export class HiddenPairsSolver {
    */
   static solve(targetGrid: Grid): CellValueChange[] {
     return SolverHelpers.solveHiddenMultiples(targetGrid, ValueComboType.Pair, HiddenPairsSolver.source);
-
-    // return [
-    //   ...SudokuAllPossibleValues.map((row) =>
-    //     SolverHelpers.processHiddenCellsInBlock(targetGrid.row(row), ValueComboType.Pair),
-    //   ).flat(),
-    //   ...SudokuAllPossibleValues.map((column) =>
-    //     SolverHelpers.processHiddenCellsInBlock(targetGrid.column(column), ValueComboType.Pair),
-    //   ).flat(),
-    //   ...SudokuAllPossibleValues.map((block) =>
-    //     SolverHelpers.processHiddenCellsInBlock(targetGrid.block(block), ValueComboType.Pair),
-    //   ).flat(),
-    // ];
   }
 }

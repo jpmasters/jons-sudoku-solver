@@ -1,5 +1,6 @@
 import { Grid } from '../Grid';
 import { CellValueChange, SudokuAllPossibleValues, ValueComboType } from '../ValueTypes';
+import { HiddenTriplesSolver } from './HiddenTriplesSolver';
 import { SolverHelpers } from './SolverHelpers';
 
 /**
@@ -19,20 +20,6 @@ export class HiddenQuadsSolver {
    * @returns An array of changes to apply to the grid to solve it.
    */
   static solve(targetGrid: Grid): CellValueChange[] {
-    return [
-      ...SudokuAllPossibleValues.map((row) =>
-        SolverHelpers.processHiddenCellsInBlock(targetGrid.row(row), ValueComboType.Quad, HiddenQuadsSolver.source),
-      ).flat(),
-      ...SudokuAllPossibleValues.map((column) =>
-        SolverHelpers.processHiddenCellsInBlock(
-          targetGrid.column(column),
-          ValueComboType.Quad,
-          HiddenQuadsSolver.source,
-        ),
-      ).flat(),
-      ...SudokuAllPossibleValues.map((block) =>
-        SolverHelpers.processHiddenCellsInBlock(targetGrid.block(block), ValueComboType.Quad, HiddenQuadsSolver.source),
-      ).flat(),
-    ];
+    return SolverHelpers.solveHiddenMultiples(targetGrid, ValueComboType.Quad, HiddenTriplesSolver.source);
   }
 }
