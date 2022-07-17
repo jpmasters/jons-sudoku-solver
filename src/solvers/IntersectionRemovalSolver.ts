@@ -24,19 +24,23 @@ export class IntersectionRemovalSolver {
    */
   static solve(targetGrid: Grid): CellValueChange[] {
     const rv: CellValueChange[] = [];
+
+    // iterate through each block in the puzzle
     SudokuAllPossibleValues.map((b) => targetGrid.block(b)).some((block) => {
+      // search both rows and columns in the block...
       ['row', 'column'].some((rc) => {
-        const rowOrColumn: 'row' | 'column' = rc as 'row' | 'column';
+        const rowOrColumn = rc as 'row' | 'column';
+
         block.cells
+          // ...looking for rows and cells that intersect the block
           .filter((cell, i, arr) => {
             return arr.findIndex((c) => cell.location[rowOrColumn] === c.location[rowOrColumn]) === i;
           })
           .some((cell) => {
-            const changes = IntersectionRemovalSolver.solveForBlockAndRow(
-              block,
-              targetGrid.row(cell.location[rowOrColumn]),
+            // call the solver for the block row / column combo
+            rv.push(
+              ...IntersectionRemovalSolver.solveForBlockAndRow(block, targetGrid.row(cell.location[rowOrColumn])),
             );
-            rv.push(...changes);
 
             // exit early if we have something to return
             return rv.length;
