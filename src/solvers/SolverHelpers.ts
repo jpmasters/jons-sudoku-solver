@@ -278,4 +278,49 @@ export class SolverHelpers {
   static solveHiddenMultiples(targetGrid: Grid, comboType: ValueComboType, source: string): CellValueChange[] {
     return SolverHelpers.solveSimpleMultiples(SolverHelpers.processHiddenCellsInBlock, targetGrid, comboType, source);
   }
+
+  /**
+   * Searches the grid provided for intersecting blocks, rows and columns
+   * where potential removals can take place. Returns an array of CellValueChange
+   * objects to make the required changes.
+   * array of changes to apply to the target grid.
+   * @param targetGrid The grid to solve.
+   * @param solveFn A function that can solve for a given block and row / column.
+   * @returns An array of changes to apply to the grid to solve it.
+   */
+  static solveBoxLineReduction(
+    targetGrid: Grid,
+    solveFn: (blockCells: CellCollection, rowOrColumnCells: CellCollection) => CellValueChange[],
+  ): CellValueChange[] {
+    const rv: CellValueChange[] = [];
+
+    // iterate through each block in the puzzle
+    SudokuAllPossibleValues.map((b) => targetGrid.block(b)).some((block) => {
+      // search both rows and columns in the block...
+      ['row', 'column'].some((rc) => {
+        const rowOrColumn = rc as 'row' | 'column';
+
+        block.cells
+          // ...looking for rows and cells that intersect the block
+          .filter((cell, i, arr) => {
+            return arr.findIndex((c) => cell.location[rowOrColumn] === c.location[rowOrColumn]) === i;
+          })
+          .some((cell) => {
+            // call the solver for the block row / column combo
+            rv.push(...solveFn(block, targetGrid.row(cell.location[rowOrColumn])));
+
+            // exit early if we have something to return
+            return rv.length;
+          });
+
+        // exit early if we have something to return
+        return rv.length;
+      });
+
+      // exit early if we have something to return
+      return rv.length;
+    });
+
+    return rv;
+  }
 }
