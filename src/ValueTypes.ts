@@ -46,7 +46,7 @@ export enum ValueComboType {
  * Describes a change to a grid.
  */
 export type CellValueChange = {
-  source?: string; // think about how we can make this a required field (see Grid.differences() for the problem)
+  source: string; // think about how we can make this a required field (see Grid.differences() for the problem)
   location: GridLocation;
   valuesToRemove: SudokuPossibleValue[];
 };

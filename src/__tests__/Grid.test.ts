@@ -205,9 +205,15 @@ test('Difference works', () => {
     [0, 0, 0, 0, 0, 0, 0, 0, 0],
   ]);
 
+  const expected = {
+    source: 'Grid.differences',
+    location: { row: 1, column: 1 },
+    valuesToRemove: [2, 3, 4, 5, 6, 7, 8, 9],
+  };
+
   diffs = p3.differences(p4);
   expect(diffs.length).toBe(1);
-  expect(diffs[0]).toEqual({ location: { row: 1, column: 1 }, valuesToRemove: [2, 3, 4, 5, 6, 7, 8, 9] });
+  expect(diffs[0]).toEqual(expected);
 });
 
 test('Grid to puzzle array works', () => {

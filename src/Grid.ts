@@ -148,7 +148,7 @@ export class Grid extends CellCollection {
         );
 
         if (valuesRemoved.length) {
-          rv.push({ location: { ...thisCell.location }, valuesToRemove: valuesRemoved });
+          rv.push({ source: 'Grid.differences', location: { ...thisCell.location }, valuesToRemove: valuesRemoved });
         }
       }
     });

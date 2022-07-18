@@ -6,6 +6,11 @@ import { SolverHelpers } from './SolverHelpers';
 
 export class BacktrackingSolver {
   /**
+   * The source of changes provided to callers.
+   */
+  static source: string = 'BacktrackingSolver';
+
+  /**
    * Completes the grid using a backtracking algorithm but is optimised to only select
    * values that appear in the CelValue potentials. It will always work but is a very inefficient
    * and non-human way to do things. if you're writing a Sudoku puzzle game and want to be able to
@@ -37,6 +42,7 @@ export class BacktrackingSolver {
           // we have a value to try so try it
           const newGrid = SolverHelpers.applyChangeList(grid, [
             {
+              source: BacktrackingSolver.source,
               location: { ...cell.location },
               valuesToRemove: cell.potentialValues.filter((v) => v !== valueToTry),
             },
