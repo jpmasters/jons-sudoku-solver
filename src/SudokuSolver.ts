@@ -52,6 +52,9 @@ export class SudokuSolver {
 
       // apply them to the target grid
       targetGrid = SolverHelpers.applyChangeList(targetGrid, changes);
+
+      // call the callback with the changes and the resulting grid
+      options.stepCallback?.call(options, changes, targetGrid);
     } while (changes.length && !targetGrid.isSolved);
 
     // if there's anything left to do, use backtracking

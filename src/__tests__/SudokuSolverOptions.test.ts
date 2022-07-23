@@ -17,9 +17,10 @@ test('SudokuSolverOptions provides the correct defaults if not provided', () => 
       SudokuSolverStrategy.PointingPairs,
       SudokuSolverStrategy.IntersectionRemoval,
     ],
+    stepCallback: expect.any(Function),
   };
 
-  expect(derivedOptions).toStrictEqual(expected);
+  expect(derivedOptions).toMatchObject(expected);
 });
 
 test('SudokuSolverOptions includeBacktracking overridden to false', () => {
@@ -39,9 +40,10 @@ test('SudokuSolverOptions includeBacktracking overridden to false', () => {
       SudokuSolverStrategy.PointingPairs,
       SudokuSolverStrategy.IntersectionRemoval,
     ],
+    stepCallback: expect.any(Function),
   };
 
-  expect(derivedOptions).toStrictEqual(expected);
+  expect(derivedOptions).toMatchObject(expected);
 });
 
 test('SudokuSolverOptions includeBacktracking overridden to true', () => {
@@ -61,9 +63,10 @@ test('SudokuSolverOptions includeBacktracking overridden to true', () => {
       SudokuSolverStrategy.PointingPairs,
       SudokuSolverStrategy.IntersectionRemoval,
     ],
+    stepCallback: expect.any(Function),
   };
 
-  expect(derivedOptions).toStrictEqual(expected);
+  expect(derivedOptions).toMatchObject(expected);
 });
 
 test('SudokuSolverOptions includeStrategies overridden', () => {
@@ -74,9 +77,10 @@ test('SudokuSolverOptions includeStrategies overridden', () => {
   const expected: SudokuSolverOptions = {
     includeBacktracking: true,
     includeStrategies: [SudokuSolverStrategy.HiddenPairs, SudokuSolverStrategy.PointingPairs],
+    stepCallback: expect.any(Function),
   };
 
-  expect(derivedOptions).toStrictEqual(expected);
+  expect(derivedOptions).toMatchObject(expected);
 });
 
 test('SudokuSolverOptions includeStrategies overridden to empty', () => {
@@ -87,7 +91,8 @@ test('SudokuSolverOptions includeStrategies overridden to empty', () => {
   const expected: SudokuSolverOptions = {
     includeBacktracking: true,
     includeStrategies: [],
+    stepCallback: expect.any(Function),
   };
 
-  expect(derivedOptions).toStrictEqual(expected);
+  expect(derivedOptions).toMatchObject(expected);
 });

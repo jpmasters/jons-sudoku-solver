@@ -1,3 +1,6 @@
+import { Grid } from './Grid';
+import { CellValueChange } from './ValueTypes';
+
 /**
  * An enumeration of available solving strategies. Note that backtracking
  * is handled separately in the options.
@@ -34,6 +37,12 @@ export class SudokuSolverOptions {
    * solver classes.
    */
   includeBacktracking?: boolean;
+
+  /**
+   * An optional callback function that allows you to see each individual set of changes as the
+   * grid is solved.
+   */
+  stepCallback?: (changes: CellValueChange[], resultingGrid: Grid) => void;
 }
 
 /**
@@ -47,6 +56,9 @@ export function deriveOptions(providedOptions: SudokuSolverOptions): SudokuSolve
     includeStrategies: Object.values(SudokuSolverStrategy).filter(
       (v) => typeof v !== 'string',
     ) as SudokuSolverStrategy[],
+    stepCallback: (changes, grid) => {
+      return;
+    },
     ...providedOptions,
   };
 }

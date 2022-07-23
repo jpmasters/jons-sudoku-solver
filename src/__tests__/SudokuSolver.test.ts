@@ -1,5 +1,6 @@
 import { emptyPuzzle } from '../EmptyPuzzle';
 import { SudokuSolver } from '../SudokuSolver';
+import { CellValueChange } from '../ValueTypes';
 import {
   easyTestPuzzle1,
   easyTestPuzzle2,
@@ -134,4 +135,25 @@ test('Solves hardPuzzle1', () => {
 test('Solves hardPuzzle3', () => {
   const solvedPuzzle: number[][] = SudokuSolver.solve(hardTestPuzzle3);
   expect(solvedPuzzle).toStrictEqual(hardTestPuzzle3Solved);
+});
+
+test('Callback function works in options', () => {
+  let callbackCount = 0;
+
+  SudokuSolver.solve(easyTestPuzzle1, {
+    stepCallback: (changes, grid) => {
+      const expected: CellValueChange = {
+        source: 'NakedSinglesSolver',
+        location: { row: 1, column: 1 },
+        valuesToRemove: [2],
+      };
+
+      callbackCount++;
+      if (callbackCount === 1) {
+        expect(changes).toEqual(expect.arrayContaining([expected]));
+      }
+    },
+  });
+
+  expect(callbackCount).toBeGreaterThan(0);
 });
